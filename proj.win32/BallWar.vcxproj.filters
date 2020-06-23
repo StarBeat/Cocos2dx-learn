@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="win32">
+      <UniqueIdentifier>{84a8ebd7-7cf0-47f6-b75e-d441df67da40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource">
+      <UniqueIdentifier>{715254bc-d70b-4ec5-bf29-467dd3ace079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Effect">
+      <UniqueIdentifier>{797a162b-8066-4737-90a4-658798f7a4b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\network">
+      <UniqueIdentifier>{2a782749-39bf-41c9-ab0b-fbed49d90e14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\player">
+      <UniqueIdentifier>{34af43fa-09f0-48d8-8d0f-221761f2d0c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base">
+      <UniqueIdentifier>{cfc4449c-c8dd-4504-a23d-976166199507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\interface">
+      <UniqueIdentifier>{7e2a24a5-08a7-42f8-b1c1-ce3295528cd6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>src\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="LightEffect.cpp">
+      <Filter>src\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="NetWork.cpp">
+      <Filter>src\network</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\network\Rpc.cpp">
+      <Filter>src\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\network\xnet.cpp">
+      <Filter>src\network</Filter>
+    </ClCompile>
+    <ClCompile Include="NetPlayer.cpp">
+      <Filter>src\player</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalPlayer.cpp">
+      <Filter>src\player</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="main.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\HelloWorldScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>src\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="LightEffect.h">
+      <Filter>src\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="IPlayer.h">
+      <Filter>src\base\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="NetWork.h">
+      <Filter>src\network</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Rpc.h">
+      <Filter>src\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\xnet.h">
+      <Filter>src\network</Filter>
+    </ClInclude>
+    <ClInclude Include="NetPlayer.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Queue.hpp">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Serializer.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="LocalPlayer.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="ISingle.h">
+      <Filter>src\base\interface</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc">
+      <Filter>resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
