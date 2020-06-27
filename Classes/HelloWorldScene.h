@@ -37,6 +37,8 @@ public:
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
     
+    void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 };

@@ -493,6 +493,7 @@ bool GLProgram::compileShader(GLuint * shader, GLenum type, const GLchar* source
 #elif (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32 && CC_TARGET_PLATFORM != CC_PLATFORM_LINUX && CC_TARGET_PLATFORM != CC_PLATFORM_MAC)
         headersDef = (type == GL_VERTEX_SHADER ? "precision highp float;\n precision highp int;\n" : "precision mediump float;\n precision mediump int;\n");
 #endif
+        headersDef = "#version 330 core\n";
     }else{
         headersDef = compileTimeHeaders;
     }

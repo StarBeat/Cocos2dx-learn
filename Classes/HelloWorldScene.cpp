@@ -24,6 +24,11 @@
 
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
+#include "GameManager.h"
+#include "PhysicExt.h"
+#include "RectPrimitive.h"
+#include "Light2d.h"
+#include "LightingManager.h"
 
 USING_NS_CC;
 
@@ -48,7 +53,11 @@ bool HelloWorld::init()
     {
         return false;
     }
+    initWithPhysics();
 
+    _physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+
+    GameManager::Instane()->moduleInit(_physicsWorld);
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -80,41 +89,112 @@ bool HelloWorld::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
-    /////////////////////////////
-    // 3. add your codes below...
+    //auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
+    //if (label == nullptr)
+    //{
+    //    problemLoading("'fonts/Marker Felt.ttf'");
+    //}
+    //else
+    //{
+    //    // position the label on the center of the screen
+    //    label->setPosition(Vec2(origin.x + visibleSize.width/2,
+    //                            origin.y + visibleSize.height - label->getContentSize().height));
 
-    // add a label shows "Hello World"
-    // create and initialize a label
-
-    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    if (label == nullptr)
-    {
-        problemLoading("'fonts/Marker Felt.ttf'");
-    }
-    else
-    {
-        // position the label on the center of the screen
-        label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                origin.y + visibleSize.height - label->getContentSize().height));
-
-        // add the label as a child to this layer
-        this->addChild(label, 1);
-    }
+    //    // add the label as a child to this layer
+    //    this->addChild(label, 1);
+    //}
 
     // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-    if (sprite == nullptr)
-    {
-        problemLoading("'HelloWorld.png'");
-    }
-    else
-    {
-        // position the sprite on the center of the screen
-        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+    //auto sprite = Sprite::create("BG.png");
+    //if (sprite == nullptr)
+    //{
+    //    problemLoading("'HelloWorld.png'");
+    //}
+    //else
+    //{
+    //    // position the sprite on the center of the screen
+    //    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 
-        // add the sprite as a child to this layer
-        this->addChild(sprite, 0);
-    }
+    //    // add the sprite as a child to this layer
+    //    this->addChild(sprite, 0);
+    //}
+
+    //RectPrimitive* rect = RectPrimitive::create({ 0,0 }, { 50,505 }, Color4F::GRAY, 1, Color4F::GREEN);
+    //
+    //this->addChild(rect);
+    //auto pb = PhysicsBody::createBox({50,50});
+    //pb->setDynamic(false);
+    //pb->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
+    //rect->addComponent(pb);
+    
+
+    RectPrimitive* rect1 = RectPrimitive::create({ 0,0 }, { 50,50 }, Color4F::GRAY, 1, Color4F::GREEN);
+    
+    this->addChild(rect1);
+    rect1->setPosition(300, 300);
+    auto pb1 = PhysicsBody::createBox({ 50,50 });
+    pb1->setDynamic(false);
+    pb1->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
+    rect1->addComponent(pb1);
+
+    Light2d* li = Light2d::create();
+    li->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+    this->addChild(li, 100);
+
+    auto event = EventListenerKeyboard::create();
+    event->onKeyPressed = [li](EventKeyboard::KeyCode k, Event*)->void
+        {
+            Vec2 p;
+            if (EventKeyboard::KeyCode::KEY_D == k)
+            {
+                p = li->getPosition() + Vec2(40, 0);
+                li->setPosition(p);
+            }
+            if (EventKeyboard::KeyCode::KEY_W == k)
+            {
+                p = li->getPosition() + Vec2(0, 40);
+                li->setPosition(p);
+            }
+            if (EventKeyboard::KeyCode::KEY_A == k)
+            {
+                p = li->getPosition() + Vec2(-40, 0);
+                li->setPosition(p);
+            }
+            if (EventKeyboard::KeyCode::KEY_S == k)
+            {
+                p = li->getPosition() + Vec2(0, -40);
+                li->setPosition(p);
+            }
+        };
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(event, this);
+    
+ /*   auto pb1 = PhysicsBody::createCircle(50);
+    pb1->setDynamic(false);
+    pb1->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
+    li->addComponent(pb1);*/
+   
+
+
+   /* Light2d* li2 = Light2d::create();
+    li2->setPosition({0,0});
+    */
+    /*std::vector<std::pair<int, Vec2*>> hits;
+    int i = ::PhysicEx::OverlapCircle({0,0}, 1000, hits);
+    for (auto j : hits)
+    {
+        for (size_t k = 0; k < j.first; k++)
+        {
+            CCLOG("hits %f, %f \n", j.second[k].x, j.second[k].y);
+        }
+        delete j.second;
+    }*/
+
+
+  /*  auto dn = DrawNode::create();
+    this->addChild(dn);
+    dn->drawSolidCircle({ 50,50 }, 50, 0, 360, Color4F::GREEN);*/
+
+    GameManager::Instane()->delayInit();
     return true;
 }
 
@@ -130,4 +210,8 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
 
+}
+
+void HelloWorld::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags)
+{
 }

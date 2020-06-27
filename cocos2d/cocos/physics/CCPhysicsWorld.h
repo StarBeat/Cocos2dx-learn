@@ -423,6 +423,8 @@ protected:
     friend class PhysicsJoint;
     friend class PhysicsWorldCallback;
     friend class PhysicsDebugDraw;
+    friend struct PhysicEx;
+
 };
 
 extern const float CC_DLL PHYSICS_INFINITY;

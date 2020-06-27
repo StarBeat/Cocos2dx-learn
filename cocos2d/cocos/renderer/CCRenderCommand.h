@@ -64,7 +64,8 @@ public:
         /**Primitive command, used to draw primitives such as lines, points and triangles.*/
         PRIMITIVE_COMMAND,
         /**Triangles command, used to draw triangles.*/
-        TRIANGLES_COMMAND
+        TRIANGLES_COMMAND,
+        INSTANCE_COMMAND
     };
 
     /**

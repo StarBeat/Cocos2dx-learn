@@ -71,6 +71,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\LE\cocos2d-x-3.17.2\proj\BallWar\cocos2d\external\chipmunk\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A\lib;$(LibraryPath)</LibraryPath>
@@ -152,35 +153,58 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\CirclePrimitive.cpp" />
+    <ClCompile Include="..\Classes\DeferredEffect.cpp" />
+    <ClCompile Include="..\Classes\DotPrimitive.cpp" />
+    <ClCompile Include="..\Classes\Effect.cpp" />
+    <ClCompile Include="..\Classes\GameManager.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="..\Classes\InstanceRenderCommand.cpp" />
+    <ClCompile Include="..\Classes\Light2d.cpp" />
+    <ClCompile Include="..\Classes\LightEffect.cpp" />
+    <ClCompile Include="..\Classes\LightingManager.cpp" />
+    <ClCompile Include="..\Classes\LocalPlayer.cpp" />
+    <ClCompile Include="..\Classes\NetPlayer.cpp" />
+    <ClCompile Include="..\Classes\network\NetWork.cpp" />
     <ClCompile Include="..\Classes\network\Rpc.cpp" />
     <ClCompile Include="..\Classes\network\xnet.cpp" />
-    <ClCompile Include="Effect.cpp" />
-    <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="LightEffect.cpp" />
-    <ClCompile Include="LocalPlayer.cpp" />
+    <ClCompile Include="..\Classes\PlayerManager.cpp" />
+    <ClCompile Include="..\Classes\PrimitiveEffect.cpp" />
+    <ClCompile Include="..\Classes\RectPrimitive.cpp" />
+    <ClCompile Include="..\Classes\ShadowEffect.cpp" />
+    <ClCompile Include="..\Classes\TrianglePrimitive.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="NetPlayer.cpp" />
-    <ClCompile Include="NetWork.cpp" />
-    <ClCompile Include="PlayerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\Classes\CirclePrimitive.h" />
+    <ClInclude Include="..\Classes\DeferredEffect.h" />
+    <ClInclude Include="..\Classes\DotPrimitive.h" />
+    <ClInclude Include="..\Classes\Effect.h" />
+    <ClInclude Include="..\Classes\GameManager.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
+    <ClInclude Include="..\Classes\InstanceRenderCommand.h" />
+    <ClInclude Include="..\Classes\IPlayer.h" />
+    <ClInclude Include="..\Classes\IPrimitive.h" />
+    <ClInclude Include="..\Classes\ISingle.h" />
+    <ClInclude Include="..\Classes\Light2d.h" />
+    <ClInclude Include="..\Classes\LightEffect.h" />
+    <ClInclude Include="..\Classes\LightingManager.h" />
+    <ClInclude Include="..\Classes\LocalPlayer.h" />
+    <ClInclude Include="..\Classes\MathUtil.h" />
+    <ClInclude Include="..\Classes\NetPlayer.h" />
+    <ClInclude Include="..\Classes\network\NetWork.h" />
+    <ClInclude Include="..\Classes\PhysicExt.h" />
+    <ClInclude Include="..\Classes\PlayerManager.h" />
+    <ClInclude Include="..\Classes\PrimitiveEffect.h" />
+    <ClInclude Include="..\Classes\RectPrimitive.h" />
+    <ClInclude Include="..\Classes\ShadowEffect.h" />
+    <ClInclude Include="..\Classes\TrianglePrimitive.h" />
     <ClInclude Include="..\include\Queue.hpp" />
     <ClInclude Include="..\include\Rpc.h" />
     <ClInclude Include="..\include\Serializer.h" />
     <ClInclude Include="..\include\xnet.h" />
-    <ClInclude Include="Effect.h" />
-    <ClInclude Include="GameManager.h" />
-    <ClInclude Include="IPlayer.h" />
-    <ClInclude Include="ISingle.h" />
-    <ClInclude Include="LightEffect.h" />
-    <ClInclude Include="LocalPlayer.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="NetPlayer.h" />
-    <ClInclude Include="NetWork.h" />
-    <ClInclude Include="PlayerManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cocos2d\cocos\2d\libcocos2d.vcxproj">
@@ -193,6 +217,13 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Resources\shader\deferred_light_shader.glsl" />
+    <None Include="..\Resources\shader\light2d_shader.glsl" />
+    <None Include="..\Resources\shader\primitive_shader.glsl" />
+    <None Include="..\Resources\shader\Shader.vert" />
+    <None Include="..\Resources\shader\shadow_shader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
