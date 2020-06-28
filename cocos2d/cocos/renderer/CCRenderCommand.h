@@ -100,6 +100,7 @@ public:
     /**Get the depth by current model view matrix.*/
     float getDepth() const { return _depth; }
     
+    virtual  void execute() {}
 protected:
     /**Constructor.*/
     RenderCommand();

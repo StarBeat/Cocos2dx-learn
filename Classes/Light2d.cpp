@@ -3,6 +3,7 @@
 #include <math\CCMath.h>
 #include <math.h>
 #include "MathUtil.h"
+#include <functional>
 
 using namespace cocos2d;
 using cocos2d::MathUtil;
@@ -44,6 +45,10 @@ void Light2d::debugDrawline(Vec2 a, Vec2 b,const Color4F& cl)
 		this->addChild(node);
 	}
 	node->drawLine(a, b, cl);
+}
+void Light2d::submite(const cocos2d::Mat4& transform)
+{
+	LightingManager::Instane()->pushMat(this, transform);
 }
 void Light2d::calculateShadow()
 {
@@ -248,5 +253,14 @@ void Light2d::drawShadowAndLight(const cocos2d::Mat4& transform)
 
 void Light2d::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags)
 {
-	LightingManager::Instane()->pushMat(this, transform);
+	_rendercmd.init(RenderQueue::QUEUE_GROUP::GLOBALZ_POS);
+	_rendercmd.func = std::bind(&Light2d::submite, this, transform);
+	renderer->addCommand(&_rendercmd);
+}
+
+void Light2d::setLightSize(float range, float volumneRaduis)
+{
+	_shadoweff->_lightVolumne = volumneRaduis;
+	_lighteff->_lightVolumn = volumneRaduis;
+	_lighteff->_lightDistance = range;
 }

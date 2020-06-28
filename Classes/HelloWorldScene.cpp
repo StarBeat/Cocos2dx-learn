@@ -105,19 +105,19 @@ bool HelloWorld::init()
     //}
 
     // add "HelloWorld" splash screen"
-    //auto sprite = Sprite::create("BG.png");
-    //if (sprite == nullptr)
-    //{
-    //    problemLoading("'HelloWorld.png'");
-    //}
-    //else
-    //{
-    //    // position the sprite on the center of the screen
-    //    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+    auto sprite = Sprite::create("BG.png");
+    if (sprite == nullptr)
+    {
+        problemLoading("'HelloWorld.png'");
+    }
+    else
+    {
+        // position the sprite on the center of the screen
+        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 
-    //    // add the sprite as a child to this layer
-    //    this->addChild(sprite, 0);
-    //}
+        // add the sprite as a child to this layer
+        this->addChild(sprite, 0);
+    }
 
     //RectPrimitive* rect = RectPrimitive::create({ 0,0 }, { 50,505 }, Color4F::GRAY, 1, Color4F::GREEN);
     //
@@ -168,6 +168,19 @@ bool HelloWorld::init()
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(event, this);
     
+    Node* n1 = Node::create();
+    this->addChild(n1);
+    auto pb2 = PhysicsBody::createBox({ 50,50 });
+    pb2->setDynamic(false);
+    pb2->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
+    n1->addComponent(pb2);
+    n1->setPosition(500, 700);
+
+    Light2d* li2 = Light2d::create();
+    li2->setPosition(100,300);
+    li2->setLightSize(200, 80);
+    this->addChild(li2, 100);
+
  /*   auto pb1 = PhysicsBody::createCircle(50);
     pb1->setDynamic(false);
     pb1->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);

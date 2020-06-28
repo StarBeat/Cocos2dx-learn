@@ -27,9 +27,11 @@ public:
 	void renderShadow(const cocos2d::Mat4& transform);
 	void drawShadowAndLight(const cocos2d::Mat4& transform);
 	void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+	void setLightSize(float range, float volumneRaduis);
 private:
 	Light2d();
 	void debugDrawline(cocos2d::Vec2 a, cocos2d::Vec2 b,const cocos2d::Color4F&);
+	void submite(const cocos2d::Mat4& transform);
 private:
 	ShadowEffect* _shadoweff;
 	LightEffect* _lighteff;
@@ -38,6 +40,7 @@ private:
 	std::vector<SS_Vertice> _shadowtrianglesbuffer;
 	cocos2d::Color4B _shadow_color = cocos2d::Color4B::BLACK;
 
+	cocos2d::CustomCommand _rendercmd;
 
 	friend class LightingManager;
 };

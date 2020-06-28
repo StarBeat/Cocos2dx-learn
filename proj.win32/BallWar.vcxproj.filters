@@ -28,16 +28,16 @@
     <Filter Include="src\gpp\player">
       <UniqueIdentifier>{34af43fa-09f0-48d8-8d0f-221761f2d0c0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\gpp\render">
+    <Filter Include="src\render">
       <UniqueIdentifier>{5439a0cf-049e-4eff-863d-08db37140ab8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\gpp\render\Primitive">
+    <Filter Include="src\render\Primitive">
       <UniqueIdentifier>{df3d8339-e095-4149-8831-58703a6b7c62}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\gpp\render\Effect">
+    <Filter Include="src\render\Effect">
       <UniqueIdentifier>{797a162b-8066-4737-90a4-658798f7a4b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\gpp\render\light">
+    <Filter Include="src\render\light">
       <UniqueIdentifier>{8293d3b5-f22f-46d9-afcb-9b825f77f459}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -58,19 +58,19 @@
       <Filter>src\network</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\CirclePrimitive.cpp">
-      <Filter>src\gpp\render\Primitive</Filter>
+      <Filter>src\render\Primitive</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\RectPrimitive.cpp">
-      <Filter>src\gpp\render\Primitive</Filter>
+      <Filter>src\render\Primitive</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\TrianglePrimitive.cpp">
-      <Filter>src\gpp\render\Primitive</Filter>
+      <Filter>src\render\Primitive</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Effect.cpp">
-      <Filter>src\gpp\render\Effect</Filter>
+      <Filter>src\render\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\LightEffect.cpp">
-      <Filter>src\gpp\render\Effect</Filter>
+      <Filter>src\render\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\network\NetWork.cpp">
       <Filter>src\network</Filter>
@@ -85,28 +85,28 @@
       <Filter>src\gpp\player</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\InstanceRenderCommand.cpp">
-      <Filter>src\gpp\render\Effect</Filter>
+      <Filter>src\render\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\DotPrimitive.cpp">
-      <Filter>src\gpp\render\Primitive</Filter>
+      <Filter>src\render\Primitive</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\PrimitiveEffect.cpp">
-      <Filter>src\gpp\render\Effect</Filter>
+      <Filter>src\render\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\GameManager.cpp">
       <Filter>src\gpp</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\ShadowEffect.cpp">
-      <Filter>src\gpp\render\Effect</Filter>
+      <Filter>src\render\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Light2d.cpp">
-      <Filter>src\gpp\render\light</Filter>
+      <Filter>src\render\light</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\LightingManager.cpp">
-      <Filter>src\gpp\render\light</Filter>
+      <Filter>src\render\light</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\DeferredEffect.cpp">
-      <Filter>src\gpp\render\Effect</Filter>
+      <Filter>src\render\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -132,19 +132,19 @@
       <Filter>src\base</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\CirclePrimitive.h">
-      <Filter>src\gpp\render\Primitive</Filter>
+      <Filter>src\render\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\RectPrimitive.h">
-      <Filter>src\gpp\render\Primitive</Filter>
+      <Filter>src\render\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\TrianglePrimitive.h">
-      <Filter>src\gpp\render\Primitive</Filter>
+      <Filter>src\render\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Effect.h">
-      <Filter>src\gpp\render\Effect</Filter>
+      <Filter>src\render\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\LightEffect.h">
-      <Filter>src\gpp\render\Effect</Filter>
+      <Filter>src\render\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\network\NetWork.h">
       <Filter>src\network</Filter>
@@ -168,19 +168,19 @@
       <Filter>src\base\interface</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\InstanceRenderCommand.h">
-      <Filter>src\gpp\render\Effect</Filter>
+      <Filter>src\render\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\DotPrimitive.h">
-      <Filter>src\gpp\render\Primitive</Filter>
+      <Filter>src\render\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\PrimitiveEffect.h">
-      <Filter>src\gpp\render\Effect</Filter>
+      <Filter>src\render\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\PhysicExt.h">
       <Filter>src\base</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\ShadowEffect.h">
-      <Filter>src\gpp\render\Effect</Filter>
+      <Filter>src\render\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\GameManager.h">
       <Filter>src\gpp</Filter>
@@ -189,13 +189,13 @@
       <Filter>src\base</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Light2d.h">
-      <Filter>src\gpp\render\light</Filter>
+      <Filter>src\render\light</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\LightingManager.h">
-      <Filter>src\gpp\render\light</Filter>
+      <Filter>src\render\light</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\DeferredEffect.h">
-      <Filter>src\gpp\render\Effect</Filter>
+      <Filter>src\render\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
