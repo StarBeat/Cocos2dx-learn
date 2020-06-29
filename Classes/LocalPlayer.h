@@ -3,11 +3,12 @@
 class LocalPlayer : public IPlayer
 {
 public:
-	LocalPlayer* create(cocos2d::Vec2 pos = 0, cocos2d::Vec2 rot = 0);
+	static LocalPlayer* create(const cocos2d::Vec2& pos,const cocos2d::Vec2& rot);
+	void move(float x, float y) override;
 	virtual ~LocalPlayer();
 protected:
 	virtual bool init();
 private:
-	LocalPlayer() = default;
+	LocalPlayer(const cocos2d::Vec2& pos, const cocos2d::Vec2& rot);
 };
 

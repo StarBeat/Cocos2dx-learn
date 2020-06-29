@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include "Rpc.h"
+using namespace Util;
 
 class NetWork
 {
@@ -10,8 +12,18 @@ public:
 		Server,
 		None
 	};
-	NetWork(Type type, std::string& ip, int port);
-
-private:
+	NetWork(std::string& ip, int port);
+	~NetWork()
+	{
+		delete _rpc;
+	}
+	void asServer(int seed);
+	void asClient();
+	void update(float dt);
+public:
+	Rpc* _rpc;
 	Type _type;
+private:
+	std::string _ip;
+	int _port;
 };

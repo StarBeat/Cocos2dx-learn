@@ -116,6 +116,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
       <Outputs>$(TargetName).cab</Outputs>
       <Inputs>$(TargetFileName)</Inputs>
     </CustomBuildStep>
+    <ClCompile>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdcpp17</LanguageStandard>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -153,11 +156,14 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\Asteroid.cpp" />
+    <ClCompile Include="..\Classes\AsteroidManager.cpp" />
     <ClCompile Include="..\Classes\CirclePrimitive.cpp" />
     <ClCompile Include="..\Classes\DeferredEffect.cpp" />
     <ClCompile Include="..\Classes\DotPrimitive.cpp" />
     <ClCompile Include="..\Classes\Effect.cpp" />
     <ClCompile Include="..\Classes\GameManager.cpp" />
+    <ClCompile Include="..\Classes\GameScene.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\InstanceRenderCommand.cpp" />
     <ClCompile Include="..\Classes\Light2d.cpp" />
@@ -170,6 +176,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClCompile Include="..\Classes\network\xnet.cpp" />
     <ClCompile Include="..\Classes\PlayerManager.cpp" />
     <ClCompile Include="..\Classes\PrimitiveEffect.cpp" />
+    <ClCompile Include="..\Classes\Random.cpp" />
     <ClCompile Include="..\Classes\RectPrimitive.cpp" />
     <ClCompile Include="..\Classes\ShadowEffect.cpp" />
     <ClCompile Include="..\Classes\TrianglePrimitive.cpp" />
@@ -177,11 +184,14 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\Classes\Asteroid.h" />
+    <ClInclude Include="..\Classes\AsteroidManager.h" />
     <ClInclude Include="..\Classes\CirclePrimitive.h" />
     <ClInclude Include="..\Classes\DeferredEffect.h" />
     <ClInclude Include="..\Classes\DotPrimitive.h" />
     <ClInclude Include="..\Classes\Effect.h" />
     <ClInclude Include="..\Classes\GameManager.h" />
+    <ClInclude Include="..\Classes\GameScene.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\InstanceRenderCommand.h" />
     <ClInclude Include="..\Classes\IPlayer.h" />
@@ -197,6 +207,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\PhysicExt.h" />
     <ClInclude Include="..\Classes\PlayerManager.h" />
     <ClInclude Include="..\Classes\PrimitiveEffect.h" />
+    <ClInclude Include="..\Classes\Random.h" />
     <ClInclude Include="..\Classes\RectPrimitive.h" />
     <ClInclude Include="..\Classes\ShadowEffect.h" />
     <ClInclude Include="..\Classes\TrianglePrimitive.h" />

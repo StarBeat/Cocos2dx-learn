@@ -40,6 +40,9 @@
     <Filter Include="src\render\light">
       <UniqueIdentifier>{8293d3b5-f22f-46d9-afcb-9b825f77f459}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\gpp\asteroid">
+      <UniqueIdentifier>{bbe26ab9-5944-4f4e-a7b2-1b1fa7886c31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -107,6 +110,18 @@
     </ClCompile>
     <ClCompile Include="..\Classes\DeferredEffect.cpp">
       <Filter>src\render\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameScene.cpp">
+      <Filter>src\gpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Random.cpp">
+      <Filter>src\gpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Asteroid.cpp">
+      <Filter>src\gpp\asteroid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AsteroidManager.cpp">
+      <Filter>src\gpp\asteroid</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +211,18 @@
     </ClInclude>
     <ClInclude Include="..\Classes\DeferredEffect.h">
       <Filter>src\render\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameScene.h">
+      <Filter>src\gpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Random.h">
+      <Filter>src\gpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Asteroid.h">
+      <Filter>src\gpp\asteroid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AsteroidManager.h">
+      <Filter>src\gpp\asteroid</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

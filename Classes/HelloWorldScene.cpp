@@ -33,6 +33,7 @@
 
 #include "Light2d.h"
 #include "LightingManager.h"
+#include "GameScene.h"
 
 USING_NS_CC;
 
@@ -87,89 +88,90 @@ bool HelloWorld::init()
         float y = origin.y + closeItem->getContentSize().height/2;
         closeItem->setPosition(Vec2(x,y));
     }
-
+    auto l1 = Label::createWithTTF("AsServer", "fonts/Marker Felt.ttf", 24);
+    auto l2 = Label::createWithTTF("AsClient", "fonts/Marker Felt.ttf", 24);
+    MenuItemLabel* cmenu;
+    auto smenu = MenuItemLabel::create(l1, [](Ref*)
+        {
+            CCLOG("AsServer");
+            GameManager::Instane()->asServer();
+            auto scene = GameScene::create();
+            auto rescene = CCTransitionCrossFade::create(1, scene);
+            Director::getInstance()->replaceScene(rescene);
+        });
+    smenu->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - l1->getContentSize().height - 50));
+    cmenu = MenuItemLabel::create(l2, [](Ref* r)
+        {
+            CCLOG("AsClient");
+            GameManager::Instane()->asClient();
+            auto scene = GameScene::create();
+            auto rescene = CCTransitionCrossFade::create(1, scene);
+            Director::getInstance()->replaceScene(rescene);
+        });
+    cmenu->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - l1->getContentSize().height - l2->getContentSize().height - 70));
     // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
+    auto menu = Menu::create(closeItem, smenu, cmenu, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
+    auto pb2 = PhysicsBody::createBox(l1->getContentSize());
+    pb2->setDynamic(false);
+    pb2->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
+    l1->addComponent(pb2);
+
+
     GameManager::Instane()->delayInit();
 
-
-    //auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    //if (label == nullptr)
-    //{
-    //    problemLoading("'fonts/Marker Felt.ttf'");
-    //}
-    //else
-    //{
-    //    // position the label on the center of the screen
-    //    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-    //                            origin.y + visibleSize.height - label->getContentSize().height));
-
-    //    // add the label as a child to this layer
-    //    this->addChild(label, 1);
-    //}
-
     // add "HelloWorld" splash screen"
-    //auto sprite = Sprite::create("BG.png");
-    //if (sprite == nullptr)
-    //{
-    //    problemLoading("'HelloWorld.png'");
-    //}
-    //else
-    //{
-    //    // position the sprite on the center of the screen
-    //    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    //    // add the sprite as a child to this layer
-    //    this->addChild(sprite, 0);
-    //}
-
-    //RectPrimitive* rect = RectPrimitive::create({ 0,0 }, { 50,505 }, Color4F::GRAY, 1, Color4F::GREEN);
-    //
-    //this->addChild(rect);
-    //auto pb = PhysicsBody::createBox({50,50});
-    //pb->setDynamic(false);
-    //pb->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
-    //rect->addComponent(pb);
-    
-
-    RectPrimitive* rect1 = RectPrimitive::create({ 0,0 }, { 50,50 }, Color4F::RED, 1, Color4F::GREEN);
-    
-    this->addChild(rect1);
-    rect1->setPosition(300, 300);
-    auto pb1 = PhysicsBody::createBox({ 50,50 });
-    pb1->setDynamic(false);
-    pb1->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
-    rect1->addComponent(pb1);
-
-    RectPrimitive* rect2 = RectPrimitive::create({ 0,0 }, { 50,50 }, Color4F::RED, 1, Color4F::GREEN);
-
-    this->addChild(rect2);
-
-    CirclePrimitive* c = CirclePrimitive::create({0,0}, 50, 50, 1, 1, Color4F::GREEN, 10, Color4F::YELLOW);
-    c->setPosition(200, 100);
-    this->addChild(c);
-
-    DotPrimitive* d = DotPrimitive::create({ 60,70 }, 10, Color4F::YELLOW);
-    this->addChild(d);
-
-    for (size_t i = 0; i < 10000; i++)
+    auto sprite = Sprite::create("BG.png");
+    if (sprite == nullptr)
     {
-        auto node = CirclePrimitive::create({ 0,0 }, 5, 50, 1, 1, Color4F::GREEN, 1.5, Color4F::YELLOW);
-        node->setPosition(i*10 % (int)visibleSize.width, i*5 % (int)visibleSize.height);
-        this->addChild(node);
+        problemLoading("'HelloWorld.png'");
     }
-    //Light2d* li = Light2d::create();
-    //li->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-    //this->addChild(li, 100);
+    else
+    {
+        // position the sprite on the center of the screen
+        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x + 100, visibleSize.height/2 + origin.y + 100));
+
+        // add the sprite as a child to this layer
+        this->addChild(sprite, 0);
+    }
+    Light2d* li2 = Light2d::create();
+    li2->setPosition(cmenu->getPosition() + Vec2{0,50});
+    li2->setLightSize(200, 80);
+    this->addChild(li2, 100);
+
+    Light2d* li = Light2d::create();
+    li->setPosition(750,160);
+    li->setLightSize(720, 720);
+    this->addChild(li, 100);
+
+    Light2d* li3 = Light2d::create();
+    li3->setPosition(435,150);
+    li3->setLightSize(200, 80);
+    this->addChild(li3, 100);
+
+    auto ac1 = MoveBy::create(3, { 1050, 460 });
+
+    Light2d* li4 = Light2d::create();
+    li4->setPosition(435, 150);
+    li4->setLightSize(720, 200);
+    this->addChild(li4, 100);
+    li4->runAction(ac1->reverse());
+
+    Light2d* li5 = Light2d::create();
+    li5->setPosition(435, 150);
+    li5->setLightSize(300, 150);
+    this->addChild(li5, 100);
+    DotPrimitive* d = DotPrimitive::create({0,0}, 3, Color4F::WHITE);
+    li5->addChild(d);
+    li5->runAction(ac1);
 
     auto event = EventListenerKeyboard::create();
-    event->onKeyPressed = [d](EventKeyboard::KeyCode k, Event*)->void
+    event->onKeyPressed = [li](EventKeyboard::KeyCode k, Event*)->void
         {
             Vec2 p;
-            auto li = d;
+           // auto li = d;
             if (EventKeyboard::KeyCode::KEY_D == k)
             {
                 p = li->getPosition() + Vec2(40, 0);
@@ -192,45 +194,22 @@ bool HelloWorld::init()
             }
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(event, this);
-    //
-    //Node* n1 = Node::create();
-    //this->addChild(n1);
-    //auto pb2 = PhysicsBody::createBox({ 50,50 });
-    //pb2->setDynamic(false);
-    //pb2->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
-    //n1->addComponent(pb2);
-    //n1->setPosition(500, 700);
-
-    //Light2d* li2 = Light2d::create();
-    //li2->setPosition(100,300);
-    //li2->setLightSize(200, 80);
-    //this->addChild(li2, 100);
-
- /*   auto pb1 = PhysicsBody::createCircle(50);
-    pb1->setDynamic(false);
-    pb1->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
-    li->addComponent(pb1);*/
-   
-
-
-   /* Light2d* li2 = Light2d::create();
-    li2->setPosition({0,0});
-    */
-    /*std::vector<std::pair<int, Vec2*>> hits;
-    int i = ::PhysicEx::OverlapCircle({0,0}, 1000, hits);
-    for (auto j : hits)
-    {
-        for (size_t k = 0; k < j.first; k++)
+    
+    auto muse = EventListenerMouse::create();
+    muse->onMouseDown = [](EventMouse* event) 
         {
-            CCLOG("hits %f, %f \n", j.second[k].x, j.second[k].y);
-        }
-        delete j.second;
-    }*/
+     //   Director::getInstance()->getOpenGLView()->setDesignResolutionSize(960, 480, ResolutionPolicy::SHOW_ALL);
+        CCLOG("%f,%f\n", event->getCursorX(), event->getCursorY());
+        };
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(muse, this);
 
-
-  /*  auto dn = DrawNode::create();
-    this->addChild(dn);
-    dn->drawSolidCircle({ 50,50 }, 50, 0, 360, Color4F::GREEN);*/
+    auto pb3 = PhysicsBody::createCircle(30);
+    pb3->setDynamic(false);
+    pb3->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
+    Node* n2 = Node::create();
+    this->addChild(n2);
+    n2->addComponent(pb3);
+    n2->setPosition(1050, 460);
 
     return true;
 }
@@ -248,7 +227,31 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 
 }
+//RectPrimitive* rect1 = RectPrimitive::create({ 0,0 }, { 50,50 }, Color4F::RED, 1, Color4F::GREEN);
+//
+//this->addChild(rect1);
+//rect1->setPosition(300, 300);
+//auto pb1 = PhysicsBody::createBox({ 50,50 });
+//pb1->setDynamic(false);
+//pb1->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
+//rect1->addComponent(pb1);
 
+//RectPrimitive* rect2 = RectPrimitive::create({ 0,0 }, { 50,50 }, Color4F::RED, 1, Color4F::GREEN);
+//this->addChild(rect2);
+
+//CirclePrimitive* c = CirclePrimitive::create({0,0}, 50, 50, 1, 1, Color4F::GREEN, 10, Color4F::YELLOW);
+//c->setPosition(200, 100);
+//this->addChild(c);
+
+//DotPrimitive* d = DotPrimitive::create({ 60,70 }, 10, Color4F::YELLOW);
+//this->addChild(d);
+
+//for (size_t i = 0; i < 1000; i++)
+//{
+//    auto node = CirclePrimitive::create({ 0,0 }, 5, 50, 1, 1, Color4F::GREEN, 1.5, Color4F::YELLOW);
+//    node->setPosition(i*10 % (int)visibleSize.width, i*5 % (int)visibleSize.height);
+//    this->addChild(node);
+//}
 void HelloWorld::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags)
 {
 }

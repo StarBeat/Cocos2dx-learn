@@ -23,6 +23,8 @@ struct PhysicEx
     enum NODE_TAG
     {
         SHADOW_CAST_TAG = 1,
+        PLAYER_TAG,
+
     };
 
     static void init(PhysicsWorld* pw)
@@ -69,15 +71,15 @@ private:
                     auto scaleY = circle->getBody()->getNode()->getScaleY();
                     count = 50;
                     const float coef = 2.0f * (float)M_PI / count;
-                    Vec2* vertices = new Vec2[count];
+                    points = new Vec2[count];
                     for (unsigned int i = 0; i < count; i++)
                     {
                         float rads = i * coef;
                         GLfloat j = radius * cosf(rads) * scaleX + center.x;
                         GLfloat k = radius * sinf(rads) * scaleY + center.y;
 
-                        vertices[i].x = j;
-                        vertices[i].y = k;
+                        points[i].x = j;
+                        points[i].y = k;
                     }
                     break;
                 }

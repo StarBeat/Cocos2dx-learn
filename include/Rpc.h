@@ -71,6 +71,8 @@ public:
 	Rpc(std::function<void(int)> bindEnty);
 	~Rpc();
 
+	bool isServer() { return _type == CSType::RPC_Server; }
+
 	void asClient(std::string& ip, int port);
 	void asServer(int port);
 
@@ -99,9 +101,27 @@ public:
 		{
 			_handlers[id] = std::unordered_map < std::string, proxyfunc>();
 		}
-		_handlers[id][name] = std::bind(&Rpc::callproxy<F, S>, this, func, s, std::placeholders::_1, std::placeholders::_2);
+		_handlers[id][name] = std::bind(&Rpc::callproxy<F, S>, this, std::forward<F>(func), s, std::placeholders::_1, std::placeholders::_2);
 	}
 
+	template<typename... Params>
+	void call(int id, std::string name, Params... ps) {
+		using args_type = std::tuple<typename std::decay<Params>::type...>;
+		args_type args = std::make_tuple(ps...);
+
+		Serializer ds;
+		ds << name;
+		ds << id;//todo
+		package_params(ds, args);
+		net_call(ds, 0);
+	}
+	void call(int id, std::string name) {
+		Serializer ds;
+		ds << name;
+		ds << id;//todo
+		net_call(ds, 0);
+	}
+	
 	template<typename... Params>
 	void call(std::string name, Params... ps) {
 		using args_type = std::tuple<typename std::decay<Params>::type...>;
@@ -120,12 +140,7 @@ public:
 			}
 			return;
 		}
-		ds << name;
-		ds << 0;
-		package_params(ds, args);
-		net_call(ds, 0);
 	}
-
 	void call(std::string name) {
 		Serializer ds;
 		if (_type == CSType::RPC_Server)
@@ -139,13 +154,8 @@ public:
 			}
 			return;
 		}
-		ds << name;
-		ds << 0;
-		net_call(ds, 0);
 	}
-
-private:
-	/// single_call for server
+	/// single_call only for server
 	template<typename... Params>
 	void single_call(int id, std::string name, Params... ps) {
 		using args_type = std::tuple<typename std::decay<Params>::type...>;
@@ -163,6 +173,7 @@ private:
 		ds << SERVERID;
 		net_call(ds, id);
 	}
+private:
 	
 	void connect(int id);
 	void disconnect(int id);

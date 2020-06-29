@@ -15,6 +15,10 @@ protected:
 public:
 	static T* Instane() 
 	{
+		if (!instance)
+		{
+			instance = new T();
+		}
 		return instance;
 	}
 };

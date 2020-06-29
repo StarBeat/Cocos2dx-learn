@@ -779,6 +779,7 @@ void Renderer::drawBatchedTriangles()
             _triBatchesToDraw[batchesTotal].cmd = cmd;
             _triBatchesToDraw[batchesTotal].indicesToDraw = (int) cmd->getIndexCount();
 
+            isValidMaterialID = true;
             // is this a single batch ? Prevent creating a batch group then
             if (!batchable)
                 isValidMaterialID = false;
@@ -791,7 +792,6 @@ void Renderer::drawBatchedTriangles()
         }
 
         prevMaterialID = currentMaterialID;
-        isValidMaterialID = true;
         firstCommand = false;
     }
     batchesTotal++;

@@ -74,17 +74,17 @@ namespace Util
 	{
 		int result;
 
-	/*	int win = 256 << 10;
+		int win = 256 << 10;
 		result = ::setsockopt(_socket, SOL_SOCKET, SO_RCVBUF, (char*)&win, sizeof(win));
 		result = ::setsockopt(_socket, SOL_SOCKET, SO_SNDBUF, (char*)&win, sizeof(win));
 
 		int noDelay = 1;
-		result = ::setsockopt(_socket, IPPROTO_TCP, TCP_NODELAY, (char*)&noDelay, sizeof(noDelay));*/
+		result = ::setsockopt(_socket, IPPROTO_TCP, TCP_NODELAY, (char*)&noDelay, sizeof(noDelay));
 	}
 
 	SimpleNet::SimpleNet(int maxConnect):_maxConnect(maxConnect)
 	{
-#if __WIN
+#if WIN32
 		WSADATA wsaData;
 		if (WSAStartup(WINSOCK_VERSION, &wsaData) != 0)
 		{
@@ -261,7 +261,7 @@ namespace Util
 			msgPoll.push(msg);
 		}
 
-		//if (socketReady(_socket))
+		if (socketReady(_socket))
 		{
 			Message* msg = getFreeMessage();
 			int rt = ::recv(_socket, (char*)msg->data, 255,0);

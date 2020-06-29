@@ -101,7 +101,6 @@ struct IPrimitive : public cocos2d::Node
     }
     void prepared()
     {
-
     }
 
     unsigned int _primitiveHash;
