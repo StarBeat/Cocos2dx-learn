@@ -5,7 +5,7 @@
 class DotPrimitive : public IPrimitive
 {
 public:
-	DotPrimitive* create(const cocos2d::Vec2& pos, float radius, const cocos2d::Color4F& color);
+	static DotPrimitive* create(const cocos2d::Vec2& pos, float radius, const cocos2d::Color4F& color);
 	~DotPrimitive();
 private:
 	DotPrimitive(const cocos2d::Vec2& pos, float radius, const cocos2d::Color4F& color);

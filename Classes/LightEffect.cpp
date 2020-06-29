@@ -64,7 +64,6 @@ void LightEffect::bindBufferData()
 	buffer[2] = { Vec2(_lightDistance, _lightDistance),Color4B(_color.r, _color.g, _color.b, _color.a), {1, 1} };
 	buffer[3] = { Vec2(_lightDistance, -_lightDistance),Color4B(_color.r, _color.g, _color.b, _color.a), {1, 0} };
 
-
 	//buffer[0] = { Vec2(-_lightDistance, -_lightDistance),Color4B(_color.r, _color.g, _color.b, _color.a), {0,0} };
 	//buffer[1] = { Vec2(-_lightDistance, _lightDistance),Color4B(_color.r, _color.g, _color.b, _color.a), {0, 1} };
 	//buffer[2] = { Vec2(_lightDistance, -_lightDistance),Color4B(_color.r, _color.g, _color.b, _color.a), {1, 0} };
@@ -89,7 +88,7 @@ void LightEffect::draw(GLuint shadowmap)
 	glBindVertexArray(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-
+	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);
 
 	CHECK_GL_ERROR_DEBUG();
 }

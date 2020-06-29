@@ -1,6 +1,8 @@
 #include "GameManager.h"
 #include "PhysicExt.h"
 #include "LightingManager.h"
+#include "InstanceRenderCommand.h"
+
 using namespace cocos2d;
 
 template<>
@@ -22,5 +24,6 @@ bool GameManager::moduleInit(cocos2d::PhysicsWorld* pw)
 bool GameManager::delayInit()
 {
 	LightingManager::Instane()->init();
+	InstanceRenderCommand::init();
 	return true;
 }

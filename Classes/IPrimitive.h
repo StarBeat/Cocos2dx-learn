@@ -4,10 +4,14 @@
 #include "InstanceRenderCommand.h"
 
 using cocos2d::Vec2;
+using cocos2d::Mat4; 
+using cocos2d::RenderQueue;
 using cocos2d::Color4B;
 using cocos2d::Tex2F;
 using cocos2d::V2F_C4B_T2F;
-using cocos2d::V2F_C4B_T2F_Triangle;
+using cocos2d::V2F_C4B_T2F_Triangle; 
+using cocos2d::Renderer; 
+using cocos2d::MATRIX_STACK_TYPE;
 
 static inline Vec2 v2f(float x, float y)
 {
@@ -73,20 +77,37 @@ struct IPrimitive : public cocos2d::Node
 {
     IPrimitive() 
     {
-        _effect = PrimitiveEffect::create(); 
-        _effect->retain();
-        _instancecommande._instances.push_back(this);
     }
     virtual ~IPrimitive() 
     {
+        _instancecommande.rmPrimitive(this);
+        glDeleteBuffers(1, &_vbo);
+        glDeleteVertexArrays(1, &_vao);
         delete _trianglesbuffer;
-        _instancecommande._instances.remove(this);
+    }
+    void calculateTriangleDone()
+    {
+        _instancecommande.addPrimitive(this);
+    }
+	unsigned int _vertex_count;
+    cocos2d::Mat4 _mvp;
+    cocos2d::V2F_C4B_T2F* _trianglesbuffer;
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+    {
+        _mvp = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION) * transform;
+      //  _instancecommande.pushMvp(_primitiveHash, _mvp);
+        _instancecommande.init(RenderQueue::QUEUE_GROUP::GLOBALZ_ZERO, const_cast<Mat4&>(transform), flags, _primitiveHash);
+        renderer->addCommand(&_instancecommande);
+    }
+    void prepared()
+    {
+
     }
 
+    unsigned int _primitiveHash;
 protected:
-	unsigned int _vertex_count;
-    PrimitiveEffect* _effect;
-    cocos2d::V2F_C4B_T2F* _trianglesbuffer;
+    GLuint _vao;
+    GLuint _vbo;
     InstanceRenderCommand _instancecommande;
 protected:
     void createPolygonTriangle(const cocos2d::Vec2* verts, int count, const cocos2d::Color4F& fillColor, float borderWidth, const cocos2d::Color4F& borderColor)

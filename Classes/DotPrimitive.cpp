@@ -1,8 +1,12 @@
 #include "DotPrimitive.h"
+#include "external\xxhash\xxhash.h"
+
 using namespace cocos2d;
 
 DotPrimitive::DotPrimitive(const Vec2& pos, float radius, const Color4F& color)
 {
+    float intArray[] = { pos.x, pos.y, radius, color.r, color.g, color.b,color.a };
+    _primitiveHash = XXH32((const void*)intArray, sizeof(intArray), 0);
 	_vertex_count = 6;
     V2F_C4B_T2F a = { Vec2(pos.x - radius, pos.y - radius), Color4B(color), Tex2F(-1.0, -1.0) };
     V2F_C4B_T2F b = { Vec2(pos.x - radius, pos.y + radius), Color4B(color), Tex2F(-1.0,  1.0) };
@@ -15,7 +19,7 @@ DotPrimitive::DotPrimitive(const Vec2& pos, float radius, const Color4F& color)
     V2F_C4B_T2F_Triangle triangle1 = { a, c, d };
     triangles[0] = triangle0;
     triangles[1] = triangle1;
-    _effect->genBindBuffer(_trianglesbuffer, _vertex_count);
+    calculateTriangleDone();
 }
 
 DotPrimitive* DotPrimitive::create(const cocos2d::Vec2& pos, float radius, const cocos2d::Color4F& color)

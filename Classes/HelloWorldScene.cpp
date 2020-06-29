@@ -27,6 +27,10 @@
 #include "GameManager.h"
 #include "PhysicExt.h"
 #include "RectPrimitive.h"
+#include "CirclePrimitive.h"
+#include "DotPrimitive.h"
+#include "TrianglePrimitive.h"
+
 #include "Light2d.h"
 #include "LightingManager.h"
 
@@ -89,6 +93,9 @@ bool HelloWorld::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
+    GameManager::Instane()->delayInit();
+
+
     //auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
     //if (label == nullptr)
     //{
@@ -105,19 +112,19 @@ bool HelloWorld::init()
     //}
 
     // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("BG.png");
-    if (sprite == nullptr)
-    {
-        problemLoading("'HelloWorld.png'");
-    }
-    else
-    {
-        // position the sprite on the center of the screen
-        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+    //auto sprite = Sprite::create("BG.png");
+    //if (sprite == nullptr)
+    //{
+    //    problemLoading("'HelloWorld.png'");
+    //}
+    //else
+    //{
+    //    // position the sprite on the center of the screen
+    //    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 
-        // add the sprite as a child to this layer
-        this->addChild(sprite, 0);
-    }
+    //    // add the sprite as a child to this layer
+    //    this->addChild(sprite, 0);
+    //}
 
     //RectPrimitive* rect = RectPrimitive::create({ 0,0 }, { 50,505 }, Color4F::GRAY, 1, Color4F::GREEN);
     //
@@ -128,7 +135,7 @@ bool HelloWorld::init()
     //rect->addComponent(pb);
     
 
-    RectPrimitive* rect1 = RectPrimitive::create({ 0,0 }, { 50,50 }, Color4F::GRAY, 1, Color4F::GREEN);
+    RectPrimitive* rect1 = RectPrimitive::create({ 0,0 }, { 50,50 }, Color4F::RED, 1, Color4F::GREEN);
     
     this->addChild(rect1);
     rect1->setPosition(300, 300);
@@ -137,14 +144,32 @@ bool HelloWorld::init()
     pb1->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
     rect1->addComponent(pb1);
 
-    Light2d* li = Light2d::create();
-    li->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-    this->addChild(li, 100);
+    RectPrimitive* rect2 = RectPrimitive::create({ 0,0 }, { 50,50 }, Color4F::RED, 1, Color4F::GREEN);
+
+    this->addChild(rect2);
+
+    CirclePrimitive* c = CirclePrimitive::create({0,0}, 50, 50, 1, 1, Color4F::GREEN, 10, Color4F::YELLOW);
+    c->setPosition(200, 100);
+    this->addChild(c);
+
+    DotPrimitive* d = DotPrimitive::create({ 60,70 }, 10, Color4F::YELLOW);
+    this->addChild(d);
+
+    for (size_t i = 0; i < 10000; i++)
+    {
+        auto node = CirclePrimitive::create({ 0,0 }, 5, 50, 1, 1, Color4F::GREEN, 1.5, Color4F::YELLOW);
+        node->setPosition(i*10 % (int)visibleSize.width, i*5 % (int)visibleSize.height);
+        this->addChild(node);
+    }
+    //Light2d* li = Light2d::create();
+    //li->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+    //this->addChild(li, 100);
 
     auto event = EventListenerKeyboard::create();
-    event->onKeyPressed = [li](EventKeyboard::KeyCode k, Event*)->void
+    event->onKeyPressed = [d](EventKeyboard::KeyCode k, Event*)->void
         {
             Vec2 p;
+            auto li = d;
             if (EventKeyboard::KeyCode::KEY_D == k)
             {
                 p = li->getPosition() + Vec2(40, 0);
@@ -167,19 +192,19 @@ bool HelloWorld::init()
             }
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(event, this);
-    
-    Node* n1 = Node::create();
-    this->addChild(n1);
-    auto pb2 = PhysicsBody::createBox({ 50,50 });
-    pb2->setDynamic(false);
-    pb2->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
-    n1->addComponent(pb2);
-    n1->setPosition(500, 700);
+    //
+    //Node* n1 = Node::create();
+    //this->addChild(n1);
+    //auto pb2 = PhysicsBody::createBox({ 50,50 });
+    //pb2->setDynamic(false);
+    //pb2->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
+    //n1->addComponent(pb2);
+    //n1->setPosition(500, 700);
 
-    Light2d* li2 = Light2d::create();
-    li2->setPosition(100,300);
-    li2->setLightSize(200, 80);
-    this->addChild(li2, 100);
+    //Light2d* li2 = Light2d::create();
+    //li2->setPosition(100,300);
+    //li2->setLightSize(200, 80);
+    //this->addChild(li2, 100);
 
  /*   auto pb1 = PhysicsBody::createCircle(50);
     pb1->setDynamic(false);
@@ -207,7 +232,6 @@ bool HelloWorld::init()
     this->addChild(dn);
     dn->drawSolidCircle({ 50,50 }, 50, 0, 360, Color4F::GREEN);*/
 
-    GameManager::Instane()->delayInit();
     return true;
 }
 

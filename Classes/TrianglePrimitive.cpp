@@ -1,4 +1,6 @@
 #include "TrianglePrimitive.h"
+#include "external\xxhash\xxhash.h"
+using namespace cocos2d;
 
 TrianglePrimitive* TrianglePrimitive::create(const cocos2d::Vec2& p1, const cocos2d::Vec2& p2, const Vec2& p3, const cocos2d::Color4F& color)
 {
@@ -9,6 +11,9 @@ TrianglePrimitive* TrianglePrimitive::create(const cocos2d::Vec2& p1, const coco
 
 TrianglePrimitive::TrianglePrimitive(const cocos2d::Vec2& p1, const cocos2d::Vec2& p2, const Vec2& p3, const cocos2d::Color4F& color)
 {
+    float intArray[] = {p1.x, p1.y, p2.x,p2.y,p3.x,p3.y,color.r, color.g, color.b,color.a };
+    _primitiveHash = XXH32((const void*)intArray, sizeof(intArray), 0);
+    
     _vertex_count = 3;
     
     Color4B col = Color4B(color);
@@ -21,5 +26,5 @@ TrianglePrimitive::TrianglePrimitive(const cocos2d::Vec2& p1, const cocos2d::Vec
     V2F_C4B_T2F_Triangle triangle = { a, b, c };
 
     triangles[0] = triangle;
-    _effect->genBindBuffer(_trianglesbuffer, _vertex_count);
+    calculateTriangleDone();
 }

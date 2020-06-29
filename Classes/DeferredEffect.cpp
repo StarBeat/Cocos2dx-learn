@@ -76,6 +76,7 @@ void DeferredEffect::draw(GLuint lightmap)
 
 //	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);
 	glBindVertexArray(0);
 	CHECK_GL_ERROR_DEBUG();
 }
