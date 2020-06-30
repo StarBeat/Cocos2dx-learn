@@ -30,19 +30,15 @@ public:
 	PlayerManager();
 	
 	void bindFuncs(int id);
-	void createNetPlayer(const Vec2Ex& pos, const Vec2Ex& rot);
+	void createNetPlayer(const Vec2Ex& pos, const Vec2Ex& rot, int id);
+	void respwanNetPlayer(const Vec2Ex& pos, const Vec2Ex& rot);
 	IPlayer* createLocalPlayer(const Vec2Ex& pos, const Vec2Ex& rot);
-	IPlayer* respwanNetPlayer(const Vec2Ex& pos, const Vec2Ex& rot);
 	IPlayer* respwanLocalPlayer(const Vec2Ex& pos, const Vec2Ex& rot);
 
-	void RecycleLPlayer(LocalPlayer* lp)
-	{
-		_lpool.push(lp);
-	}
-	void RecycleNPlayer(NetPlayer* lp)
-	{
-		_npool.push(lp);
-	}
+	void RecycleLPlayer(LocalPlayer* lp);
+	
+	void RecycleNPlayer(NetPlayer* np);
+	
 private:
 	bool _connected;
 	int _selfid;
@@ -51,5 +47,7 @@ private:
 	Util::Rpc* _rpc;
 
 	friend class IPlayer;
+	friend class NetPlayer;
+	friend class LocalPlayer;
 };
 

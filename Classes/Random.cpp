@@ -3,6 +3,7 @@
 Random* ISingle<Random>::instance = new Random();
 Random::Random()
 {
+
 }
 
 Random::~Random()

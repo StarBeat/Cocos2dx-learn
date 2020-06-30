@@ -3,6 +3,7 @@
 #include "LightingManager.h"
 #include "InstanceRenderCommand.h"
 #include "PlayerManager.h"
+#include "Random.h"
 
 #include <chrono>
 using namespace cocos2d;
@@ -39,6 +40,7 @@ void GameManager::asServer()
 	auto now = std::chrono::system_clock::now().time_since_epoch();
 	_seed = std::chrono::duration_cast<std::chrono::microseconds>(now).count();
 	_network->asServer(_seed);
+	Random::Instane()->init(_seed);
 }
 
 void GameManager::asClient()
@@ -50,6 +52,7 @@ void GameManager::setSeed(int seed)
 {
 	if (_network->_type == NetWork::Type::Client)
 	{
+		Random::Instane()->init(seed);
 		_seed = seed;
 	}
 }

@@ -10,14 +10,17 @@ void Rpc::connect(int id)
 {
 	if (_type == CSType::RPC_Server)
 	{
+		single_call(id, "connect", id);//通知接入者
+		single_call(id, "connect", SERVERID);
 		call("connect", id);
 		for (auto i : _ids)
 		{
 			single_call(id, "connect", i);
 		}
-		single_call(id, "connect", id);//通知接入者
-		single_call(id, "connect", SERVERID);
-		_bindEnty(SERVERID);//绑定自身
+		if (_ids.size() == 0)
+		{
+			_bindEnty(SERVERID);//绑定自身
+		}
 	}
 	_bindEnty(id);
 	_ids.push_back(id);
@@ -94,27 +97,47 @@ void Rpc::serverRun()
 		{
 			while (true)
 			{
-				//Message* msg = nullptr;
-				//recv(&msg);
-				//ByteStream bs((char*)msg->data, msg->size);
-				//Serializer ds(bs);
-				//_net->recycleMessage(msg);
-				//std::string funcname;
-				//ds >> funcname;
-				//if (funcname.compare("disconnect") == 0 || funcname.compare("connect") == 0)
-				//{
-				//	int cid;
-				//	ds >> cid;
-				//	if (cid == -1)
-				//	{
-				//		ds<<msg->id;
-				//	}
-				//	else
-				//	{
-				//		ds << cid;
-				//	}
-				//}
-				//call_(funcname, ds.current(), ds.size());
+				Message* msg = nullptr;
+				recv(&msg);
+				if (msg == nullptr)
+					return;
+				ByteStream bs((char*)msg->data, msg->size);
+				Serializer ds(bs);
+				int sid;
+				std::string funcname;
+				ds >> funcname;
+				ds >> sid;
+				if (funcname.compare("disconnect") == 0 || funcname.compare("connect") == 0)
+				{
+					int cid;
+					ds >> cid;
+					if (cid == -1)
+					{
+						ds << msg->id;
+					}
+					else
+					{
+						ds << cid;
+					}
+					call_(DEFAULT_BINDID, funcname, ds.current(), ds.lavesize());
+					_net->recycleMessage(msg);
+					return;
+				}
+				if (_type == CSType::RPC_Server)
+				{
+					for (auto id : _ids)
+					{
+						if (msg->id != id)
+						{
+							Message* transitMsg = _net->getMessage();
+							transitMsg->id = id;
+							transitMsg->size = msg->size;
+							transitMsg->rawwrite(ds.data(), ds.size());
+							send(transitMsg);
+						}
+					}
+				}
+				call_(sid, funcname, ds.current(), ds.lavesize());
 			}
 		});
 	t.detach();
@@ -157,8 +180,8 @@ void Rpc::update()
 				Message* transitMsg = _net->getMessage();
 				transitMsg->id = id;
 				transitMsg->size = msg->size;
-				msg->rawwrite(ds.data(), ds.size());
-				send(msg);
+				transitMsg->write(msg->data, msg->size);
+				send(transitMsg);
 			}
 		}
 	}

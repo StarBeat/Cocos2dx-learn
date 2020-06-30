@@ -111,14 +111,14 @@ public:
 
 		Serializer ds;
 		ds << name;
-		ds << id;//todo
+		ds << id;
 		package_params(ds, args);
 		net_call(ds, 0);
 	}
 	void call(int id, std::string name) {
 		Serializer ds;
 		ds << name;
-		ds << id;//todo
+		ds << id;
 		net_call(ds, 0);
 	}
 	

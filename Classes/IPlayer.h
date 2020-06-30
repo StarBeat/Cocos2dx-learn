@@ -30,7 +30,7 @@ public:
 	{
 		return _primitive;
 	}
-
+	virtual void rewpan() = 0;
 #pragma region Rpc
 	virtual	void move(float x, float y) = 0;
 
@@ -41,6 +41,9 @@ protected:
 	Util::Rpc* _rpc;
 
 	bool _isalive = true;
+	uint16_t _hp;
+	uint16_t _speed;
+	uint16_t _rank;
 public:
 	IPrimitive* _primitive;
 	

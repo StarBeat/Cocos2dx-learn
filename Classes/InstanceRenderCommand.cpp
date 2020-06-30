@@ -17,6 +17,7 @@ void InstanceRenderCommand::init(float globalZOrder , Mat4 & transform, uint32_t
 
 void InstanceRenderCommand::execute()
 {
+	//glViewport(0, 0, 1080, 720);// setFrameSize 视口等比缩小到左下角
 	submit();
 }
 
@@ -26,17 +27,21 @@ void InstanceRenderCommand::submit()
 	{
 		if (_instanceBatchPool[i.first].size() == i.second)
 		{
-			_matbuffer = new float[i.second * 16];
 			_hash2count[i.first] = 0;
-			_hash2shader[i.first]->use();
 			int offset = 0;
 			auto ls = _instanceBatchPool[i.first];
+			if (ls.size() == 0)
+			{
+				return;
+			}
+			_hash2shader[i.first]->use();
+			_matbuffer = new float[i.second * 16];
 			for (auto ins : ls)
 			{
 				memcpy(_matbuffer + offset, ins->_mvp.m, 16 * sizeof(float));
 				offset += 16;
 			}
-
+	
 			_hash2shader[i.first]->bindMatBufferData(_matbuffer, ls.size());
 			//_hash2shader[i.first]->bindMatBufferData(_hash2matbuffer[i.first].data(), ls.size());
 			_hash2shader[i.first]->draw(ls.front()->_vertex_count, _instanceBatchPool[i.first].size());

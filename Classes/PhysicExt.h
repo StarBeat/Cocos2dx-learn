@@ -30,6 +30,7 @@ struct PhysicEx
     static void init(PhysicsWorld* pw)
     {
         instance = pw;
+        instance->setFixedUpdateRate(60);
     }
 
 

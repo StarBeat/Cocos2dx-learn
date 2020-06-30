@@ -19,6 +19,10 @@ public:
 	}
 	void asServer(int seed);
 	void asClient();
+	bool isServer()
+	{
+		return _rpc->isServer();
+	}
 	void update(float dt);
 public:
 	Rpc* _rpc;

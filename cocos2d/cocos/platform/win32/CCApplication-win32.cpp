@@ -95,7 +95,7 @@ int Application::run()
 
     // Retain glview to avoid glview being released in the while loop
     glview->retain();
-
+    
     LONGLONG interval = 0LL;
     LONG waitMS = 0L;
 

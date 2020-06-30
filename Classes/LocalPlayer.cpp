@@ -6,6 +6,9 @@ using namespace cocos2d;
 
 LocalPlayer::LocalPlayer(const cocos2d::Vec2& pos, const cocos2d::Vec2& rot) :IPlayer(CirclePrimitive::create({ 0,0 }, 10, 50, 1, 1, Color4F::BLUE))
 {
+	_selfid = PlayerManager::Instane()->_selfid;
+	_primitive->setPosition(pos);
+	_primitive->setRotation(rot.x);
 }
 LocalPlayer* LocalPlayer::create(const Vec2& pos, const Vec2& rot)
 {
@@ -22,8 +25,20 @@ void LocalPlayer::move(float x, float y)
 	if (_isalive)
 	{
 		_primitive->setPosition(_primitive->getPosition() + Vec2{x, y});
-		_rpc->call("move", x, y);
+		if (_rpc->isServer())
+		{
+			_rpc->call("move", x, y);
+		}
+		else
+		{
+			_rpc->call(_selfid, "move", x, y);
+		}
+	
 	}
+}
+
+void LocalPlayer::rewpan()
+{
 }
 
 LocalPlayer::~LocalPlayer()
@@ -33,5 +48,7 @@ LocalPlayer::~LocalPlayer()
 
 bool LocalPlayer::init()
 {
+	auto pb = PhysicsBody::createCircle(10);
+	_primitive->addComponent(pb);
 	return true;
 }

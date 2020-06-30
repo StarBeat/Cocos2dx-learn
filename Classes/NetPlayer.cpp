@@ -1,5 +1,6 @@
 #include "NetPlayer.h"
 #include <CirclePrimitive.h>
+#include "PlayerManager.h"
 using namespace cocos2d;
 
 NetPlayer* NetPlayer::create(cocos2d::Vec2 pos, cocos2d::Vec2 rot)
@@ -20,6 +21,10 @@ void NetPlayer::move(float x, float y)
 	}
 }
 
+void NetPlayer::rewpan()
+{
+}
+
 NetPlayer::~NetPlayer()
 {
 
@@ -27,11 +32,13 @@ NetPlayer::~NetPlayer()
 
 NetPlayer::NetPlayer(cocos2d::Vec2 pos, cocos2d::Vec2 rot) : IPlayer(CirclePrimitive::create({ 0,0 }, 10, 50, 1, 1, Color4F::BLUE))
 {
-
+	_primitive->setPosition(pos);
+	_primitive->setRotation(rot.x);
 }
 
 bool NetPlayer::init()
 {
-
-	return false;
+	auto pb = PhysicsBody::createCircle(10);
+	_primitive->addComponent(pb);
+	return true;
 }

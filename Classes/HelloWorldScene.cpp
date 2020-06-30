@@ -171,7 +171,7 @@ bool HelloWorld::init()
     event->onKeyPressed = [li](EventKeyboard::KeyCode k, Event*)->void
         {
             Vec2 p;
-           // auto li = d;
+           // auto li = this;
             if (EventKeyboard::KeyCode::KEY_D == k)
             {
                 p = li->getPosition() + Vec2(40, 0);
@@ -195,13 +195,26 @@ bool HelloWorld::init()
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(event, this);
     
-    auto muse = EventListenerMouse::create();
-    muse->onMouseDown = [](EventMouse* event) 
+    CirclePrimitive* c = CirclePrimitive::create({ 0,0 }, 50, 50, 1, 1, Color4F::GREEN, 10, Color4F::YELLOW);
+    c->setPosition(200, 100);
+    this->addChild(c);
+    auto mouse = EventListenerMouse::create();
+    mouse->onMouseDown = [c](EventMouse* event)
         {
-     //   Director::getInstance()->getOpenGLView()->setDesignResolutionSize(960, 480, ResolutionPolicy::SHOW_ALL);
+ /*       auto d = Director::getInstance();
+        auto sc = d->getRunningScene();
+        auto s = sc->getContentSize();
+        if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_LEFT)
+        {
+            Director::getInstance()->getOpenGLView()->setFrameSize(720,480);
+        }
+        if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_RIGHT)
+        {
+            Director::getInstance()->getOpenGLView()->setDesignResolutionSize(1080, 720, ResolutionPolicy::SHOW_ALL);
+        }*/
         CCLOG("%f,%f\n", event->getCursorX(), event->getCursorY());
         };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(muse, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouse, this);
 
     auto pb3 = PhysicsBody::createCircle(30);
     pb3->setDynamic(false);
@@ -224,7 +237,6 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
-
 
 }
 //RectPrimitive* rect1 = RectPrimitive::create({ 0,0 }, { 50,50 }, Color4F::RED, 1, Color4F::GREEN);

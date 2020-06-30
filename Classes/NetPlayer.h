@@ -5,6 +5,7 @@ class NetPlayer : public IPlayer
 public:
 	static NetPlayer* create(cocos2d::Vec2 pos = 0, cocos2d::Vec2 rot = 0);
 	void move(float x, float y) override;
+	void rewpan() override;
 	~NetPlayer();
 protected:
 	virtual bool init();
