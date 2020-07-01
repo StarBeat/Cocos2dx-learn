@@ -123,6 +123,9 @@
     <ClCompile Include="..\Classes\AsteroidManager.cpp">
       <Filter>src\gpp\asteroid</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\BGEffect.cpp">
+      <Filter>src\render\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -224,6 +227,9 @@
     <ClInclude Include="..\Classes\AsteroidManager.h">
       <Filter>src\gpp\asteroid</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\BGEffect.h">
+      <Filter>src\render\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
@@ -244,6 +250,9 @@
       <Filter>resource\shader</Filter>
     </None>
     <None Include="..\Resources\shader\light2d_shader.glsl">
+      <Filter>resource\shader</Filter>
+    </None>
+    <None Include="..\Resources\shader\bg_shader.glsl">
       <Filter>resource\shader</Filter>
     </None>
   </ItemGroup>

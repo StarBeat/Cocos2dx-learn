@@ -4,6 +4,7 @@
 #include "InstanceRenderCommand.h"
 #include "PlayerManager.h"
 #include "Random.h"
+#include "PlayerManager.h"
 
 #include <chrono>
 using namespace cocos2d;
@@ -25,6 +26,7 @@ bool GameManager::moduleInit(cocos2d::PhysicsWorld* pw)
 
 bool GameManager::delayInit()
 {
+	PlayerManager::Instane()->init();
 	LightingManager::Instane()->init();
 	InstanceRenderCommand::init();
 	return true;

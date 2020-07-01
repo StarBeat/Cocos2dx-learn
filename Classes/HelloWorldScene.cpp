@@ -31,6 +31,7 @@
 #include "DotPrimitive.h"
 #include "TrianglePrimitive.h"
 
+#include "BGEffect.h"
 #include "Light2d.h"
 #include "LightingManager.h"
 #include "GameScene.h"
@@ -121,6 +122,9 @@ bool HelloWorld::init()
 
 
     GameManager::Instane()->delayInit();
+    auto bg = BGEffect::create();
+    bg->genBindBuffer();
+    this->addChild(bg);
 
     // add "HelloWorld" splash screen"
     auto sprite = Sprite::create("BG.png");
@@ -195,11 +199,11 @@ bool HelloWorld::init()
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(event, this);
     
-    CirclePrimitive* c = CirclePrimitive::create({ 0,0 }, 50, 50, 1, 1, Color4F::GREEN, 10, Color4F::YELLOW);
-    c->setPosition(200, 100);
-    this->addChild(c);
+    //CirclePrimitive* c = CirclePrimitive::create({ 0,0 }, 50, 50, 1, 1, Color4F::GREEN, 10, Color4F::YELLOW);
+    //c->setPosition(200, 100);
+    //this->addChild(c);
     auto mouse = EventListenerMouse::create();
-    mouse->onMouseDown = [c](EventMouse* event)
+    mouse->onMouseDown = [](EventMouse* event)
         {
  /*       auto d = Director::getInstance();
         auto sc = d->getRunningScene();

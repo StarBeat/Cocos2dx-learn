@@ -33,7 +33,6 @@ void LocalPlayer::move(float x, float y)
 		{
 			_rpc->call(_selfid, "move", x, y);
 		}
-	
 	}
 }
 
@@ -48,7 +47,7 @@ LocalPlayer::~LocalPlayer()
 
 bool LocalPlayer::init()
 {
-	auto pb = PhysicsBody::createCircle(10);
-	_primitive->addComponent(pb);
+	IPlayer::init();
+	_primitive->getPhysicsBody()->setCategoryBitmask(::PhysicEx::NODE_BIT::LPLAYER_BIT);
 	return true;
 }

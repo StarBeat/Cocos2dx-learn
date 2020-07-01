@@ -158,6 +158,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Asteroid.cpp" />
     <ClCompile Include="..\Classes\AsteroidManager.cpp" />
+    <ClCompile Include="..\Classes\BGEffect.cpp" />
     <ClCompile Include="..\Classes\CirclePrimitive.cpp" />
     <ClCompile Include="..\Classes\DeferredEffect.cpp" />
     <ClCompile Include="..\Classes\DotPrimitive.cpp" />
@@ -186,6 +187,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Asteroid.h" />
     <ClInclude Include="..\Classes\AsteroidManager.h" />
+    <ClInclude Include="..\Classes\BGEffect.h" />
     <ClInclude Include="..\Classes\CirclePrimitive.h" />
     <ClInclude Include="..\Classes\DeferredEffect.h" />
     <ClInclude Include="..\Classes\DotPrimitive.h" />
@@ -230,6 +232,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ResourceCompile Include="game.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Resources\shader\bg_shader.glsl" />
     <None Include="..\Resources\shader\deferred_light_shader.glsl" />
     <None Include="..\Resources\shader\light2d_shader.glsl" />
     <None Include="..\Resources\shader\primitive_shader.glsl" />

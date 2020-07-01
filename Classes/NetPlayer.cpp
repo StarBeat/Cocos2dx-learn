@@ -38,7 +38,8 @@ NetPlayer::NetPlayer(cocos2d::Vec2 pos, cocos2d::Vec2 rot) : IPlayer(CirclePrimi
 
 bool NetPlayer::init()
 {
-	auto pb = PhysicsBody::createCircle(10);
-	_primitive->addComponent(pb);
+	IPlayer::init();
+	_primitive->getPhysicsBody()->setCategoryBitmask(::PhysicEx::NODE_BIT::NPLAYER_BIT);
+
 	return true;
 }

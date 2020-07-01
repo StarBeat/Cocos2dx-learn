@@ -17,5 +17,7 @@ protected:
 
 protected:
 	cocos2d::GLProgramState* _glprogramstate;
+	
+	friend class BGEffect;
 };
 

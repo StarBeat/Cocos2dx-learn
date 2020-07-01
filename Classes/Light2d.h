@@ -21,7 +21,7 @@ public:
 	};
 public:
 	static Light2d* create();
-	~Light2d() {}
+	~Light2d();
 	void calculateShadow();
 	void renderLighting(const cocos2d::Mat4& transform);
 	void renderShadow(const cocos2d::Mat4& transform);
@@ -35,7 +35,6 @@ private:
 private:
 	ShadowEffect* _shadoweff;
 	LightEffect* _lighteff;
-	InstanceRenderCommand _instancecommande;
 
 	std::vector<SS_Vertice> _shadowtrianglesbuffer;
 	cocos2d::Color4B _shadow_color = cocos2d::Color4B::BLACK;

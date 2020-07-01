@@ -24,13 +24,25 @@ struct PhysicEx
     {
         SHADOW_CAST_TAG = 1,
         PLAYER_TAG,
-
+        ASTEROID_TAG,
+        GAMEEDGE_TAG,
+        CAMERAEDGE_TAG
     };
-
+    enum NODE_GROUP
+    {
+        PLAYER_GROUP = 1,
+        ASTEROID_GROUP
+    };
+    enum NODE_BIT
+    {
+        LPLAYER_BIT = 0x1,
+        NPLAYER_BIT = 0x2,
+        ASTEROID_BIT = 0x3,
+    };
     static void init(PhysicsWorld* pw)
     {
         instance = pw;
-        instance->setFixedUpdateRate(60);
+        instance->setFixedUpdateRate(100);
     }
 
 

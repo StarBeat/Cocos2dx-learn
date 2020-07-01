@@ -8,5 +8,11 @@ struct Random : public ISingle<Random>
 	int seed;
 	Random();
 	~Random();
+	template<typename T>
+	T get(T min, T max) 
+	{
+		std::uniform_real_distribution<float> u(min, max);
+		return u(e);
+	}
 	void init(int seed);
 };

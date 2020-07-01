@@ -19,8 +19,13 @@ static V2F_C4B_T2F calculateTriangle()
 Light2d* Light2d::create()
 {
 	auto ins = new Light2d();
-	ins->retain();
+	ins->autorelease();
 	return ins;
+}
+
+Light2d::~Light2d()
+{
+	LightingManager::Instane()->lights.erase(this);
 }
 
 Light2d::Light2d()

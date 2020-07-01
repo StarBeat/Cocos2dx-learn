@@ -2,6 +2,8 @@
 #include "GameManager.h"
 #include "PlayerManager.h"
 #include "LocalPlayer.h"
+#include "PhysicExt.h"
+#include "BGEffect.h"
 
 using namespace cocos2d;
 GameScene* GameScene::gameScene = nullptr;
@@ -16,11 +18,24 @@ bool GameScene::init()
     initWithPhysics();
 
     _physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-    gameSize = Vec2(4096, 4096);
     GameManager::Instane()->moduleInit(_physicsWorld);
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+    gameSize = visibleSize * 4;
+
+    auto bg = BGEffect::create();
+    bg->genBindBuffer();
+    this->addChild(bg);
+
+    auto edge = PhysicsBody::createEdgeBox(Size(gameSize));
+    edge->setContactTestBitmask(0xffffffff);
+    edge->setTag(::PhysicEx::NODE_TAG::GAMEEDGE_TAG);
+    edge->setCollisionBitmask(0);
+    this->addComponent(edge);
+
     _scheduler->scheduleUpdate(GameManager::Instane()->_network, -1, false);
-	return true;
+    GameManager::Instane()->delayInit();
+    return true;
 }
