@@ -5,15 +5,17 @@
 #include "GameManager.h"
 #include "Rpc.h"
 #include "PhysicExt.h"
-#include "Light2d.h"
+#include "GameScene.h"
 
 using cocos2d::PhysicsBody;
+using cocos2d::Label;
+using cocos2d::EventCustom;
 
 class IPlayer
 {
 public:
 	virtual ~IPlayer() = default;
-	IPlayer(IPrimitive* primitive) :_primitive(primitive) 
+	IPlayer(IPrimitive* primitive, std::string name) :_primitive(primitive), _name(name)
 	{
 		_rpc = ::GameManager::Instane()->_network->_rpc;
 	}
@@ -34,7 +36,17 @@ public:
 	{
 		return _primitive;
 	}
-	virtual void rewpan() = 0;
+
+	void evNotifyAsManager()
+	{
+		auto ev = new EventCustom(EV_EAT);
+		ev->retain();
+		/*Vec2 ud = _primitive->getPosition();
+		ev->setUserData(&ud);*/
+		GameScene::gameScene->getEventDispatcher()->dispatchEvent(ev);
+	}
+
+	virtual void respwan() = 0;
 #pragma region Rpc
 	virtual	void move(float x, float y) = 0;
 #pragma endregion
@@ -47,12 +59,15 @@ protected:
 		pb->setGroup(::PhysicEx::NODE_GROUP::PLAYER_GROUP);
 		pb->setTag(::PhysicEx::NODE_TAG::PLAYER_TAG);
 		_primitive->addComponent(pb);
-		Light2d* lt = Light2d::create();
-		lt->setLightSize(300, 150);
-		_primitive->addChild(lt);
+		auto label = Label::createWithTTF(_name, "fonts/Marker Felt.ttf", 16);
+		label->setTextColor(cocos2d::Color4B::GRAY);
+		label->setPositionY(20);
+		_primitive->addChild(label);
 		return true;
 	}
+	
 	Util::Rpc* _rpc;
+	std::string _name;
 
 	bool _isalive = true;
 	uint16_t _hp;

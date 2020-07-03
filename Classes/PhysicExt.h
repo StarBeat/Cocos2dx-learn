@@ -5,6 +5,7 @@
 #include "physics\CCPhysicsWorld.h"
 
 using cocos2d::Vec2;
+using cocos2d::Vec3;
 using cocos2d::Rect;
 using cocos2d::PhysicsWorld;
 using cocos2d::PhysicsShape;
@@ -26,7 +27,6 @@ struct PhysicEx
         PLAYER_TAG,
         ASTEROID_TAG,
         GAMEEDGE_TAG,
-        CAMERAEDGE_TAG
     };
     enum NODE_GROUP
     {
@@ -37,15 +37,18 @@ struct PhysicEx
     {
         LPLAYER_BIT = 0x1,
         NPLAYER_BIT = 0x2,
-        ASTEROID_BIT = 0x3,
+        ASTEROID_BIT = 0x4,
     };
     static void init(PhysicsWorld* pw)
     {
         instance = pw;
-        instance->setFixedUpdateRate(100);
+        instance->setFixedUpdateRate(50);
     }
 
-
+    static int OverlapCircle(const Vec3& center, float radius, std::vector<std::pair<int, Vec2*>>& hits)
+    {
+        return OverlapCircle(Vec2(center.x, center.y), radius, hits);
+    }
 	static int OverlapCircle(const Vec2& center, float radius, std::vector<std::pair<int, Vec2*>>& hits)
 	{
         Rect rec{center.x - radius, center.y - radius, radius * 2, radius * 2};

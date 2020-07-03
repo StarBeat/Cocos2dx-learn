@@ -25,7 +25,7 @@ void InstanceRenderCommand::submit()
 {
 	for (auto i : _hash2count)
 	{
-		if (_instanceBatchPool[i.first].size() == i.second)
+		if (_instanceBatchPool[i.first].size() <= i.second && i.second > 0)
 		{
 			_hash2count[i.first] = 0;
 			int offset = 0;

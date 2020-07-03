@@ -35,7 +35,11 @@ void PlayerManager::bindFuncs(int id)
 		_rpc->bind(Util::Rpc::SERVERID,"setSeed",&GameManager::setSeed, GameManager::Instane());
 #pragma endregion
 		_connected = true;
-		createLocalPlayer(Vec2(100, 100) * abs(id + 1), Vec2(0, 0));
+		if (_rpc->isServer())
+		{
+			AsteroidManager::Instane()->init();
+		}
+		createLocalPlayer(Vec2(100, 100) * abs(id + 3), Vec2(0, 0));
 	}
 }
 
@@ -53,7 +57,7 @@ void PlayerManager::createNetPlayer(const Vec2Ex& pos, const Vec2Ex& rot, int id
 	}
 	else
 	{
-		np = NetPlayer::create(pos, rot);
+		np = NetPlayer::create(pos, rot, "Player" + std::to_string(id));
 	}
 	auto gs = GameScene::gameScene;
 	auto node = np->operator IPrimitive * ();
@@ -86,7 +90,7 @@ IPlayer* PlayerManager::createLocalPlayer(const Vec2Ex& pos, const Vec2Ex& rot)
 	}
 	else
 	{
-		lp = LocalPlayer::create(pos, rot);
+		lp = LocalPlayer::create(pos, rot, "Player" + std::to_string(_selfid));
 		auto e = EventListenerKeyboard::create();
 		e->onKeyPressed = std::bind(&PlayerManager::onKeyPressed, this, lp, std::placeholders::_1, std::placeholders::_2);
 		e->onKeyReleased = std::bind(&PlayerManager::onKeyReleased, this, std::placeholders::_1, std::placeholders::_2);
@@ -114,7 +118,7 @@ void PlayerManager::respwanNetPlayer(const Vec2Ex& pos, const Vec2Ex& rot)
 	_npool.pop();
 	np->setPosition(pos);
 	np->setRotation(rot);
-	np->rewpan();
+	np->respwan();
 	auto node = np->operator IPrimitive * ();
 	node->setVisible(true);
 	node->getPhysicsBody()->setEnabled(true);
@@ -129,7 +133,7 @@ IPlayer* PlayerManager::respwanLocalPlayer(const Vec2Ex& pos, const Vec2Ex& rot)
 	_lpool.pop();
 	lp->setPosition(pos);
 	lp->setRotation(rot);
-	lp->rewpan();
+	lp->respwan();
 	auto node = lp->operator IPrimitive * ();
 	node->setVisible(true);
 	node->getPhysicsBody()->setEnabled(true);
@@ -169,8 +173,6 @@ void PlayerManager::init()
 	physicev->onContactSeparate = OnColliderSeparate;
 	_gamescene->getEventDispatcher()->addEventListenerWithSceneGraphPriority(physicev, _gamescene);
 	_gamescene->getScheduler()->scheduleUpdate(this, 0, false);
-	
-	AsteroidManager::Instane()->init();
 }
 
 void PlayerManager::update(float df)

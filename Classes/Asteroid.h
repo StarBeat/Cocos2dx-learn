@@ -5,7 +5,7 @@
 class Asteroid
 {
 public:
-	Asteroid(float x, float y, int mass, int type);
+	Asteroid(float x, float y, int mass, float density, int type, float r, float g, float b);
 	~Asteroid();
 	IPrimitive* getNode()
 	{

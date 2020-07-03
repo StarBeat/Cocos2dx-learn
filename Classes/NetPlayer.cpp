@@ -3,9 +3,9 @@
 #include "PlayerManager.h"
 using namespace cocos2d;
 
-NetPlayer* NetPlayer::create(cocos2d::Vec2 pos, cocos2d::Vec2 rot)
+NetPlayer* NetPlayer::create(cocos2d::Vec2 pos, cocos2d::Vec2 rot, std::string name)
 {
-	auto ins = new NetPlayer(pos, rot);
+	auto ins = new NetPlayer(pos, rot, name);
 	if (ins && ins->init())
 	{
 		return ins;
@@ -21,7 +21,7 @@ void NetPlayer::move(float x, float y)
 	}
 }
 
-void NetPlayer::rewpan()
+void NetPlayer::respwan()
 {
 }
 
@@ -30,7 +30,7 @@ NetPlayer::~NetPlayer()
 
 }
 
-NetPlayer::NetPlayer(cocos2d::Vec2 pos, cocos2d::Vec2 rot) : IPlayer(CirclePrimitive::create({ 0,0 }, 10, 50, 1, 1, Color4F::BLUE))
+NetPlayer::NetPlayer(cocos2d::Vec2 pos, cocos2d::Vec2 rot, std::string name) : IPlayer(CirclePrimitive::create({ 0,0 }, 10, 50, 1, 1, Color4F::BLUE), name)
 {
 	_primitive->setPosition(pos);
 	_primitive->setRotation(rot.x);

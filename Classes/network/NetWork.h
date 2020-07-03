@@ -17,7 +17,7 @@ public:
 	{
 		delete _rpc;
 	}
-	void asServer(int seed);
+	void asServer();
 	void asClient();
 	bool isServer()
 	{

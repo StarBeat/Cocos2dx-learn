@@ -7,7 +7,7 @@ NetWork::NetWork(std::string& ip, int port):_ip(ip),_port(port)
 	_rpc = new Rpc(std::bind(&PlayerManager::bindFuncs, rhis, std::placeholders::_1));
 }
 
-void NetWork::asServer(int seed)
+void NetWork::asServer()
 {
 	_type = Type::Server;
 	_rpc->asServer(_port);

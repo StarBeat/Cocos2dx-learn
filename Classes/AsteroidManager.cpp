@@ -10,7 +10,7 @@ AsteroidManager* ISingle< AsteroidManager>::instance = new AsteroidManager();
 
 AsteroidManager::AsteroidManager():_asteroidCount(0)
 {
-
+	
 }
 
 AsteroidManager::~AsteroidManager()
@@ -28,28 +28,27 @@ void AsteroidManager::spwanAsteriod()
 	{
 		if (i.second >= 2)
 		{
-			for (size_t j = 0; j < 100; j++)
+			for (size_t j = 0; j < 150; j++)
 			{
 				x = r->get<float>(_areas[i.first].getMinX(), _areas[i.first].getMaxX());
 				y = r->get<float>(_areas[i.first].getMinY(), _areas[i.first].getMaxY());
 				t = r->get<int>(0, 3);
-				auto asteroid = new Asteroid(x, y, r->get<int>(10, 50), t);
+				auto asteroid = new Asteroid(x, y, r->get<int>(10, 50), r->get<int>(2, 10), t, r->get<float>(0.1, 1), r->get<float>(0.1, 1), r->get<float>(0.1, 1));
 				gs->addChild(asteroid->getNode());
 			}
 		}
 		else if (i.second == 1)
 		{
-			for (size_t j = 0; j < 100; j++)
+			for (size_t j = 0; j < 150; j++)
 			{
 				x = r->get<float>(_areas[i.first].getMinX(), _areas[i.first].getMaxX());
 				y = r->get<float>(_areas[i.first].getMinY(), _areas[i.first].getMaxY());
 				t = r->get<int>(0, 2);
-				auto asteroid = new Asteroid(x, y, r->get<int>(10, 50), t);
+				auto asteroid = new Asteroid(x, y, r->get<int>(10, 50), r->get<int>(2, 10), t, r->get<float>(0.1,1), r->get<float>(0.1, 1), r->get<float>(0.1, 1));
 				gs->addChild(asteroid->getNode());
 			}
 		}
 	}
-
 }
 
 void AsteroidManager::init()
@@ -60,6 +59,12 @@ void AsteroidManager::init()
 	_areas[1] = { Vec2{0, 0},Size(rectsize) };
 	_areas[2] = { Vec2{-rectsize.x, -rectsize.y },Size(rectsize) };
 	_areas[3] = { Vec2{0, -rectsize.y},Size(rectsize) };
+	auto e = EventListenerCustom::create(EV_EAT, [this](EventCustom* event)
+		{
+
+			event->release();
+		});
+	GameScene::gameScene->getEventDispatcher()->addEventListenerWithSceneGraphPriority(e, GameScene::gameScene);
 }
 
 void AsteroidManager::update(float dt)
