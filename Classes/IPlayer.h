@@ -6,17 +6,20 @@
 #include "Rpc.h"
 #include "PhysicExt.h"
 #include "GameScene.h"
+#include <Asteroid.h>
 
 using cocos2d::PhysicsBody;
 using cocos2d::Label;
 using cocos2d::EventCustom;
+using cocos2d::MoveBy;
 
 class IPlayer
 {
 public:
 	virtual ~IPlayer() = default;
-	IPlayer(IPrimitive* primitive, std::string name) :_primitive(primitive), _name(name)
+	IPlayer(IPrimitive* primitive, std::string name) :_primitive(primitive), _name(name), _hp(100), _rank(1), _mass(50)
 	{
+		_primitive->_owner = this;
 		_rpc = ::GameManager::Instane()->_network->_rpc;
 	}
 	void setPosition(const cocos2d::Vec2& pos)
@@ -41,12 +44,102 @@ public:
 	{
 		auto ev = new EventCustom(EV_EAT);
 		ev->retain();
-		/*Vec2 ud = _primitive->getPosition();
-		ev->setUserData(&ud);*/
+		ev->setUserData(_primitive);
 		GameScene::gameScene->getEventDispatcher()->dispatchEvent(ev);
 	}
+	virtual void death()
+	{
+		_isalive = false;
+		_primitive->retain();
+		_primitive->setActive(false);
+		//_primitive->removeFromParent();
+	 	_primitive->stopAllActions();
+		_primitive->setVisible(false);
+		_primitive->getPhysicsBody()->setEnabled(false);
+	}
+	virtual void respwan()
+	{
+		_isalive = true;
+		_hp = 100;
+		_rank = 1;
+		_mass = 50;
+		_primitive->setActive(true);
+		_primitive->setVisible(true);
+		_primitive->getPhysicsBody()->setEnabled(true);
+		updateData();
+	}
+	void takeDamage(int da)
+	{
+		_hp -= da;
+		if (_hp <= 0)
+		{
+			death();
+		}
+	}
 
-	virtual void respwan() = 0;
+	void onContact(IPlayer* other)
+	{
+		if (_rank == other->_rank)
+		{
+			_primitive->runAction(MoveBy::create(1.0, other->_primitive->getPosition())->reverse());
+			other->_primitive->runAction(MoveBy::create(1.0, _primitive->getPosition())->reverse());
+			int damage = _mass / 5;
+			takeDamage(damage);
+			other->takeDamage(damage);
+		}
+		else if (_rank > other->_rank)
+		{
+			_mass += other->_mass;
+			other->death();
+		}
+		else
+		{
+			other->_mass += _mass;
+			death();
+		}
+		updateData();
+		other->updateData();
+	}
+
+	void onContact(Asteroid* other)
+	{
+		if (_mass >= other->getMass())
+		{
+			_mass += other->getMass();
+			other->death();
+			evNotifyAsManager();
+		}
+		else
+		{
+			int damage = other->getMass() / 5;
+			other->runAction(MoveBy::create(1.0, _primitive->getPosition())->reverse());
+			_mass -= damage;
+			takeDamage(damage);
+		}
+		updateData();
+	}
+
+	void updateData()
+	{
+		if (_isalive)
+		{
+			if (_mass >= (_rank + 1) * 100)
+			{
+				++_rank;
+			}
+			else
+			{
+				if (_rank > 1)
+				{
+					--_rank;
+				}
+			}
+			float scale = 1 + _rank / 5;
+			_primitive->setScale(scale);
+		}
+	}
+
+
 #pragma region Rpc
 	virtual	void move(float x, float y) = 0;
 #pragma endregion
@@ -71,6 +164,7 @@ protected:
 
 	bool _isalive = true;
 	uint16_t _hp;
+	uint16_t _mass;
 	uint16_t _speed;
 	uint16_t _rank;
 public:

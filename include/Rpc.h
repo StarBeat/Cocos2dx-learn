@@ -31,23 +31,17 @@ void package_params(Serializer& ds, const std::tuple<Args...>& t)
 
 // 用tuple做参数调用函数模板类
 template<typename Function, typename Tuple, std::size_t... Index>
-void invoke_impl(Function&& func, Tuple&& t, std::index_sequence<Index...>)
+void invoke(Function&& func, Tuple&& t, std::index_sequence<Index...>)
 {
 	func(std::get<Index>(std::forward<Tuple>(t))...);
-}
-
-template<typename Function, typename Tuple>
-void invoke(Function&& func, Tuple&& t)
-{
-	constexpr auto size = std::tuple_size<typename std::decay<Tuple>::type>::value;
-	invoke_impl(std::forward<Function>(func), std::forward<Tuple>(t), std::make_index_sequence<size>{});
 }
 
 // 调用帮助类，主要用于返回是否void的情况
 template<typename R, typename F, typename ArgsTuple>
 typename std::enable_if<std::is_same<R, void>::value, typename type_xx<R>::type >::type
 call_helper(F f, ArgsTuple args) {
-	invoke(f, args);
+	constexpr auto size = std::tuple_size<typename std::decay<ArgsTuple>::type>::value;
+	invoke(f, std::forward<ArgsTuple>(args), std::make_index_sequence<size>{});
 	return 0;
 }
 
@@ -228,7 +222,6 @@ private:
 		Serializer ds(ByteStream(data, len));
 		constexpr auto N = std::tuple_size<typename std::decay<args_type>::type>::value;
 		args_type args = ds.getTuple < args_type >(std::make_index_sequence<N>{});
-
 		call_helper<R>(func, args);
 	}
 	using proxyfunc = std::function<void(const char*, int)>;

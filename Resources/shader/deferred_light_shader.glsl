@@ -26,15 +26,10 @@ void main()
 	vec3 color = texture2D(_ColorMap, texcoord.xy).rgb;
 	if(color.r >0 || color.g >0 || color.b>0)
 		light *= color;
-	if(_ExposureLimit >= 0)
+	if(_ExposureLimit > 0)
 	{
 		light = clamp(light, 0, _ExposureLimit);
 	}
 	gl_FragColor = vec4(light, 1);
 }
 )";
-
-//	Cull Off
-//		Lighting Off
-//		ZWrite Off
-//		Blend DstColor Zero

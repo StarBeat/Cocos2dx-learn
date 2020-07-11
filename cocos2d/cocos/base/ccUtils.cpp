@@ -190,7 +190,7 @@ Image* captureNode(Node* startNode, float scale)
     RenderTexture* finalRtx = nullptr;
 
     auto rtx = RenderTexture::create(size.width, size.height, Texture2D::PixelFormat::RGBA8888, GL_DEPTH24_STENCIL8);
-    // rtx->setKeepMatrix(true);
+     rtx->setKeepMatrix(true);
     Point savedPos = startNode->getPosition();
     Point anchor;
     if (!startNode->isIgnoreAnchorPointForPosition()) {

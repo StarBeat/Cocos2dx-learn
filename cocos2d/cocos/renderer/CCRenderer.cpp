@@ -628,6 +628,7 @@ void Renderer::visitRenderQueue(RenderQueue& queue)
         {
             processRenderCommand(zPosNext);
         }
+
         flush();
     }
     
@@ -717,6 +718,7 @@ void Renderer::fillVerticesAndIndices(const TrianglesCommand* cmd)
 
     // fill vertex, and convert them to world coordinates
     const Mat4& modelView = cmd->getModelView();
+
     for(ssize_t i=0; i < cmd->getVertexCount(); ++i)
     {
         modelView.transformPoint(&(_verts[i + _filledVertex].vertices));

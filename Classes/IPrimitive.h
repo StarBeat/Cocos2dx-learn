@@ -89,6 +89,18 @@ struct IPrimitive : public cocos2d::Node
     {
         _instancecommande.addPrimitive(this);
     }
+
+    void setActive(bool b)
+    {
+        if (b)
+        {
+            _instancecommande.addPrimitive(this);
+        }
+        else
+        {
+            _instancecommande.rmPrimitive(this);
+        }
+    }
 	unsigned int _vertex_count;
     cocos2d::Mat4 _mvp;
     cocos2d::V2F_C4B_T2F* _trianglesbuffer;
@@ -99,12 +111,17 @@ struct IPrimitive : public cocos2d::Node
         _instancecommande.init(RenderQueue::QUEUE_GROUP::GLOBALZ_ZERO, const_cast<Mat4&>(transform), flags, _primitiveHash);
         renderer->addCommand(&_instancecommande);
     }
+
     void prepared()
     {
     }
-
+    void* getOwner()
+    {
+        return _owner;
+    }
     unsigned int _primitiveHash;
 protected:
+    void* _owner;
     GLuint _vao;
     GLuint _vbo;
     InstanceRenderCommand _instancecommande;
@@ -183,4 +200,8 @@ protected:
             free(extrude);
         }
     }
+
+
+    friend class IPlayer;
+    friend class Asteroid;
 };

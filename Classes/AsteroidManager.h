@@ -20,5 +20,10 @@ public:
 	int _asteroidCount;
 	Rect _areas[AREA_COUNT];
 	std::stack<Asteroid> _pool;
-	std::unordered_map<int, int> _aid2playercount;
+	struct _Pair
+	{
+		int playercount;
+		int asteroidcount;
+	};
+	std::unordered_map<int, _Pair> _aid2count;
 };

@@ -37,8 +37,33 @@ void LocalPlayer::move(float x, float y)
 	}
 }
 
+void LocalPlayer::death()
+{
+	IPlayer::death();
+	auto label = Label::createWithTTF("4", "fonts/Marker Felt.ttf", 80);
+	label->setTextColor(Color4B::YELLOW);
+	label->setPosition(Director::getInstance()->getVisibleSize() / 2 + Size(0, 200));
+	GameScene::gameScene->addChild(label);
+	auto a1 = ScaleTo::create(1, 0.1);
+	auto a2 = CallFunc::create([label]
+		{
+			int i = std::atoi(label->getString().c_str());
+			--i;
+			label->setString(std::to_string(i));
+			label->setScale(1);
+		});
+	auto a3 = CallFunc::create([label]
+		{
+			label->removeFromParent();
+			PlayerManager::Instane()->respwanLocalPlayer({ 300, 300 }, {0,0});
+		});
+	auto seq = Sequence::create(a1, a2, a1, a2, a1, a2, a1, a2, a3, NULL);
+	label->runAction(seq);
+}
+
 void LocalPlayer::respwan()
 {
+	IPlayer::respwan();
 }
 
 LocalPlayer::~LocalPlayer()

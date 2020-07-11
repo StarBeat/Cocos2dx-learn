@@ -35,6 +35,7 @@
 #include "Light2d.h"
 #include "LightingManager.h"
 #include "GameScene.h"
+#include "LightDemoScene.h"
 
 USING_NS_CC;
 
@@ -61,7 +62,7 @@ bool HelloWorld::init()
     }
     initWithPhysics();
 
-    _physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+  //  _physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 
     GameManager::Instane()->moduleInit(_physicsWorld);
     auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -106,12 +107,21 @@ bool HelloWorld::init()
             CCLOG("AsClient");
             GameManager::Instane()->asClient();
             auto scene = GameScene::create();
-            auto rescene = CCTransitionCrossFade::create(1, scene);
+            auto rescene = CCTransitionCrossFade::create(3, scene);
             Director::getInstance()->replaceScene(rescene);
         });
     cmenu->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - l1->getContentSize().height - l2->getContentSize().height - 70));
+    
+    auto demo = MenuItemLabel::create(Label::createWithTTF("DemoScene", "fonts/Marker Felt.ttf", 24), [](Ref*) {
+            auto scene = LightDemoScene::create();
+           // auto rescene = CCTransitionProgressHorizontal::create(1, scene);
+            auto rescene = CCTransitionCrossFade::create(1, scene);
+            Director::getInstance()->replaceScene(rescene);
+        });
+    demo->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 3 * l2->getContentSize().height - 90));
+
     // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, smenu, cmenu, NULL);
+    auto menu = Menu::create(closeItem, smenu, cmenu, demo, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
@@ -122,9 +132,12 @@ bool HelloWorld::init()
 
 
     GameManager::Instane()->delayInit();
-    auto bg = BGEffect::create();
-    bg->genBindBuffer();
-    this->addChild(bg);
+ //   auto bg = BGEffect::create();
+ ///*   bg->setTexturei(2, "snail.png");
+ //   bg->setTexturei(3, "snai2.png");
+ //   bg->setTexturei(4, "snai3.png");*/
+ //   bg->genBindBuffer();
+ //   this->addChild(bg);
 
     // add "HelloWorld" splash screen"
     auto sprite = Sprite::create("BG.png");
@@ -199,26 +212,6 @@ bool HelloWorld::init()
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(event, this);
     
-    //CirclePrimitive* c = CirclePrimitive::create({ 0,0 }, 50, 50, 1, 1, Color4F::GREEN, 10, Color4F::YELLOW);
-    //c->setPosition(200, 100);
-    //this->addChild(c);
-    auto mouse = EventListenerMouse::create();
-    mouse->onMouseDown = [](EventMouse* event)
-        {
- /*       auto d = Director::getInstance();
-        auto sc = d->getRunningScene();
-        auto s = sc->getContentSize();
-        if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_LEFT)
-        {
-            Director::getInstance()->getOpenGLView()->setFrameSize(720,480);
-        }
-        if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_RIGHT)
-        {
-            Director::getInstance()->getOpenGLView()->setDesignResolutionSize(1080, 720, ResolutionPolicy::SHOW_ALL);
-        }*/
-        CCLOG("%f,%f\n", event->getCursorX(), event->getCursorY());
-        };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouse, this);
 
     auto pb3 = PhysicsBody::createCircle(30);
     pb3->setDynamic(false);

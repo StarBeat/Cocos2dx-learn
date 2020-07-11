@@ -3,7 +3,7 @@
 #include <stack>
 #include <list>
 #include "cocos2d.h"
-#include "Serializer.h"
+#include "include\Serializer.h"
 
 using Util::Serializer;
 using cocos2d::Vec2; 
@@ -19,7 +19,8 @@ class GameScene;
 
 struct Vec2Ex : Vec2
 {
-	Vec2Ex() : Vec2(){}
+	Vec2Ex() : Vec2() {}
+	Vec2Ex(float xx, float yy) : Vec2(xx, yy){}
 	Vec2Ex(const Vec2& v) :Vec2(v){}
 	friend Serializer& operator >> (Serializer& in, Vec2Ex& d) {
 		in >> d.x >> d.y;
@@ -39,12 +40,9 @@ public:
 	void bindFuncs(int id);
 
 	void createNetPlayer(const Vec2Ex& pos, const Vec2Ex& rot, int id);
-	void respwanNetPlayer(const Vec2Ex& pos, const Vec2Ex& rot);
 	IPlayer* createLocalPlayer(const Vec2Ex& pos, const Vec2Ex& rot);
 	IPlayer* respwanLocalPlayer(const Vec2Ex& pos, const Vec2Ex& rot);
 
-	void RecycleLPlayer(LocalPlayer* lp);
-	void RecycleNPlayer(NetPlayer* np);
 	
 	void init();
 	void update(float df);
@@ -60,8 +58,6 @@ public:
 private:
 	bool _connected;
 	int _selfid;
-	std::stack<LocalPlayer*> _lpool;
-	std::stack<NetPlayer*> _npool;
 	std::list<IPlayer*> _players;
 	Util::Rpc* _rpc;
 	LocalPlayer* _lplayer;

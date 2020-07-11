@@ -12,7 +12,7 @@ varying vec4 Color;
 
 uniform vec4 _Color;
 //uniform mat4 _MMatrix;
-inline vec4 _ComputeGrabScreenPos (vec4 pos) 
+vec4 _ComputeGrabScreenPos (vec4 pos) 
 {
       #if UNITY_UV_STARTS_AT_TOP
       float scale = -1.0;

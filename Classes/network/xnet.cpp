@@ -1,4 +1,4 @@
-#include "xnet.h"
+#include "include\xnet.h"
 #include <cassert>
 #include <thread>
 #include <iostream>
@@ -187,7 +187,11 @@ namespace Util
 		if (!msgPoll.empty())
 		{
 			msg = msgPoll.pop();
-			memset(msg->data, 0, 256);
+			if (msg != nullptr)
+			{
+				memset(msg->data, 0, 256);
+				return msg;
+			}
 		}
 		else
 		{
@@ -424,12 +428,13 @@ namespace Util
 		if (!msgPoll.empty())
 		{
 			sub = msgPoll.pop();
-			memset(sub->data, 0, 256);
+			if (sub != nullptr)
+			{
+				memset(sub->data, 0, 256);
+				return sub;
+			}
 		}
-		else
-		{
-			sub = new Message();
-		}
+		sub = new Message();
 		return sub;
 	}
 }

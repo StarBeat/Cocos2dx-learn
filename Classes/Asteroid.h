@@ -11,6 +11,15 @@ public:
 	{
 		return _body;
 	}
+	int getMass()
+	{
+		return _mass;
+	}
+	void runAction(cocos2d::Action* action)
+	{
+		_body->runAction(action);
+	}
+	void death();
 private:
 	IPrimitive* _body;
 	int _mass;

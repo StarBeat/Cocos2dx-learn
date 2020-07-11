@@ -5,11 +5,6 @@ class Effect : public cocos2d::Ref
 {
 public:
 	auto inline getGLProgramState() const noexcept { return _glprogramstate; }
-	void useGLProgramState(cocos2d::Node* rhis) 
-	{
-		CCASSERT(_glprogramstate!=nullptr, __FUNCDNAME__);
-		rhis->setGLProgramState(_glprogramstate); 
-	}
 	Effect();
 	virtual ~Effect();
 protected:

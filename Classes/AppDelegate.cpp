@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
@@ -42,7 +42,7 @@ using namespace CocosDenshion;
 
 USING_NS_CC;
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(1080, 720);
+static cocos2d::Size designResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
@@ -76,6 +76,120 @@ static int register_all_packages()
 {
     return 0; //flag for packages manager
 }
+WNDPROC OldWndProc;
+LRESULT winProc(UINT message, WPARAM wParam, LPARAM lParam, BOOL* pProcessed)
+{
+    const int captionHeight = 10;
+    const int frameWidth = 10;
+    static POINTS cursor;
+    switch (message)
+    {
+    case WM_NCHITTEST:
+    {
+        RECT  rc;
+        GetClientRect(Director::getInstance()->getOpenGLView()->getWin32Window(), &rc);
+        int w = rc.right - rc.left;
+        int h = rc.bottom - rc.top;
+        POINT point;
+        GetCursorPos(&point);
+        ScreenToClient(Director::getInstance()->getOpenGLView()->getWin32Window(), &point);
+        rc = { frameWidth, captionHeight, w - frameWidth - frameWidth, h - captionHeight - frameWidth };
+        RECT rectTopLeft = { 0, 0, frameWidth, captionHeight };
+        RECT rectTop = { frameWidth, 0, w - frameWidth, captionHeight };
+        RECT rectTopRight = { w - frameWidth, 0, w, captionHeight };
+        RECT rectLeft = { 0, captionHeight, frameWidth, h - captionHeight - frameWidth };
+        RECT rectRight = { w - frameWidth, captionHeight, w, h - captionHeight - frameWidth };
+        RECT rectBottm = { frameWidth, h - frameWidth, w - frameWidth, h };
+        RECT rectBottmLeft = { 0, h - frameWidth, frameWidth, h };
+        RECT rectBottmRight = { w - frameWidth, h - frameWidth, w, h };
+
+
+        if (PtInRect(&rc, point))
+        {
+            OutputDebugString(L"CLicent\n");
+            return HTCLIENT;
+        }
+        else if (PtInRect(&rectTopLeft, point))
+        {
+            OutputDebugString(L"TopLeft\n");
+            return HTTOPLEFT;
+        }
+        else if (PtInRect(&rectTop, point))
+        {
+            OutputDebugString(L"Caption\n");
+            return HTCAPTION;
+        }
+        else if (PtInRect(&rectTopRight, point))
+        {
+            OutputDebugString(L"TopRight\n");
+            return HTTOPRIGHT;
+        }
+        else if (PtInRect(&rectLeft, point))
+        {
+            OutputDebugString(L"Left\n");
+            return HTLEFT;
+        }
+        else if (PtInRect(&rectRight, point))
+        {
+            OutputDebugString(L"Right\n");
+            return HTRIGHT;
+        }
+        else if (PtInRect(&rectBottm, point))
+        {
+            OutputDebugString(L"Bottom\n");
+            return HTBOTTOM;
+        }
+        else if (PtInRect(&rectBottmLeft, point))
+        {
+            OutputDebugString(L"BottomLeft\n");
+            return HTBOTTOMLEFT;
+        }
+        else if (PtInRect(&rectBottmRight, point))
+        {
+            OutputDebugString(L"BottomRight\n");
+            return HTBOTTOMRIGHT;
+        }
+    }
+    break;
+    case WM_LBUTTONDOWN:
+    {
+        OutputDebugString(L"WM_LBUTTONDOWN\n");
+        cursor = MAKEPOINTS(lParam);
+    }
+    break;
+    case WM_LBUTTONUP:
+    {
+        OutputDebugString(L"WM_LBUTTONUP\n");
+        POINTS pts = MAKEPOINTS(lParam);
+        int xDaly = pts.x - cursor.x;
+        int yDaly = pts.y - cursor.y;
+        RECT rectClient;
+        GetWindowRect(Director::getInstance()->getOpenGLView()->getWin32Window(), &rectClient);
+        int w = rectClient.right - rectClient.left;
+        int h = rectClient.bottom - rectClient.top;
+        MoveWindow(Director::getInstance()->getOpenGLView()->getWin32Window(), rectClient.left + xDaly, rectClient.top + yDaly, w, h, true);
+    }
+    break;
+    default:
+        break;
+    }
+        DefWindowProc(Director::getInstance()->getOpenGLView()->getWin32Window(), message, wParam, lParam);
+    return CallWindowProc((WNDPROC)OldWndProc, Director::getInstance()->getOpenGLView()->getWin32Window(), message, wParam, lParam);
+}
+HHOOK _gMsgHook;
+LRESULT CALLBACK hook_proc(int code, WPARAM w, LPARAM l)
+{
+    MSG* ms = (MSG*)l;
+
+    if (code == HC_ACTION)//Checks if an action is beeing active
+    {
+
+        CWPSTRUCT* pwp = (CWPSTRUCT*)l;
+        if (pwp->message == WM_INITDIALOG)
+            OldWndProc = (WNDPROC)SetWindowLong(pwp->hwnd, GWL_WNDPROC, (LONG)winProc);
+    }
+    return CallNextHookEx(_gMsgHook, code, w, l);
+}
 
 bool AppDelegate::applicationDidFinishLaunching() {
     // initialize director
@@ -83,7 +197,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+        
         glview = GLViewImpl::createWithRect("BallWar", Rect{0,0, designResolutionSize.width, designResolutionSize.height }, 1, true);
+        //glfwWindowHint(GLFW_DECORATED, GL_FALSE);
+        //DWORD dskPid = 0;
+        //DWORD tid = ::GetWindowThreadProcessId(glview->getWin32Window(), &dskPid);
+        //_gMsgHook = ::SetWindowsHookEx(WH_CALLWNDPROC, hook_proc, NULL, tid);
 #else
         glview = GLViewImpl::create("BallWar");
 #endif

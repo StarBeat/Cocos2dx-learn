@@ -28,13 +28,13 @@ varying vec2 pos;
 
 uniform float _LightVolume;
 
-inline vec2 rotate(vec2 v, float ang)
+vec2 rotate(vec2 v, float ang)
 {
 	vec2 r = vec2(cos(ang), sin(ang));
 	return vec2(r.x * v.x - r.y * v.y, r.x * v.y + r.y *v.x);
 }
 
-inline float cross2(vec2 u, vec2 v)
+float cross2(vec2 u, vec2 v)
 {
 	return cross(vec3(u,0), vec3(v,0)).z;
 }
@@ -58,7 +58,7 @@ void main()
 	float leftLeak = clamp(sign(cross2(u, left)), 0 ,1)* acos(dot(left, u));
 	float rightLeak = clamp(sign(cross2(right, v)), 0, 1) * acos(dot(right, v));
 	float total = acos(dot(right, left));
-	float rgb = (leftLeak + rightLeak) / total;
+	float rgb = (leftLeak + rightLeak + 0.01) / total;
 	vec3 color = vec3(rgb, rgb, rgb);
 	color = clamp(color.rgb, 0, 1);
 	FragColor = vec4(1 - color, 1.0);

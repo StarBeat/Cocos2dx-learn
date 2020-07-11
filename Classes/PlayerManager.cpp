@@ -47,116 +47,46 @@ void PlayerManager::bindFuncs(int id)
 void PlayerManager::createNetPlayer(const Vec2Ex& pos, const Vec2Ex& rot, int id)
 {
 	CCLOG("createNetPlayer At (%f,%f)\n", pos.x, pos.y);
-	IPlayer* np;
-	if (!_npool.empty())
-	{
-		np = _npool.top();
-		_npool.pop();
-		np->setPosition(pos);
-		np->setRotation(rot);
-	}
-	else
-	{
-		np = NetPlayer::create(pos, rot, "Player" + std::to_string(id));
-	}
+	IPlayer* np = NetPlayer::create(pos, rot, "Player" + std::to_string(id));
 	auto gs = GameScene::gameScene;
 	auto node = np->operator IPrimitive * ();
-	if (!node->isVisible())// false don`t addchild
-	{
-		node->setVisible(true);
-		node->getPhysicsBody()->setEnabled(true);
-	}
-	else
-	{
-		gs->addChild(node);
-	}
+	
+	gs->addChild(node);
 	_players.push_back(np);
 #pragma region NidBindPoint
 	_rpc->bind( id, "move", &NetPlayer::move, (NetPlayer*)np);
-	_rpc->bind(id, "respwanNetPlayer", &PlayerManager::respwanNetPlayer, this);
+	_rpc->bind(id, "respwanNetPlayer", &NetPlayer::respwanNetPlayer, (NetPlayer*)np);
 #pragma endregion
 }
 
 IPlayer* PlayerManager::createLocalPlayer(const Vec2Ex& pos, const Vec2Ex& rot)
 {
 	_rpc->call(Util::Rpc::DEFAULT_BINDID, "createNetPlayer", pos, rot, _selfid);
-	IPlayer* lp;
-	if (!_lpool.empty())
-	{
-		lp = _lpool.top();
-		_lpool.pop();
-		lp->setPosition(pos);
-		lp->setRotation(rot);
-	}
-	else
-	{
-		lp = LocalPlayer::create(pos, rot, "Player" + std::to_string(_selfid));
-		auto e = EventListenerKeyboard::create();
-		e->onKeyPressed = std::bind(&PlayerManager::onKeyPressed, this, lp, std::placeholders::_1, std::placeholders::_2);
-		e->onKeyReleased = std::bind(&PlayerManager::onKeyReleased, this, std::placeholders::_1, std::placeholders::_2);
-		_gamescene->getEventDispatcher()->addEventListenerWithSceneGraphPriority(e, _gamescene);
-	}
+	IPlayer* lp = LocalPlayer::create(pos, rot, "Player" + std::to_string(_selfid));
+	auto e = EventListenerKeyboard::create();
+	e->onKeyPressed = std::bind(&PlayerManager::onKeyPressed, this, lp, std::placeholders::_1, std::placeholders::_2);
+	e->onKeyReleased = std::bind(&PlayerManager::onKeyReleased, this, std::placeholders::_1, std::placeholders::_2);
+	_gamescene->getEventDispatcher()->addEventListenerWithSceneGraphPriority(e, _gamescene);
 	_lplayer = static_cast<LocalPlayer*>(lp);
 	_players.push_back(lp);
 	auto node = lp->operator IPrimitive * ();
-	if (!node->isVisible())// false don`t addchild
-	{
-		node->setVisible(true);
-		node->getPhysicsBody()->setEnabled(true);
-	}
-	else
-	{
-		_gamescene->addChild(node);
-	}
+	_gamescene->addChild(node);
 	return lp;
 }
 
-void PlayerManager::respwanNetPlayer(const Vec2Ex& pos, const Vec2Ex& rot)
-{
-	IPlayer* np;
-	np = _npool.top();
-	_npool.pop();
-	np->setPosition(pos);
-	np->setRotation(rot);
-	np->respwan();
-	auto node = np->operator IPrimitive * ();
-	node->setVisible(true);
-	node->getPhysicsBody()->setEnabled(true);
-	_players.push_back(np);
-}
 
 IPlayer* PlayerManager::respwanLocalPlayer(const Vec2Ex& pos, const Vec2Ex& rot)
 {
 	_rpc->call(_selfid, "respwanNetPlayer", pos, rot);
-	IPlayer* lp;
-	lp = _lpool.top();
-	_lpool.pop();
-	lp->setPosition(pos);
-	lp->setRotation(rot);
-	lp->respwan();
-	auto node = lp->operator IPrimitive * ();
-	node->setVisible(true);
-	node->getPhysicsBody()->setEnabled(true);
-	_players.push_back(lp);
-	return lp;
-}
-
-void PlayerManager::RecycleLPlayer(LocalPlayer* lp)
-{
-	_players.remove(lp);
-	lp->operator IPrimitive* ()->stopAllActions();
-	lp->operator IPrimitive* ()->setVisible(false);
-	lp->operator IPrimitive* ()->getPhysicsBody()->setEnabled(false);
-	_lpool.push(lp);
-}
-
-void PlayerManager::RecycleNPlayer(NetPlayer* np)
-{
-	_players.remove(np);
-	np->operator IPrimitive* ()->stopAllActions();
-	np->operator IPrimitive* ()->setVisible(false);
-	np->operator IPrimitive* ()->getPhysicsBody()->setEnabled(false);
-	_npool.push(np);
+	_lplayer->setPosition(pos);
+	_lplayer->setRotation(rot);
+	_lplayer->respwan();
+	auto node = _lplayer->operator IPrimitive * ();
+	node->setPosition(pos);
+	node->setRotation(rot.x);
+	auto move = MoveTo::create(1, Vec3(pos.x, pos.y, _gamescene->getDefaultCamera()->getPosition3D().z));
+	_gamescene->getDefaultCamera()->runAction(move);
+	return _lplayer;
 }
 
 void PlayerManager::init()
@@ -183,11 +113,16 @@ void PlayerManager::update(float df)
 		auto vsize = Director::getInstance()->getVisibleSize();
 		auto cam = _gamescene->getDefaultCamera();
 		Rect rc(cam->getPosition() - vsize / 2 + Size(100, 100), vsize - Size(200, 200));
-		if (!rc.containsPoint(_lplayer->_primitive->getPosition() + Vec2(x, y)))
+		auto pos = _lplayer->_primitive->getPosition() + Vec2(x, y);
+		if (!rc.containsPoint(pos))
 		{
 			cam->setPosition(cam->getPosition() + Vec2(x, y));
 		}
-		((LocalPlayer*)_lplayer)->move(x, y);
+		if (pos.x > GameScene::gameScene->gameRect.origin.x && pos.x < GameScene::gameScene->gameRect.size.width &&
+			pos.y >GameScene::gameScene->gameRect.origin.y && pos.y < GameScene::gameScene->gameRect.size.height)
+		{
+			((LocalPlayer*)_lplayer)->move(x, y);
+		}
 	}
 }
 
@@ -195,8 +130,23 @@ bool PlayerManager::OnColliderEntry(PhysicsContact& contact)
 {
 	auto a = contact.getShapeA()->getBody();
 	auto b = contact.getShapeB()->getBody();
-
-	return true;
+	if (a->getTag() == ::PhysicEx::NODE_TAG::ASTEROID_TAG && b->getTag() == ::PhysicEx::NODE_TAG::PLAYER_TAG)
+	{
+		auto player = (IPlayer*)static_cast<IPrimitive*>(b->getNode())->getOwner();
+		player->onContact((Asteroid*)static_cast<IPrimitive*>(a->getNode())->getOwner());
+	}
+	else if (b->getTag() == ::PhysicEx::NODE_TAG::ASTEROID_TAG && a->getTag() == ::PhysicEx::NODE_TAG::PLAYER_TAG)
+	{
+		auto player = (IPlayer*)static_cast<IPrimitive*>(a->getNode())->getOwner();
+		player->onContact((Asteroid*)static_cast<IPrimitive*>(b->getNode())->getOwner());
+	}
+	if (a->getTag() == ::PhysicEx::NODE_TAG::PLAYER_TAG && b->getTag() == ::PhysicEx::NODE_TAG::PLAYER_TAG)
+	{
+		auto player1 = (IPlayer*)static_cast<IPrimitive*>(a->getNode())->getOwner();
+		auto player2 = (IPlayer*)static_cast<IPrimitive*>(b->getNode())->getOwner();
+		player1->onContact(player2);
+	}
+	return false;
 }
 
 bool PlayerManager::OnColliderPreSolve(PhysicsContact& contact, PhysicsContactPreSolve& solve)
@@ -204,7 +154,7 @@ bool PlayerManager::OnColliderPreSolve(PhysicsContact& contact, PhysicsContactPr
 	auto a = contact.getShapeA()->getBody();
 	auto b = contact.getShapeB()->getBody();
 
-	return false;//½ûÖ¹Åö×²
+	return true;
 }
 
 void PlayerManager::OnColliderPostSolve(PhysicsContact& contact, const PhysicsContactPostSolve& solve)

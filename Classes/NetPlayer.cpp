@@ -21,8 +21,23 @@ void NetPlayer::move(float x, float y)
 	}
 }
 
+void NetPlayer::death()
+{
+	IPlayer::death();
+}
+
 void NetPlayer::respwan()
 {
+	IPlayer::respwan();
+}
+
+void NetPlayer::respwanNetPlayer(const Vec2Ex& pos, const Vec2Ex& rot)
+{
+	setPosition(pos);
+	setRotation(rot);
+	respwan();
+	_primitive->setPosition(pos);
+	_primitive->setRotation(rot.x);
 }
 
 NetPlayer::~NetPlayer()

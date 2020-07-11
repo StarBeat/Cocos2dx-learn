@@ -5,6 +5,7 @@ class LocalPlayer : public IPlayer
 public:
 	static LocalPlayer* create(const cocos2d::Vec2& pos,const cocos2d::Vec2& rot, std::string name);
 	void move(float x, float y) override;
+	void death() override;
 	void respwan() override;
 	virtual ~LocalPlayer();
 protected:

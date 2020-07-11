@@ -63,6 +63,10 @@ public:
 	T& pop() 
 	{
 		lock_guard l(_busy);
+		if (queue<T>::empty())
+		{
+			return *reinterpret_cast<T*>(nullptr);
+		}
 		auto rt = queue<T>::front();
 		queue<T>::pop();
 		return rt;
@@ -71,11 +75,19 @@ public:
 	T& front()
 	{
 		lock_guard l(_busy);
+		if (queue<T>::empty())
+		{
+			return *reinterpret_cast<T*>(nullptr);
+		}
 		return queue<T>::front();
 	}
 	T& back()
 	{
 		lock_guard l(_busy);
+		if (queue<T>::empty())
+		{
+			return *reinterpret_cast<T*>(nullptr);
+		}
 		return queue<T>::back();
 	}
 private:

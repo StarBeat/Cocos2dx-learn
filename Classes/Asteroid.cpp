@@ -33,7 +33,7 @@ Asteroid::Asteroid(float x, float y, int mass, float density, int type, float r,
 		//_body = RectPrimitive::create(Vec2(x, y), Vec2(x + 2, y + h), color);
 		_body = DotPrimitive::create(Vec2::ZERO, w, color);
 		_body->setPosition(Vec2(x, y));
-		auto pb = PhysicsBody::createBox({ w,w });
+		auto pb = PhysicsBody::createBox({ 2*w,2 * w });
 		_body->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
 		pb->setTag(::PhysicEx::NODE_TAG::ASTEROID_TAG);
 		pb->setContactTestBitmask(::PhysicEx::NODE_BIT::LPLAYER_BIT | ::PhysicEx::NODE_BIT::NPLAYER_BIT);
@@ -46,7 +46,7 @@ Asteroid::Asteroid(float x, float y, int mass, float density, int type, float r,
 	{
 		_body = DotPrimitive::create(Vec2::ZERO, w, color);
 		_body->setPosition(Vec2(x, y));
-		auto pb = PhysicsBody::createBox({ w,w });
+		auto pb = PhysicsBody::createBox({ 2 * w,2 * w });
 		_body->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
 		pb->setTag(::PhysicEx::NODE_TAG::ASTEROID_TAG);
 		pb->setContactTestBitmask(::PhysicEx::NODE_BIT::LPLAYER_BIT | ::PhysicEx::NODE_BIT::NPLAYER_BIT);
@@ -58,8 +58,14 @@ Asteroid::Asteroid(float x, float y, int mass, float density, int type, float r,
 	default:
 		break;
 	}
+	_body->_owner = this;
 }
 
 Asteroid::~Asteroid()
 {
+}
+
+void Asteroid::death()
+{
+	_body->removeFromParent();
 }

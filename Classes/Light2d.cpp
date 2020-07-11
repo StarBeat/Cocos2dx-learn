@@ -61,7 +61,7 @@ void Light2d::calculateShadow()
 	//calculate
 	std::vector<std::pair<int, Vec2*>> hits;
 	auto pos =getParent()->convertToWorldSpace(getPosition());
-	int hit = ::PhysicEx::OverlapCircle(pos, _lighteff->_lightDistance, hits);
+	int hit = ::PhysicEx::OverlapCircle(pos, _lighteff->_lightDistance + 20, hits);
 	if (hit > 0)
 	{
 		Vec3 z(0, 0, 1);

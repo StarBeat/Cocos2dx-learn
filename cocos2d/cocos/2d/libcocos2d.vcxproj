@@ -97,6 +97,7 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <PrecompiledHeaderFile>precheader.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>precheader.h</ForcedIncludeFiles>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
     </ClCompile>
     <PreLinkEvent>
       <Command>if not exist "$(OutDir)" mkdir "$(OutDir)"
@@ -157,6 +158,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\external\uv\prebuilt\win32\*.*" "$(OutDir)"</Com
       <Optimization>MinSpace</Optimization>
       <PrecompiledHeaderFile>precheader.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>precheader.h</ForcedIncludeFiles>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
     </ClCompile>
     <PreLinkEvent>
       <Command>if not exist "$(OutDir)" mkdir "$(OutDir)"

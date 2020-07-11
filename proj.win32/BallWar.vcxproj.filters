@@ -43,6 +43,9 @@
     <Filter Include="src\gpp\asteroid">
       <UniqueIdentifier>{bbe26ab9-5944-4f4e-a7b2-1b1fa7886c31}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\demo">
+      <UniqueIdentifier>{cc28b55a-ba9c-41f9-babd-acb9fa7b5bcf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -125,6 +128,9 @@
     </ClCompile>
     <ClCompile Include="..\Classes\BGEffect.cpp">
       <Filter>src\render\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LightDemoScene.cpp">
+      <Filter>src\demo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -229,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\BGEffect.h">
       <Filter>src\render\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LightDemoScene.h">
+      <Filter>src\demo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

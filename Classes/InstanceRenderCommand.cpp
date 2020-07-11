@@ -29,14 +29,14 @@ void InstanceRenderCommand::submit()
 		{
 			_hash2count[i.first] = 0;
 			int offset = 0;
-			auto ls = _instanceBatchPool[i.first];
+			auto& ls = _instanceBatchPool[i.first];
 			if (ls.size() == 0)
 			{
 				return;
 			}
 			_hash2shader[i.first]->use();
 			_matbuffer = new float[i.second * 16];
-			for (auto ins : ls)
+			for (const auto& ins : ls)
 			{
 				memcpy(_matbuffer + offset, ins->_mvp.m, 16 * sizeof(float));
 				offset += 16;
