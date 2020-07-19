@@ -72,7 +72,7 @@ void PrimitiveEffect::draw(int vertcount, int objcount)
 	glBindVertexArray(_vao);
 	glDrawArraysInstanced(GL_TRIANGLES, 0, vertcount, objcount);
 
-	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, vertcount);
+	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, vertcount * objcount);
 
 	glBindVertexArray(0);
 	//CHECK_GL_ERROR_DEBUG();

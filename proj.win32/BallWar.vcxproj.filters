@@ -46,6 +46,12 @@
     <Filter Include="src\demo">
       <UniqueIdentifier>{cc28b55a-ba9c-41f9-babd-acb9fa7b5bcf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\imgui">
+      <UniqueIdentifier>{bca5a7c5-9d26-47c3-ab27-27acf3580659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util">
+      <UniqueIdentifier>{e81c3cd7-d786-43da-a560-f72cc3c587dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -131,6 +137,30 @@
     </ClCompile>
     <ClCompile Include="..\Classes\LightDemoScene.cpp">
       <Filter>src\demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\InstanceDemoScene.cpp">
+      <Filter>src\demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\imgui\imgui.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\imgui\imgui_demo.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\imgui\imgui_draw.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\imgui\imgui_widgets.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\imgui\CCIMGUI.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\imgui\CCImGuiLayer.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\imgui\imgui_impl_cocos2dx.cpp">
+      <Filter>src\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +268,39 @@
     </ClInclude>
     <ClInclude Include="..\Classes\LightDemoScene.h">
       <Filter>src\demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\InstanceDemoScene.h">
+      <Filter>src\demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\imgui\imconfig.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\imgui\imgui.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\imgui\imgui_internal.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\imgui\CCIMGUI.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\imgui\CCImGuiLayer.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\imgui\imgui_impl_cocos2dx.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\imgui\imstb_rectpack.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\imgui\imstb_textedit.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\imgui\imstb_truetype.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Util.h">
+      <Filter>src\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -39,6 +39,8 @@ using namespace cocos2d::experimental;
 #include "audio/include/SimpleAudioEngine.h"
 using namespace CocosDenshion;
 #endif
+#include <CCImGuiLayer.h>
+#include <CCIMGUI.h>
 
 USING_NS_CC;
 
@@ -240,7 +242,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // run
     director->runWithScene(scene);
-
+    ImGuiLayer::createAndKeepOnTop();
     return true;
 }
 

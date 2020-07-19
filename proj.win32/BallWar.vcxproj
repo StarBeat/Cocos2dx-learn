@@ -60,7 +60,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration).win32\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration).win32\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration).win32\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration).win32\obj\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
@@ -79,7 +79,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>E:\LE\cocos2d-x-3.17.2\proj\BallWar\include;$(EngineRoot);$(EngineRoot)external;$(EngineRoot)cocos\audio\include;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)extensions;..\Classes;..;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\LE\cocos2d-x-3.17.2\proj\BallWar\Classes\imgui;E:\LE\cocos2d-x-3.17.2\proj\BallWar\include;$(EngineRoot);$(EngineRoot)external;$(EngineRoot)cocos\audio\include;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)extensions;..\Classes;..;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;COCOS2D_DEBUG=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -137,20 +137,21 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
       <DisableSpecificWarnings>4267;4251;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
       <AdditionalDependencies>libcurl.lib;%(AdditionalDependencies);$(_COCOS_LIB_WIN32_BEGIN);$(_COCOS_LIB_WIN32_END)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories);$(_COCOS_LIB_PATH_WIN32_BEGIN);$(_COCOS_LIB_PATH_WIN32_END)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>rmdir /S /Q "$(Configuration).win32\obj\"</Command>
     </PostBuildEvent>
     <PreLinkEvent>
       <Command>
@@ -169,6 +170,14 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClCompile Include="..\Classes\GameManager.cpp" />
     <ClCompile Include="..\Classes\GameScene.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="..\Classes\imgui\CCIMGUI.cpp" />
+    <ClCompile Include="..\Classes\imgui\CCImGuiLayer.cpp" />
+    <ClCompile Include="..\Classes\imgui\imgui.cpp" />
+    <ClCompile Include="..\Classes\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\Classes\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\Classes\imgui\imgui_impl_cocos2dx.cpp" />
+    <ClCompile Include="..\Classes\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\Classes\InstanceDemoScene.cpp" />
     <ClCompile Include="..\Classes\InstanceRenderCommand.cpp" />
     <ClCompile Include="..\Classes\Light2d.cpp" />
     <ClCompile Include="..\Classes\LightDemoScene.cpp" />
@@ -199,6 +208,16 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\GameManager.h" />
     <ClInclude Include="..\Classes\GameScene.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
+    <ClInclude Include="..\Classes\imgui\CCIMGUI.h" />
+    <ClInclude Include="..\Classes\imgui\CCImGuiLayer.h" />
+    <ClInclude Include="..\Classes\imgui\imconfig.h" />
+    <ClInclude Include="..\Classes\imgui\imgui.h" />
+    <ClInclude Include="..\Classes\imgui\imgui_impl_cocos2dx.h" />
+    <ClInclude Include="..\Classes\imgui\imgui_internal.h" />
+    <ClInclude Include="..\Classes\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\Classes\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\Classes\imgui\imstb_truetype.h" />
+    <ClInclude Include="..\Classes\InstanceDemoScene.h" />
     <ClInclude Include="..\Classes\InstanceRenderCommand.h" />
     <ClInclude Include="..\Classes\IPlayer.h" />
     <ClInclude Include="..\Classes\IPrimitive.h" />
@@ -218,6 +237,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\RectPrimitive.h" />
     <ClInclude Include="..\Classes\ShadowEffect.h" />
     <ClInclude Include="..\Classes\TrianglePrimitive.h" />
+    <ClInclude Include="..\Classes\Util.h" />
     <ClInclude Include="..\include\Queue.hpp" />
     <ClInclude Include="..\include\Rpc.h" />
     <ClInclude Include="..\include\Serializer.h" />

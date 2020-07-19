@@ -16,10 +16,11 @@ static V2F_C4B_T2F calculateTriangle()
 
 }
 
-Light2d* Light2d::create()
+Light2d* Light2d::create(const std::string& texname)
 {
-	auto ins = new Light2d();
+	auto ins = new Light2d(texname);
 	ins->autorelease();
+	ins->setTag(::PhysicEx::LIGHTING_TAG);
 	return ins;
 }
 
@@ -28,10 +29,16 @@ Light2d::~Light2d()
 	LightingManager::Instane()->lights.erase(this);
 }
 
-Light2d::Light2d()
+Light2d::Light2d(const std::string& texname)
 {
+	Texture2D* tex = nullptr;
+	if (!texname.empty())
+	{
+		tex = _director->getTextureCache()->addImage(texname);
+	}
 	_shadoweff = ShadowEffect::create(this);
-	_lighteff = LightEffect::create(this);
+	_lighteff = LightEffect::create(this, tex);
+	_shadoweff->_lightVolumne = &_lighteff->_lightVolumn;
 
 	_shadoweff->genBuffer();
 	_lighteff->genBuffer();
@@ -241,7 +248,7 @@ void Light2d::calculateShadow()
 void Light2d::renderLighting(const cocos2d::Mat4& transform)
 {
 	_lighteff->use(transform);
-	_lighteff->draw(_shadoweff->getShadowMap());
+	_lighteff->draw(_shadoweff->getShadowMap(), this->getPosition3D());
 }
 
 void Light2d::renderShadow(const cocos2d::Mat4& transform)
@@ -266,7 +273,7 @@ void Light2d::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, 
 
 void Light2d::setLightSize(float range, float volumneRaduis)
 {
-	_shadoweff->_lightVolumne = volumneRaduis;
 	_lighteff->_lightVolumn = volumneRaduis;
+	_shadoweff->_lightVolumne = &_lighteff->_lightVolumn;
 	_lighteff->_lightDistance = range;
 }

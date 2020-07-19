@@ -17,7 +17,7 @@ public:
 private:
 	ShadowEffect() {}
 	bool init();
-	float _lightVolumne = 140;
+	float* _lightVolumne;
 private:
 	GLuint _vao;
 	GLuint _vbo;

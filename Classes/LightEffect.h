@@ -4,10 +4,10 @@ class Light2d;
 class LightEffect : public Effect
 {
 public:
-	static LightEffect* create(Light2d* l);
+	static LightEffect* create(Light2d* l, cocos2d::Texture2D* tex);
 	void genBuffer();
 	void bindBufferData();
-	void draw(GLuint shadowmap);
+	void draw(GLuint shadowmap, cocos2d::Vec3 pos);
 	void use(const cocos2d::Mat4& mat);
 	static void lightRenderStart()
 	{
@@ -26,22 +26,28 @@ public:
 		return _lightmap;
 	}
 protected:
-	bool init();
+	bool init(cocos2d::Texture2D* tex);
 	cocos2d::Color4F _color = cocos2d::Color4F::WHITE;
-	float _attenuation = 0.5;
+	float _attenuation = 0.5f;
 	float _intensity = 1;
 	float _lightDistance = 480;
-	int _smoothRadius = 100;
 	float _lightVolumn = 140;
+	float _K0 = 1;
+	float _K1 = 0.0014f;
+	float _K2 = 0.000007f;
 private:
-	LightEffect() {}
+	LightEffect():_lightCookie(nullptr){}
 	GLuint _vao;
 	GLuint _vbo;
+	cocos2d::Texture2D* _lightCookie;
 	cocos2d::V2F_C4B_T2F buffer[6];
 	static GLuint _fbo;
 	static GLuint _lightmap;
 	static bool _start_renderlights;
 	Light2d* _light;
 	friend class Light2d;
+
+	friend class LightDemoScene;
+	friend class LightDemoScene1;
 };
 

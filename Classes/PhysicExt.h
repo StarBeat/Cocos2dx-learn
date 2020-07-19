@@ -27,6 +27,7 @@ struct PhysicEx
         PLAYER_TAG,
         ASTEROID_TAG,
         GAMEEDGE_TAG,
+        LIGHTING_TAG,
     };
     enum NODE_GROUP
     {

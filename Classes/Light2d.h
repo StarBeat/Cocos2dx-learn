@@ -20,7 +20,7 @@ public:
 		cocos2d::Vec2 uv2;
 	};
 public:
-	static Light2d* create();
+	static Light2d* create(const std::string& texname = "");
 	~Light2d();
 	void calculateShadow();
 	void renderLighting(const cocos2d::Mat4& transform);
@@ -29,7 +29,7 @@ public:
 	void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
 	void setLightSize(float range, float volumneRaduis);
 private:
-	Light2d();
+	Light2d(const std::string& texname);
 	void debugDrawline(cocos2d::Vec2 a, cocos2d::Vec2 b,const cocos2d::Color4F&);
 	void submite(const cocos2d::Mat4& transform);
 private:
@@ -42,5 +42,7 @@ private:
 	cocos2d::CustomCommand _rendercmd;
 
 	friend class LightingManager;
+	friend class LightDemoScene;
+	friend class LightDemoScene1;
 };
 

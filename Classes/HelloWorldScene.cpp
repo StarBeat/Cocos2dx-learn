@@ -36,7 +36,8 @@
 #include "LightingManager.h"
 #include "GameScene.h"
 #include "LightDemoScene.h"
-
+#include "InstanceDemoScene.h"
+#include <CCIMGUI.h>
 USING_NS_CC;
 
 Scene* HelloWorld::createScene()
@@ -50,6 +51,7 @@ static void problemLoading(const char* filename)
     printf("Error while loading: %s\n", filename);
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
+
 
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
@@ -90,38 +92,49 @@ bool HelloWorld::init()
         float y = origin.y + closeItem->getContentSize().height/2;
         closeItem->setPosition(Vec2(x,y));
     }
-    auto l1 = Label::createWithTTF("AsServer", "fonts/Marker Felt.ttf", 24);
-    auto l2 = Label::createWithTTF("AsClient", "fonts/Marker Felt.ttf", 24);
+    auto l1 = Label::createWithTTF("RPCAsServer", "fonts/fontcn1.ttf", 24);
+    auto l2 = Label::createWithTTF("RPCAsClient", "fonts/Marker Felt.ttf", 24);
     MenuItemLabel* cmenu;
     auto smenu = MenuItemLabel::create(l1, [](Ref*)
         {
-            CCLOG("AsServer");
             GameManager::Instane()->asServer();
             auto scene = GameScene::create();
             auto rescene = CCTransitionCrossFade::create(1, scene);
             Director::getInstance()->replaceScene(rescene);
         });
-    smenu->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - l1->getContentSize().height - 50));
+    smenu->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - l1->getContentSize().height));
     cmenu = MenuItemLabel::create(l2, [](Ref* r)
         {
-            CCLOG("AsClient");
             GameManager::Instane()->asClient();
             auto scene = GameScene::create();
             auto rescene = CCTransitionCrossFade::create(3, scene);
             Director::getInstance()->replaceScene(rescene);
         });
-    cmenu->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - l1->getContentSize().height - l2->getContentSize().height - 70));
+    cmenu->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - l1->getContentSize().height - l2->getContentSize().height));
     
-    auto demo = MenuItemLabel::create(Label::createWithTTF("DemoScene", "fonts/Marker Felt.ttf", 24), [](Ref*) {
+    auto demo = MenuItemLabel::create(Label::createWithTTF("LightDemoScene", "fonts/Marker Felt.ttf", 24), [](Ref*) {
             auto scene = LightDemoScene::create();
            // auto rescene = CCTransitionProgressHorizontal::create(1, scene);
             auto rescene = CCTransitionCrossFade::create(1, scene);
             Director::getInstance()->replaceScene(rescene);
         });
-    demo->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 3 * l2->getContentSize().height - 90));
+    demo->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 3 * l2->getContentSize().height));
+    auto demo1 = MenuItemLabel::create(Label::createWithTTF("LightDemoScene1", "fonts/Marker Felt.ttf", 24), [](Ref*) {
+        auto scene = LightDemoScene1::create();
+        // auto rescene = CCTransitionProgressHorizontal::create(1, scene);
+        auto rescene = CCTransitionCrossFade::create(1, scene);
+        Director::getInstance()->replaceScene(rescene);
+        });
+    demo1->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 4 * l2->getContentSize().height));
+    auto demo2 = MenuItemLabel::create(Label::createWithTTF("InstanceDemoScene", "fonts/Marker Felt.ttf", 24), [](Ref*) {
+        auto scene = InstanceDemoScene::create();
+        auto rescene = CCTransitionCrossFade::create(1, scene);
+        Director::getInstance()->replaceScene(rescene);
+        });
+    demo2->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 5 * l2->getContentSize().height));
 
     // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, smenu, cmenu, demo, NULL);
+    auto menu = Menu::create(closeItem, smenu, cmenu, demo, demo1, demo2, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 

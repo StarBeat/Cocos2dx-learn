@@ -70,11 +70,12 @@ void ShadowEffect::draw(int vercount)
 {
 	glBindVertexArray(_vao);
 	//_glprogramstate->setUniformFloat("_LightSize", 1.4);//_lightVolumn
-	_glprogramstate->setUniformFloat("_LightVolume", _lightVolumne);//_lightVolumn
+	_glprogramstate->setUniformFloat("_LightVolume", *_lightVolumne);//_lightVolumn
 	_glprogramstate->applyUniforms();
 	glDrawArrays(GL_TRIANGLES, 0,vercount);
 	glBindVertexArray(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, vercount);
 	CHECK_GL_ERROR_DEBUG();
 }
 

@@ -8,10 +8,10 @@ GLuint LightEffect::_fbo = -1;
 GLuint LightEffect::_lightmap = -1;
 bool LightEffect::_start_renderlights = false;
 
-LightEffect* LightEffect::create(Light2d* l)
+LightEffect* LightEffect::create(Light2d* l, Texture2D* tex)
 {
 	auto ins = new LightEffect();
-	if (ins && ins->init())
+	if (ins && ins->init(tex))
 	{
 		ins->retain();
 	}
@@ -51,6 +51,7 @@ void LightEffect::genBuffer()
 	unsigned int attachments[1] = { GL_COLOR_ATTACHMENT0 };
 	glDrawBuffers(1, attachments);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	//auto i = _glprogramstate->getGLProgram()->getUniformLocation("_ShadowMap");
 	//glUniform1i(i, 0);
 }
@@ -74,15 +75,23 @@ void LightEffect::bindBufferData()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(V2F_C4B_T2F) * 4, buffer, GL_STREAM_DRAW);
 }
 
-void LightEffect::draw(GLuint shadowmap)
+void LightEffect::draw(GLuint shadowmap, Vec3 pos)
 {
 	bindBufferData();
 	_glprogramstate->setUniformFloat("_Attenuation", _attenuation);
-	_glprogramstate->setUniformFloat("_Intensity", _intensity);
+	_glprogramstate->setUniformFloat("_Intensity", _intensity); 
+	_glprogramstate->setUniformFloat("_K0", _K0);
+	_glprogramstate->setUniformFloat("_K1", _K1);
+	_glprogramstate->setUniformFloat("_K2", _K2);
 	_glprogramstate->setUniformVec4("_Color", { _color.r, _color.g, _color.b, _color.a });
+	_glprogramstate->setUniformVec3("_Position", pos);
 	_glprogramstate->setUniformTexture("_ShadowMap", shadowmap);
+	if (_lightCookie)
+	{
+		_glprogramstate->setUniformTexture("_LightCookie", _lightCookie);
+	}
 	_glprogramstate->applyUniforms();
-
+	
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	
 	glBindVertexArray(0);
@@ -108,9 +117,18 @@ void LightEffect::use(const cocos2d::Mat4& mat)
 	_glprogramstate->apply(mat);
 }
 
-bool LightEffect::init()
+bool LightEffect::init(Texture2D* tex)
 {
 	std::string vs = light2d_analytic_vs;
-	std::string fs = light2d_analytic_fs;
+	std::string fs;
+	if (tex != nullptr)
+	{
+		_lightCookie = tex;
+		fs = light2d_texture_fs;
+	}
+	else
+	{
+		fs = light2d_analytic_fs;
+	}
 	return initGLProgramState(vs, fs);
 }
