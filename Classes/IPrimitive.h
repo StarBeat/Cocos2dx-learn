@@ -108,7 +108,7 @@ struct IPrimitive : public cocos2d::Node
     {
         _mvp = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION) * transform;
       //  _instancecommande.pushMvp(_primitiveHash, _mvp);
-        _instancecommande.init(RenderQueue::QUEUE_GROUP::GLOBALZ_ZERO, const_cast<Mat4&>(transform), flags, _primitiveHash);
+        _instancecommande.init(RenderQueue::QUEUE_GROUP::GLOBALZ_NEG, const_cast<Mat4&>(transform), flags, _primitiveHash);
         renderer->addCommand(&_instancecommande);
     }
 

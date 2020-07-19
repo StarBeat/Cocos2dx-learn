@@ -41,7 +41,6 @@ void InstanceRenderCommand::submit()
 				memcpy(_matbuffer + offset, ins->_mvp.m, 16 * sizeof(float));
 				offset += 16;
 			}
-	
 			_hash2shader[i.first]->bindMatBufferData(_matbuffer, ls.size());
 			//_hash2shader[i.first]->bindMatBufferData(_hash2matbuffer[i.first].data(), ls.size());
 			_hash2shader[i.first]->draw(ls.front()->_vertex_count, _instanceBatchPool[i.first].size());

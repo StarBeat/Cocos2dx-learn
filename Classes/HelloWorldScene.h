@@ -32,6 +32,7 @@ class HelloWorld : public cocos2d::Scene
 public:
     static cocos2d::Scene* createScene();
 
+    void onEnter() override;
     virtual bool init();
     
     // a selector callback

@@ -408,7 +408,7 @@ bool LightDemoScene1::init()
             ImGui::Text(u8"单击添加灯光，右击结束");
             if (_lightTex)
             {
-                auto ls = lsdir(FileUtils::getInstance()->getDefaultResourceRootPath(), "*.png");
+                auto ls = lsdir(FileUtils::getInstance()->getDefaultResourceRootPath(), "light/*.png");
                 static int selected = 0;
                 ImGui::BeginChild("left pane", ImVec2(150, 0), true);
                 for (int i = 0; i < ls.size(); i++)
@@ -416,7 +416,7 @@ bool LightDemoScene1::init()
                     if (ImGui::Selectable(ls[i].c_str(), selected == i))
                     {
                         selected = i;
-                        _selectedLighttex = ls[i];
+                        _selectedLighttex = "light/" + ls[i];
                     }
                 }
                 ImGui::EndChild();
@@ -447,7 +447,7 @@ bool LightDemoScene1::init()
         {
             if (_allowBg)
             {
-                auto ls = lsdir(FileUtils::getInstance()->getDefaultResourceRootPath(), "*.png");
+                auto ls = lsdir(FileUtils::getInstance()->getDefaultResourceRootPath(), "BG/*.png");
                 static int selected = 0;
                 ImGui::BeginChild("left pane", ImVec2(150, 0), true);
                 for (int i = 0; i < ls.size(); i++)
@@ -455,7 +455,7 @@ bool LightDemoScene1::init()
                     if (ImGui::Selectable(ls[i].c_str(), selected == i))
                     {
                         selected = i;
-                        sprite->setTexture(ls[i]);
+                        sprite->setTexture("BG/" + ls[i]);
                     }
                 }
                 ImGui::EndChild();
@@ -511,7 +511,7 @@ bool LightDemoScene1::init()
             }
 
         }
-        ImGui::ShowDemoWindow();
+      //  ImGui::ShowDemoWindow();
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         }, "LightDemoScene1");
 

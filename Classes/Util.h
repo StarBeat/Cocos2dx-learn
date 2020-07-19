@@ -81,18 +81,18 @@ static std::vector<std::string> lsdir(const std::string& dir, std::string type =
 	do
 	{
 		if (findData.attrib & _A_SUBDIR && strcmp(findData.name, ".") == 0 && strcmp(findData.name, "..") == 0)
-#if _DEBUG
 		{
+#if _DEBUG
 			std::cout << findData.name << "\t<dir>\n";
-		}
 #endif
+		}
 		else
-#if _DEBUG
 		{
+#if _DEBUG
 			std::cout << findData.name << "\t" << findData.size << std::endl;
+#endif // _DEBUG
 			ret.push_back(findData.name);
 		}
-#endif // _DEBUG
 	} while (_findnext(handle, &findData) == 0);    // 查找目录中的下一个文件
 
 	_findclose(handle);    // 关闭搜索句柄

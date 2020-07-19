@@ -7,5 +7,7 @@ public:
     virtual bool init();
     ~InstanceDemoScene();
     CREATE_FUNC(InstanceDemoScene);
-    int _nums;
+
+    int _nnums;
+    int _cnums;
 };

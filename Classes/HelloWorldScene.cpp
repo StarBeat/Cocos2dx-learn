@@ -53,6 +53,12 @@ static void problemLoading(const char* filename)
 }
 
 
+void HelloWorld::onEnter()
+{
+    Scene::onEnter();
+    GameManager::Instane()->moduleInit(_physicsWorld);
+}
+
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
@@ -129,6 +135,7 @@ bool HelloWorld::init()
     auto demo2 = MenuItemLabel::create(Label::createWithTTF("InstanceDemoScene", "fonts/Marker Felt.ttf", 24), [](Ref*) {
         auto scene = InstanceDemoScene::create();
         auto rescene = CCTransitionCrossFade::create(1, scene);
+        //Director::getInstance()->pushScene(rescene);
         Director::getInstance()->replaceScene(rescene);
         });
     demo2->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 5 * l2->getContentSize().height));
@@ -224,7 +231,6 @@ bool HelloWorld::init()
             }
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(event, this);
-    
 
     auto pb3 = PhysicsBody::createCircle(30);
     pb3->setDynamic(false);

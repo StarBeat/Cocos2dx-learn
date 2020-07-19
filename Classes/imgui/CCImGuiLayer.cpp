@@ -10,12 +10,11 @@ void ImGuiLayer::createAndKeepOnTop()
     // delay call, once.
     auto director = Director::getInstance();
     CCIMGUI::getInstance();
-    director->getScheduler()->schedule([=](float dt)
-    {
-        auto layer = ImGuiLayer::create();
-        layer->retain();
-        director->setNotificationNode(layer);
-    }, director, 0, 0, 0, false, "IMGUI");
+    
+    auto layer = ImGuiLayer::create();
+    layer->retain();
+    director->setNotificationNode(layer);
+   
     if (FileUtils::getInstance()->isFileExist("fonts/fontcn1.ttf"))
     {
         ImGuiIO& io = ImGui::GetIO();
@@ -70,7 +69,7 @@ void ImGuiLayer::onDraw()
     
     // draw all gui
     CCIMGUI::getInstance()->updateImGUI();
-    
+
     // rendering
     glUseProgram(0);
     
