@@ -28,6 +28,8 @@ public:
 	void drawShadowAndLight(const cocos2d::Mat4& transform);
 	void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
 	void setLightSize(float range, float volumneRaduis);
+	void setLightIntensity(float intensity);
+	void setLightLinerAttenuation(float k0 = 1, float k1 = 0, float k2 = 0);
 private:
 	Light2d(const std::string& texname);
 	void debugDrawline(cocos2d::Vec2 a, cocos2d::Vec2 b,const cocos2d::Color4F&);

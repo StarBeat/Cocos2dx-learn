@@ -83,7 +83,7 @@ void main()
     
     color1 = color1 * (1 - texture2D(_ShadowMap, uv).r);
     float dis= length(_Position.xy - worldPos.xy);
-     float attenuation = 1.0 / (_K0 +  _K1 * dis + _K2 * (dis * dis));
+    float attenuation = 1.0 / (_K0 +  _K1 * dis + _K2 * (dis * dis));
     color1*=attenuation;
     FragColor = vec4(color1, 1);
 }

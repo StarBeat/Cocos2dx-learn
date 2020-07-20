@@ -41,7 +41,7 @@ bool GameScene::init()
     layer->addChild(e);
 
     _scheduler->scheduleUpdate(GameManager::Instane()->_network, -1, false);
-    GameManager::Instane()->delayInit();
+    GameManager::Instane()->delayInit(this);
 
     //auto b = CirclePrimitive::create(Vec2(100, 100), 20, 30, 1, 1, Color4F::GRAY);
     //auto pb = PhysicsBody::createCircle(20);

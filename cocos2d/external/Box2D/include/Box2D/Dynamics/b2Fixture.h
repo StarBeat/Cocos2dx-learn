@@ -1,5 +1,6 @@
 /*
 * Copyright (c) 2006-2009 Erin Catto http://www.box2d.org
+* Copyright (c) 2013 Google, Inc.
 *
 * This software is provided 'as-is', without any express or implied
 * warranty.  In no event will the authors be held liable for any damages
@@ -19,9 +20,9 @@
 #ifndef B2_FIXTURE_H
 #define B2_FIXTURE_H
 
-#include "Box2D/Dynamics/b2Body.h"
-#include "Box2D/Collision/b2Collision.h"
-#include "Box2D/Collision/Shapes/b2Shape.h"
+#include <Box2D/Dynamics/b2Body.h>
+#include <Box2D/Collision/b2Collision.h>
+#include <Box2D/Collision/Shapes/b2Shape.h>
 
 class b2BlockAllocator;
 class b2Body;
@@ -58,8 +59,8 @@ struct b2FixtureDef
 	/// The constructor sets the default fixture definition values.
 	b2FixtureDef()
 	{
-		shape = nullptr;
-		userData = nullptr;
+		shape = NULL;
+		userData = NULL;
 		friction = 0.2f;
 		restitution = 0.0f;
 		density = 0.0f;
@@ -135,7 +136,7 @@ public:
 	/// Call this if you want to establish collision that was previously disabled by b2ContactFilter::ShouldCollide.
 	void Refilter();
 
-	/// Get the parent body of this fixture. This is nullptr if the fixture is not attached.
+	/// Get the parent body of this fixture. This is NULL if the fixture is not attached.
 	/// @return the parent body.
 	b2Body* GetBody();
 	const b2Body* GetBody() const;
@@ -155,6 +156,10 @@ public:
 	/// Test a point for containment in this fixture.
 	/// @param p a point in world coordinates.
 	bool TestPoint(const b2Vec2& p) const;
+
+	/// Compute the distance from this fixture.
+	/// @param p a point in world coordinates.
+	void ComputeDistance(const b2Vec2& p, float32* distance, b2Vec2* normal, int32 childIndex) const;
 
 	/// Cast a ray against this shape.
 	/// @param output the ray-cast results.
@@ -324,6 +329,11 @@ inline void b2Fixture::SetRestitution(float32 restitution)
 inline bool b2Fixture::TestPoint(const b2Vec2& p) const
 {
 	return m_shape->TestPoint(m_body->GetTransform(), p);
+}
+
+inline void b2Fixture::ComputeDistance(const b2Vec2& p, float32* d, b2Vec2* n, int32 childIndex) const
+{
+	m_shape->ComputeDistance(m_body->GetTransform(), p, d, n, childIndex);
 }
 
 inline bool b2Fixture::RayCast(b2RayCastOutput* output, const b2RayCastInput& input, int32 childIndex) const

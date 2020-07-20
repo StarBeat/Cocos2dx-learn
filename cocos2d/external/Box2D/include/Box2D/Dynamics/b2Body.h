@@ -1,5 +1,6 @@
 /*
 * Copyright (c) 2006-2011 Erin Catto http://www.box2d.org
+* Copyright (c) 2013 Google, Inc.
 *
 * This software is provided 'as-is', without any express or implied
 * warranty.  In no event will the authors be held liable for any damages
@@ -19,8 +20,8 @@
 #ifndef B2_BODY_H
 #define B2_BODY_H
 
-#include "Box2D/Common/b2Math.h"
-#include "Box2D/Collision/Shapes/b2Shape.h"
+#include <Box2D/Common/b2Math.h>
+#include <Box2D/Collision/Shapes/b2Shape.h>
 #include <memory>
 
 class b2Fixture;
@@ -53,7 +54,7 @@ struct b2BodyDef
 	/// This constructor sets the body definition default values.
 	b2BodyDef()
 	{
-		userData = nullptr;
+		userData = NULL;
 		position.Set(0.0f, 0.0f);
 		angle = 0.0f;
 		linearVelocity.Set(0.0f, 0.0f);
@@ -68,6 +69,11 @@ struct b2BodyDef
 		active = true;
 		gravityScale = 1.0f;
 	}
+
+#if LIQUIDFUN_EXTERNAL_LANGUAGE_API
+	/// Set position with direct floats.
+	void SetPosition(float32 positionX, float32 positionY);
+#endif // LIQUIDFUN_EXTERNAL_LANGUAGE_API
 
 	/// The body type: static, kinematic, or dynamic.
 	/// Note: if a dynamic body would have zero mass, the mass is set to one.
@@ -89,13 +95,11 @@ struct b2BodyDef
 	/// Linear damping is use to reduce the linear velocity. The damping parameter
 	/// can be larger than 1.0f but the damping effect becomes sensitive to the
 	/// time step when the damping parameter is large.
-	/// Units are 1/time
 	float32 linearDamping;
 
 	/// Angular damping is use to reduce the angular velocity. The damping parameter
 	/// can be larger than 1.0f but the damping effect becomes sensitive to the
 	/// time step when the damping parameter is large.
-	/// Units are 1/time
 	float32 angularDamping;
 
 	/// Set this flag to false if this body should never fall asleep. Note that
@@ -211,6 +215,7 @@ public:
 
 	/// Apply a torque. This affects the angular velocity
 	/// without affecting the linear velocity of the center of mass.
+	/// This wakes up the body.
 	/// @param torque about the z-axis (out of the screen), usually in N-m.
 	/// @param wake also wake up the body
 	void ApplyTorque(float32 torque, bool wake);
@@ -222,11 +227,6 @@ public:
 	/// @param point the world position of the point of application.
 	/// @param wake also wake up the body
 	void ApplyLinearImpulse(const b2Vec2& impulse, const b2Vec2& point, bool wake);
-
-	/// Apply an impulse to the center of mass. This immediately modifies the velocity.
-	/// @param impulse the world impulse vector, usually in N-seconds or kg-m/s.
-	/// @param wake also wake up the body
-	void ApplyLinearImpulseToCenter(const b2Vec2& impulse, bool wake);
 
 	/// Apply an angular impulse.
 	/// @param impulse the angular impulse in units of kg*m*m/s
@@ -389,6 +389,18 @@ public:
 	/// Dump this body to a log file
 	void Dump();
 
+#if LIQUIDFUN_EXTERNAL_LANGUAGE_API
+public:
+	/// Get x-coordinate of position.
+	float32 GetPositionX() const { return GetPosition().x; }
+
+	/// Get y-coordinate of position.
+	float32 GetPositionY() const { return GetPosition().y; }
+
+	/// Set b2Transform using direct floats.
+	void SetTransform(float32 positionX, float32 positionY, float32 angle);
+#endif // LIQUIDFUN_EXTERNAL_LANGUAGE_API
+
 private:
 
 	friend class b2World;
@@ -396,7 +408,7 @@ private:
 	friend class b2ContactManager;
 	friend class b2ContactSolver;
 	friend class b2Contact;
-	
+
 	friend class b2DistanceJoint;
 	friend class b2FrictionJoint;
 	friend class b2GearJoint;
@@ -408,6 +420,9 @@ private:
 	friend class b2RopeJoint;
 	friend class b2WeldJoint;
 	friend class b2WheelJoint;
+
+	friend class b2ParticleSystem;
+	friend class b2ParticleGroup;
 
 	// m_flags
 	enum
@@ -440,6 +455,7 @@ private:
 	int32 m_islandIndex;
 
 	b2Transform m_xf;		// the body origin transform
+	b2Transform m_xf0;		// the previous transform for particle simulation
 	b2Sweep m_sweep;		// the swept motion for CCD
 
 	b2Vec2 m_linearVelocity;
@@ -640,8 +656,11 @@ inline void b2Body::SetAwake(bool flag)
 {
 	if (flag)
 	{
-		m_flags |= e_awakeFlag;
-		m_sleepTime = 0.0f;
+		if ((m_flags & e_awakeFlag) == 0)
+		{
+			m_flags |= e_awakeFlag;
+			m_sleepTime = 0.0f;
+		}
 	}
 	else
 	{
@@ -815,25 +834,6 @@ inline void b2Body::ApplyLinearImpulse(const b2Vec2& impulse, const b2Vec2& poin
 	}
 }
 
-inline void b2Body::ApplyLinearImpulseToCenter(const b2Vec2& impulse, bool wake)
-{
-	if (m_type != b2_dynamicBody)
-	{
-		return;
-	}
-
-	if (wake && (m_flags & e_awakeFlag) == 0)
-	{
-		SetAwake(true);
-	}
-
-	// Don't accumulate velocity if the body is sleeping
-	if (m_flags & e_awakeFlag)
-	{
-		m_linearVelocity += m_invMass * impulse;
-	}
-}
-
 inline void b2Body::ApplyAngularImpulse(float32 impulse, bool wake)
 {
 	if (m_type != b2_dynamicBody)
@@ -878,5 +878,17 @@ inline const b2World* b2Body::GetWorld() const
 {
 	return m_world;
 }
+
+#if LIQUIDFUN_EXTERNAL_LANGUAGE_API
+inline void b2BodyDef::SetPosition(float32 positionX, float32 positionY)
+{
+	position.Set(positionX, positionY);
+}
+
+inline void b2Body::SetTransform(float32 positionX, float32 positionY, float32 angle)
+{
+	SetTransform(b2Vec2(positionX, positionY), angle);
+}
+#endif // LIQUIDFUN_EXTERNAL_LANGUAGE_API
 
 #endif

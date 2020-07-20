@@ -277,3 +277,15 @@ void Light2d::setLightSize(float range, float volumneRaduis)
 	_shadoweff->_lightVolumne = &_lighteff->_lightVolumn;
 	_lighteff->_lightDistance = range;
 }
+
+void Light2d::setLightIntensity(float intensity)
+{
+	_lighteff->_intensity = intensity;
+}
+
+void Light2d::setLightLinerAttenuation(float k0, float k1, float k2)
+{
+	_lighteff->_K0 = k0;
+	_lighteff->_K1 = k1;
+	_lighteff->_K2 = k2;
+}

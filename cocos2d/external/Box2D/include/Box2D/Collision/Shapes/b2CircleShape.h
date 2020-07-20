@@ -1,5 +1,6 @@
 /*
 * Copyright (c) 2006-2009 Erin Catto http://www.box2d.org
+* Copyright (c) 2013 Google, Inc.
 *
 * This software is provided 'as-is', without any express or implied
 * warranty.  In no event will the authors be held liable for any damages
@@ -19,7 +20,7 @@
 #ifndef B2_CIRCLE_SHAPE_H
 #define B2_CIRCLE_SHAPE_H
 
-#include "Box2D/Collision/Shapes/b2Shape.h"
+#include <Box2D/Collision/Shapes/b2Shape.h>
 
 /// A circle shape.
 class b2CircleShape : public b2Shape
@@ -28,23 +29,50 @@ public:
 	b2CircleShape();
 
 	/// Implement b2Shape.
-	b2Shape* Clone(b2BlockAllocator* allocator) const override;
+	b2Shape* Clone(b2BlockAllocator* allocator) const;
 
 	/// @see b2Shape::GetChildCount
-	int32 GetChildCount() const override;
+	int32 GetChildCount() const;
 
 	/// Implement b2Shape.
-	bool TestPoint(const b2Transform& transform, const b2Vec2& p) const override;
+	bool TestPoint(const b2Transform& transform, const b2Vec2& p) const;
+
+	// @see b2Shape::ComputeDistance
+	void ComputeDistance(const b2Transform& xf, const b2Vec2& p, float32* distance, b2Vec2* normal, int32 childIndex) const;
 
 	/// Implement b2Shape.
 	bool RayCast(b2RayCastOutput* output, const b2RayCastInput& input,
-				const b2Transform& transform, int32 childIndex) const override;
+				const b2Transform& transform, int32 childIndex) const;
 
 	/// @see b2Shape::ComputeAABB
-	void ComputeAABB(b2AABB* aabb, const b2Transform& transform, int32 childIndex) const override;
+	void ComputeAABB(b2AABB* aabb, const b2Transform& transform, int32 childIndex) const;
 
 	/// @see b2Shape::ComputeMass
-	void ComputeMass(b2MassData* massData, float32 density) const override;
+	void ComputeMass(b2MassData* massData, float32 density) const;
+
+	/// Get the supporting vertex index in the given direction.
+	int32 GetSupport(const b2Vec2& d) const;
+
+	/// Get the supporting vertex in the given direction.
+	const b2Vec2& GetSupportVertex(const b2Vec2& d) const;
+
+	/// Get the vertex count.
+	int32 GetVertexCount() const { return 1; }
+
+	/// Get a vertex by index. Used by b2Distance.
+	const b2Vec2& GetVertex(int32 index) const;
+
+#if LIQUIDFUN_EXTERNAL_LANGUAGE_API
+public:
+	/// Set position with direct floats.
+	void SetPosition(float32 x, float32 y) { m_p.Set(x, y); }
+
+	/// Get x-coordinate of position.
+	float32 GetPositionX() const { return m_p.x; }
+
+	/// Get y-coordinate of position.
+	float32 GetPositionY() const { return m_p.y; }
+#endif // LIQUIDFUN_EXTERNAL_LANGUAGE_API
 
 	/// Position
 	b2Vec2 m_p;
@@ -55,6 +83,25 @@ inline b2CircleShape::b2CircleShape()
 	m_type = e_circle;
 	m_radius = 0.0f;
 	m_p.SetZero();
+}
+
+inline int32 b2CircleShape::GetSupport(const b2Vec2 &d) const
+{
+	B2_NOT_USED(d);
+	return 0;
+}
+
+inline const b2Vec2& b2CircleShape::GetSupportVertex(const b2Vec2 &d) const
+{
+	B2_NOT_USED(d);
+	return m_p;
+}
+
+inline const b2Vec2& b2CircleShape::GetVertex(int32 index) const
+{
+	B2_NOT_USED(index);
+	b2Assert(index == 0);
+	return m_p;
 }
 
 #endif

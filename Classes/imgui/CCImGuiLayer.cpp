@@ -2,6 +2,7 @@
 #include "imgui.h"
 #include "imgui_impl_cocos2dx.h"
 #include "CCIMGUI.h"
+#include <direct.h>
 
 USING_NS_CC;
 
@@ -14,11 +15,22 @@ void ImGuiLayer::createAndKeepOnTop()
     auto layer = ImGuiLayer::create();
     layer->retain();
     director->setNotificationNode(layer);
-   
     if (FileUtils::getInstance()->isFileExist("fonts/fontcn1.ttf"))
     {
-        ImGuiIO& io = ImGui::GetIO();
-        ImFont* font = io.Fonts->AddFontFromFileTTF("fonts/fontcn1.ttf", 22.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
+        ImGuiIO& io = ImGui::GetIO(); 
+        char buffer[_MAX_PATH];
+        _getcwd(buffer, _MAX_PATH); // GetCurrentDirectoryA(_MAX_PATH, buffer1);
+        strcat(buffer, "\\Resources\\fonts\\fontcn1.ttf");//直接执行exe 拿不到工作目录？？ vs bug？
+        if (FileUtils::getInstance()->isFileExist(buffer))
+        {
+            std::cout << buffer;
+            ImFont* font = io.Fonts->AddFontFromFileTTF(buffer, 22.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
+        }
+        else
+        {
+            std::cout << buffer;
+            ImFont* font = io.Fonts->AddFontFromFileTTF("fonts/fontcn1.ttf", 22.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
+        }
     }
 }
 

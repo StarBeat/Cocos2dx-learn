@@ -48,33 +48,33 @@ bool LightDemoScene::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    auto layer = Layer::create();
-    this->addChild(layer);
+
 
     auto sprite = Sprite::create("HelloWorld.png");
     sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x + 100, visibleSize.height / 2 + origin.y + 100));
-    layer->addChild(sprite, 0);
+    this->addChild(sprite, 0);
     
     Light2d* li = Light2d::create();
     auto sprite1 = Sprite::create("light.png");
     li->addChild(sprite1);
     li->setPosition(350, 610);
     li->setLightSize(720, 200);
-    layer->addChild(li, 100);
+    this->addChild(li, 100);
 
     Light2d* li3 = Light2d::create();
     auto sprite2 = Sprite::create("light.png");
     li3->addChild(sprite2);
     li3->setPosition(900, 150);
     li3->setLightSize(600, 80);
-    layer->addChild(li3, 100);
+    this->addChild(li3, 100);
     
     Vec2 points[] = { {554,376}, {727,382}, {730, 549}, {727,382} };
     auto pb4 = PhysicsBody::createEdgeChain(points, sizeof(points) / sizeof(points[0]));
     pb4->setDynamic(false);
     pb4->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
     Node* n3 = Node::create();
-    layer->addChild(n3);
+    n3->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
+    this->addChild(n3);
     n3->addComponent(pb4);
 
     auto mouse = EventListenerMouse::create();
@@ -116,6 +116,7 @@ bool LightDemoScene::init()
                 Node* n2 = Node::create();
                 this->addChild(n2);
                 n2->addComponent(pb2);
+                n2->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);
                 _chainPoints.clear();
                 _chainAdd = false;
             }
@@ -221,7 +222,7 @@ bool LightDemoScene::init()
 
         }, "LightDemoScene");
 
-    GameManager::Instane()->delayInit();
+    GameManager::Instane()->delayInit(this);
     auto back = MenuItemLabel::create(Label::createWithTTF("Back", "fonts/Marker Felt.ttf", 24), [](Ref*) {
         Director::getInstance()->replaceScene(HelloWorld::createScene());
         CCIMGUI::getInstance()->removeImGUI("LightDemoScene");
@@ -301,7 +302,7 @@ bool LightDemoScene1::init()
             else
             {
                 Vec2 p = { event->getCursorX(), event->getCursorY() };
-                _drawNode->drawDot(p, 1, Color4F::GRAY);
+                _drawNode->drawDot(p, 2, Color4F::GREEN);
                 _chainPoints.push_back(p);
             }
         }
@@ -389,7 +390,7 @@ bool LightDemoScene1::init()
     //};
     //_eventDispatcher->addEventListenerWithSceneGraphPriority(event, this);
 
-    GameManager::Instane()->delayInit();
+    GameManager::Instane()->delayInit(this);
     CCIMGUI::getInstance()->addImGUI([=]() {
         ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), u8"单击选中灯光修改属性");
         if (ImGui::Button(u8"允许添加点灯光"))
@@ -417,6 +418,14 @@ bool LightDemoScene1::init()
                     {
                         selected = i;
                         _selectedLighttex = "light/" + ls[i];
+                    }
+                    if (ImGui::IsItemHovered())
+                    {
+                        ImGui::BeginTooltip();
+                        Texture2D* texture = Director::getInstance()->getTextureCache()->addImage("light/" + ls[i]);
+                        ImGui::Text(u8"预览");
+                        ImGui::Image((ImTextureID)(intptr_t)texture->getName(), ImVec2(300, 400), ImVec2(0, 0), ImVec2(1, 1), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+                        ImGui::EndTooltip();
                     }
                 }
                 ImGui::EndChild();
@@ -456,6 +465,14 @@ bool LightDemoScene1::init()
                     {
                         selected = i;
                         sprite->setTexture("BG/" + ls[i]);
+                    }
+                    if (ImGui::IsItemHovered())
+                    {
+                        ImGui::BeginTooltip();
+                        Texture2D* texture = Director::getInstance()->getTextureCache()->addImage("BG/" + ls[i]);
+                        ImGui::Text(u8"预览");
+                        ImGui::Image((ImTextureID)(intptr_t)texture->getName(), ImVec2(300, 400), ImVec2(0, 0), ImVec2(1, 1), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+                        ImGui::EndTooltip();
                     }
                 }
                 ImGui::EndChild();

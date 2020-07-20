@@ -70,12 +70,13 @@ LocalPlayer::~LocalPlayer()
 {
 }
 
-
 bool LocalPlayer::init()
 {
 	IPlayer::init();
 	Light2d* lt = Light2d::create();
 	lt->setLightSize(500, 150);
+	lt->setLightIntensity(1.5);
+	lt->setLightLinerAttenuation();
 	_primitive->addChild(lt);
 	_primitive->getPhysicsBody()->setCategoryBitmask(::PhysicEx::NODE_BIT::LPLAYER_BIT);
 	return true;

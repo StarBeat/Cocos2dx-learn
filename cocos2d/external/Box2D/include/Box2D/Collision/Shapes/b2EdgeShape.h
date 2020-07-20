@@ -1,5 +1,6 @@
 /*
 * Copyright (c) 2006-2010 Erin Catto http://www.box2d.org
+* Copyright (c) 2013 Google, Inc.
 *
 * This software is provided 'as-is', without any express or implied
 * warranty.  In no event will the authors be held liable for any damages
@@ -19,7 +20,7 @@
 #ifndef B2_EDGE_SHAPE_H
 #define B2_EDGE_SHAPE_H
 
-#include "Box2D/Collision/Shapes/b2Shape.h"
+#include <Box2D/Collision/Shapes/b2Shape.h>
 
 /// A line segment (edge) shape. These can be connected in chains or loops
 /// to other edge shapes. The connectivity information is used to ensure
@@ -33,24 +34,33 @@ public:
 	void Set(const b2Vec2& v1, const b2Vec2& v2);
 
 	/// Implement b2Shape.
-	b2Shape* Clone(b2BlockAllocator* allocator) const override;
+	b2Shape* Clone(b2BlockAllocator* allocator) const;
 
 	/// @see b2Shape::GetChildCount
-	int32 GetChildCount() const override;
+	int32 GetChildCount() const;
 
 	/// @see b2Shape::TestPoint
-	bool TestPoint(const b2Transform& transform, const b2Vec2& p) const override;
+	bool TestPoint(const b2Transform& transform, const b2Vec2& p) const;
+
+	// @see b2Shape::ComputeDistance
+	void ComputeDistance(const b2Transform& xf, const b2Vec2& p, float32* distance, b2Vec2* normal, int32 childIndex) const;
 
 	/// Implement b2Shape.
 	bool RayCast(b2RayCastOutput* output, const b2RayCastInput& input,
-				const b2Transform& transform, int32 childIndex) const override;
+				const b2Transform& transform, int32 childIndex) const;
 
 	/// @see b2Shape::ComputeAABB
-	void ComputeAABB(b2AABB* aabb, const b2Transform& transform, int32 childIndex) const override;
+	void ComputeAABB(b2AABB* aabb, const b2Transform& transform, int32 childIndex) const;
 
 	/// @see b2Shape::ComputeMass
-	void ComputeMass(b2MassData* massData, float32 density) const override;
-	
+	void ComputeMass(b2MassData* massData, float32 density) const;
+
+#if LIQUIDFUN_EXTERNAL_LANGUAGE_API
+public:
+	/// Set this as an isolated edge, with direct floats.
+	void Set(float32 vx1, float32 vy1, float32 vx2, float32 vy2);
+#endif // LIQUIDFUN_EXTERNAL_LANGUAGE_API
+
 	/// These are the edge vertices
 	b2Vec2 m_vertex1, m_vertex2;
 
@@ -70,5 +80,15 @@ inline b2EdgeShape::b2EdgeShape()
 	m_hasVertex0 = false;
 	m_hasVertex3 = false;
 }
+
+#if LIQUIDFUN_EXTERNAL_LANGUAGE_API
+inline void b2EdgeShape::Set(float32 vx1,
+														 float32 vy1,
+														 float32 vx2,
+														 float32 vy2) {
+	Set(b2Vec2(vx1, vy1), b2Vec2(vx2, vy2));
+}
+#endif // LIQUIDFUN_EXTERNAL_LANGUAGE_API
+
 
 #endif

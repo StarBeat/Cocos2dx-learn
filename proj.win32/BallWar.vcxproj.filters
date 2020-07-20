@@ -52,6 +52,9 @@
     <Filter Include="src\util">
       <UniqueIdentifier>{e81c3cd7-d786-43da-a560-f72cc3c587dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\render\sprite">
+      <UniqueIdentifier>{a622873f-5bea-4ee8-b3f0-009c338084b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -95,9 +98,6 @@
     </ClCompile>
     <ClCompile Include="..\Classes\PlayerManager.cpp">
       <Filter>src\gpp\player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\InstanceRenderCommand.cpp">
-      <Filter>src\render\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\DotPrimitive.cpp">
       <Filter>src\render\Primitive</Filter>
@@ -162,6 +162,24 @@
     <ClCompile Include="..\Classes\imgui\imgui_impl_cocos2dx.cpp">
       <Filter>src\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\PuddingEffect.cpp">
+      <Filter>src\render\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\InstanceRenderCommand.cpp">
+      <Filter>src\render\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\PuddingSprite.cpp">
+      <Filter>src\render\sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GLESDebugDraw.cpp">
+      <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LiquidFunDemo.cpp">
+      <Filter>src\demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LFSpriteNode.cpp">
+      <Filter>src\demo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -220,9 +238,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\ISingle.h">
       <Filter>src\base\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\InstanceRenderCommand.h">
-      <Filter>src\render\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\DotPrimitive.h">
       <Filter>src\render\Primitive</Filter>
@@ -302,6 +317,24 @@
     <ClInclude Include="..\Classes\Util.h">
       <Filter>src\util</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\PuddingEffect.h">
+      <Filter>src\render\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\b2Physic.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\InstanceRenderCommand.h">
+      <Filter>src\render\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PuddingSprite.h">
+      <Filter>src\render\sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GLESDebugDraw.h">
+      <Filter>src\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LFSpriteNode.h">
+      <Filter>src\demo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
@@ -325,6 +358,15 @@
       <Filter>resource\shader</Filter>
     </None>
     <None Include="..\Resources\shader\bg_shader.glsl">
+      <Filter>resource\shader</Filter>
+    </None>
+    <None Include="..\Resources\shader\pudding_shader.glsl">
+      <Filter>resource\shader</Filter>
+    </None>
+    <None Include="..\Classes\LiquidFunDemo.h">
+      <Filter>src\demo</Filter>
+    </None>
+    <None Include="..\Resources\shader\metaball_shader.glsl">
       <Filter>resource\shader</Filter>
     </None>
   </ItemGroup>

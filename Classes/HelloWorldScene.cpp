@@ -37,6 +37,7 @@
 #include "GameScene.h"
 #include "LightDemoScene.h"
 #include "InstanceDemoScene.h"
+#include "LiquidFunDemo.h"
 #include <CCIMGUI.h>
 USING_NS_CC;
 
@@ -139,9 +140,15 @@ bool HelloWorld::init()
         Director::getInstance()->replaceScene(rescene);
         });
     demo2->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 5 * l2->getContentSize().height));
+    auto demo3 = MenuItemLabel::create(Label::createWithTTF("LiquidFunDemo", "fonts/Marker Felt.ttf", 24), [](Ref*) {
+        auto scene = LiquidFunDemo::create();
+        auto rescene = CCTransitionCrossFade::create(1, scene);
+        Director::getInstance()->replaceScene(rescene);
+        });
+    demo3->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 6 * l2->getContentSize().height));
 
     // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, smenu, cmenu, demo, demo1, demo2, NULL);
+    auto menu = Menu::create(closeItem, smenu, cmenu, demo, demo1, demo2, demo3, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
@@ -151,7 +158,7 @@ bool HelloWorld::init()
     l1->addComponent(pb2);
 
 
-    GameManager::Instane()->delayInit();
+    GameManager::Instane()->delayInit(this);
  //   auto bg = BGEffect::create();
  ///*   bg->setTexturei(2, "snail.png");
  //   bg->setTexturei(3, "snai2.png");

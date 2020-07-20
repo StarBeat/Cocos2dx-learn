@@ -79,7 +79,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>E:\LE\cocos2d-x-3.17.2\proj\BallWar\Classes\imgui;E:\LE\cocos2d-x-3.17.2\proj\BallWar\include;$(EngineRoot);$(EngineRoot)external;$(EngineRoot)cocos\audio\include;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)extensions;..\Classes;..;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\LE\cocos2d-x-3.17.2\proj\BallWar\cocos2d\external\Box2D\include;E:\LE\cocos2d-x-3.17.2\proj\BallWar\Classes\imgui;E:\LE\cocos2d-x-3.17.2\proj\BallWar\include;$(EngineRoot);$(EngineRoot)external;$(EngineRoot)cocos\audio\include;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)extensions;..\Classes;..;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;COCOS2D_DEBUG=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -169,6 +169,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Effect.cpp" />
     <ClCompile Include="..\Classes\GameManager.cpp" />
     <ClCompile Include="..\Classes\GameScene.cpp" />
+    <ClCompile Include="..\Classes\GLESDebugDraw.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\imgui\CCIMGUI.cpp" />
     <ClCompile Include="..\Classes\imgui\CCImGuiLayer.cpp" />
@@ -179,10 +180,12 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClCompile Include="..\Classes\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\Classes\InstanceDemoScene.cpp" />
     <ClCompile Include="..\Classes\InstanceRenderCommand.cpp" />
+    <ClCompile Include="..\Classes\LFSpriteNode.cpp" />
     <ClCompile Include="..\Classes\Light2d.cpp" />
     <ClCompile Include="..\Classes\LightDemoScene.cpp" />
     <ClCompile Include="..\Classes\LightEffect.cpp" />
     <ClCompile Include="..\Classes\LightingManager.cpp" />
+    <ClCompile Include="..\Classes\LiquidFunDemo.cpp" />
     <ClCompile Include="..\Classes\LocalPlayer.cpp" />
     <ClCompile Include="..\Classes\NetPlayer.cpp" />
     <ClCompile Include="..\Classes\network\NetWork.cpp" />
@@ -190,6 +193,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClCompile Include="..\Classes\network\xnet.cpp" />
     <ClCompile Include="..\Classes\PlayerManager.cpp" />
     <ClCompile Include="..\Classes\PrimitiveEffect.cpp" />
+    <ClCompile Include="..\Classes\PuddingEffect.cpp" />
+    <ClCompile Include="..\Classes\PuddingSprite.cpp" />
     <ClCompile Include="..\Classes\Random.cpp" />
     <ClCompile Include="..\Classes\RectPrimitive.cpp" />
     <ClCompile Include="..\Classes\ShadowEffect.cpp" />
@@ -200,6 +205,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Asteroid.h" />
     <ClInclude Include="..\Classes\AsteroidManager.h" />
+    <ClInclude Include="..\Classes\b2Physic.h" />
     <ClInclude Include="..\Classes\BGEffect.h" />
     <ClInclude Include="..\Classes\CirclePrimitive.h" />
     <ClInclude Include="..\Classes\DeferredEffect.h" />
@@ -207,6 +213,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Effect.h" />
     <ClInclude Include="..\Classes\GameManager.h" />
     <ClInclude Include="..\Classes\GameScene.h" />
+    <ClInclude Include="..\Classes\GLESDebugDraw.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\imgui\CCIMGUI.h" />
     <ClInclude Include="..\Classes\imgui\CCImGuiLayer.h" />
@@ -222,6 +229,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\IPlayer.h" />
     <ClInclude Include="..\Classes\IPrimitive.h" />
     <ClInclude Include="..\Classes\ISingle.h" />
+    <ClInclude Include="..\Classes\LFSpriteNode.h" />
     <ClInclude Include="..\Classes\Light2d.h" />
     <ClInclude Include="..\Classes\LightDemoScene.h" />
     <ClInclude Include="..\Classes\LightEffect.h" />
@@ -233,6 +241,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\PhysicExt.h" />
     <ClInclude Include="..\Classes\PlayerManager.h" />
     <ClInclude Include="..\Classes\PrimitiveEffect.h" />
+    <ClInclude Include="..\Classes\PuddingEffect.h" />
+    <ClInclude Include="..\Classes\PuddingSprite.h" />
     <ClInclude Include="..\Classes\Random.h" />
     <ClInclude Include="..\Classes\RectPrimitive.h" />
     <ClInclude Include="..\Classes\ShadowEffect.h" />
@@ -257,10 +267,13 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ResourceCompile Include="game.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Classes\LiquidFunDemo.h" />
     <None Include="..\Resources\shader\bg_shader.glsl" />
     <None Include="..\Resources\shader\deferred_light_shader.glsl" />
     <None Include="..\Resources\shader\light2d_shader.glsl" />
+    <None Include="..\Resources\shader\metaball_shader.glsl" />
     <None Include="..\Resources\shader\primitive_shader.glsl" />
+    <None Include="..\Resources\shader\pudding_shader.glsl" />
     <None Include="..\Resources\shader\Shader.vert" />
     <None Include="..\Resources\shader\shadow_shader.glsl" />
   </ItemGroup>

@@ -1,5 +1,6 @@
 /*
 * Copyright (c) 2006-2009 Erin Catto http://www.box2d.org
+* Copyright (c) 2013 Google, Inc.
 *
 * This software is provided 'as-is', without any express or implied
 * warranty.  In no event will the authors be held liable for any damages
@@ -19,9 +20,9 @@
 #ifndef B2_SHAPE_H
 #define B2_SHAPE_H
 
-#include "Box2D/Common/b2BlockAllocator.h"
-#include "Box2D/Common/b2Math.h"
-#include "Box2D/Collision/b2Collision.h"
+#include <Box2D/Common/b2BlockAllocator.h>
+#include <Box2D/Common/b2Math.h>
+#include <Box2D/Collision/b2Collision.h>
 
 /// This holds the mass data computed for a shape.
 struct b2MassData
@@ -69,6 +70,13 @@ public:
 	/// @param p a point in world coordinates.
 	virtual bool TestPoint(const b2Transform& xf, const b2Vec2& p) const = 0;
 
+	/// Compute the distance from the current shape to the specified point. This only works for convex shapes.
+	/// @param xf the shape world transform.
+	/// @param p a point in world coordinates.
+	/// @param distance returns the distance from the current shape.
+	/// @param normal returns the direction in which the distance increases.
+	virtual void ComputeDistance(const b2Transform& xf, const b2Vec2& p, float32* distance, b2Vec2* normal, int32 childIndex) const= 0;
+
 	/// Cast a ray against a child shape.
 	/// @param output the ray-cast results.
 	/// @param input the ray-cast input parameters.
@@ -90,9 +98,6 @@ public:
 	virtual void ComputeMass(b2MassData* massData, float32 density) const = 0;
 
 	Type m_type;
-
-	/// Radius of a shape. For polygonal shapes this must be b2_polygonRadius. There is no support for
-	/// making rounded polygons.
 	float32 m_radius;
 };
 

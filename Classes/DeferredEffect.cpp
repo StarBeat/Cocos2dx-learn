@@ -25,20 +25,20 @@ void DeferredEffect::genBuffer()
 		{{1.0f,  1.0f}, {1.0f, 1.0f}},
 		{{1.0f, -1.0f}, {1.0f, 0.0f}}
 	};
-//	int index[6] = { 0, 1, 3,
-//					 1, 2, 3};
+	int index[6] = { 0, 1, 2,
+					 1, 3, 2};//还有三角形环绕顺序要求？
 
 	glGenVertexArrays(1, &_vao);
 	glGenBuffers(1, &_vbo);
-//	glGenBuffers(1, &_ebo);
+	glGenBuffers(1, &_ebo);
 
 	glBindVertexArray(_vao);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Data) * 4, buffer, GL_STREAM_DRAW);
 
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
-	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index), index, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index), index, GL_STATIC_DRAW);
 	// vertex
 	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_POSITION);
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, sizeof(Data), (GLvoid*)offsetof(Data, pos));
@@ -73,9 +73,9 @@ void DeferredEffect::draw(GLuint lightmap)
 	_glprogramstate->setUniformTexture("_ColorMap", _colorbuffer);
 	_glprogramstate->applyUniforms();
 	glBindVertexArray(_vao);
-
-//	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+//		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);
 	glBindVertexArray(0);
 	CHECK_GL_ERROR_DEBUG();
