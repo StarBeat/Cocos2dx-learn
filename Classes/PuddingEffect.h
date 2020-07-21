@@ -33,4 +33,5 @@ private:
 	cocos2d::RenderTexture* _renderTexture;
 	std::vector<cocos2d::Vec2> texCoords;
 	std::vector<int> indexs;
+	cocos2d::Size texSize;
 };

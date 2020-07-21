@@ -204,10 +204,16 @@ bool BGEffect::init(int id)
 		 "
 		+ fs;
 			
-#endif
+#else
 	fs += "\nvoid main() \
 			{ \
 			mainImage(gl_FragColor, gl_FragCoord.xy); \n\
 			}";
+	auto size = Director::getInstance()->getVisibleSize();
+	e->onMouseMove = [this, size](EventMouse* event) {
+		_eff->getGLProgramState()->setUniformVec2("mouse", { event->getCursorX()/ size.width , event->getCursorY()/ size .height});
+	};
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(e, this);
+#endif
 	return _eff->initGLProgramState(vs, fs);
 }

@@ -55,6 +55,18 @@
     <Filter Include="src\render\sprite">
       <UniqueIdentifier>{a622873f-5bea-4ee8-b3f0-009c338084b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\render\Effect\base">
+      <UniqueIdentifier>{1c6ce630-2b8b-4fb3-8806-6311ef93c4c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\render\Effect\lighting">
+      <UniqueIdentifier>{af16c6fc-3820-4111-9f29-89890706ebe6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\render\Effect\toy">
+      <UniqueIdentifier>{77a1378d-156f-4f39-9971-b536a575c5a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\render\Effect\physic">
+      <UniqueIdentifier>{927f84c8-67c8-43aa-9e13-937f6ea847a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -81,12 +93,6 @@
     <ClCompile Include="..\Classes\TrianglePrimitive.cpp">
       <Filter>src\render\Primitive</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Effect.cpp">
-      <Filter>src\render\Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\LightEffect.cpp">
-      <Filter>src\render\Effect</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\network\NetWork.cpp">
       <Filter>src\network</Filter>
     </ClCompile>
@@ -108,17 +114,11 @@
     <ClCompile Include="..\Classes\GameManager.cpp">
       <Filter>src\gpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\ShadowEffect.cpp">
-      <Filter>src\render\Effect</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\Light2d.cpp">
       <Filter>src\render\light</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\LightingManager.cpp">
       <Filter>src\render\light</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\DeferredEffect.cpp">
-      <Filter>src\render\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\GameScene.cpp">
       <Filter>src\gpp</Filter>
@@ -131,9 +131,6 @@
     </ClCompile>
     <ClCompile Include="..\Classes\AsteroidManager.cpp">
       <Filter>src\gpp\asteroid</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\BGEffect.cpp">
-      <Filter>src\render\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\LightDemoScene.cpp">
       <Filter>src\demo</Filter>
@@ -162,9 +159,6 @@
     <ClCompile Include="..\Classes\imgui\imgui_impl_cocos2dx.cpp">
       <Filter>src\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\PuddingEffect.cpp">
-      <Filter>src\render\Effect</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\InstanceRenderCommand.cpp">
       <Filter>src\render\Primitive</Filter>
     </ClCompile>
@@ -177,8 +171,32 @@
     <ClCompile Include="..\Classes\LiquidFunDemo.cpp">
       <Filter>src\demo</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\LFSpriteNode.cpp">
-      <Filter>src\demo</Filter>
+    <ClCompile Include="..\Classes\MetaBallSprite.cpp">
+      <Filter>src\render\sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Effect.cpp">
+      <Filter>src\render\Effect\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LightEffect.cpp">
+      <Filter>src\render\Effect\lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\DeferredRender.cpp">
+      <Filter>src\render\Effect\lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ShadowEffect.cpp">
+      <Filter>src\render\Effect\lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BGEffect.cpp">
+      <Filter>src\render\Effect\toy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ParticleEffect.cpp">
+      <Filter>src\render\Effect\physic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\PuddingEffect.cpp">
+      <Filter>src\render\Effect\physic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\PhysicSprite.cpp">
+      <Filter>src\render\sprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -212,12 +230,6 @@
     <ClInclude Include="..\Classes\TrianglePrimitive.h">
       <Filter>src\render\Primitive</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Effect.h">
-      <Filter>src\render\Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\LightEffect.h">
-      <Filter>src\render\Effect</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\network\NetWork.h">
       <Filter>src\network</Filter>
     </ClInclude>
@@ -248,9 +260,6 @@
     <ClInclude Include="..\Classes\PhysicExt.h">
       <Filter>src\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\ShadowEffect.h">
-      <Filter>src\render\Effect</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\GameManager.h">
       <Filter>src\gpp</Filter>
     </ClInclude>
@@ -263,9 +272,6 @@
     <ClInclude Include="..\Classes\LightingManager.h">
       <Filter>src\render\light</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\DeferredEffect.h">
-      <Filter>src\render\Effect</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\GameScene.h">
       <Filter>src\gpp</Filter>
     </ClInclude>
@@ -277,9 +283,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\AsteroidManager.h">
       <Filter>src\gpp\asteroid</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\BGEffect.h">
-      <Filter>src\render\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\LightDemoScene.h">
       <Filter>src\demo</Filter>
@@ -317,9 +320,6 @@
     <ClInclude Include="..\Classes\Util.h">
       <Filter>src\util</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\PuddingEffect.h">
-      <Filter>src\render\Effect</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\b2Physic.h">
       <Filter>src\base</Filter>
     </ClInclude>
@@ -332,8 +332,32 @@
     <ClInclude Include="..\Classes\GLESDebugDraw.h">
       <Filter>src\util</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\LFSpriteNode.h">
-      <Filter>src\demo</Filter>
+    <ClInclude Include="..\Classes\MetaBallSprite.h">
+      <Filter>src\render\sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Effect.h">
+      <Filter>src\render\Effect\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LightEffect.h">
+      <Filter>src\render\Effect\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\DeferredRender.h">
+      <Filter>src\render\Effect\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ShadowEffect.h">
+      <Filter>src\render\Effect\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BGEffect.h">
+      <Filter>src\render\Effect\toy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ParticleEffect.h">
+      <Filter>src\render\Effect\physic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PuddingEffect.h">
+      <Filter>src\render\Effect\physic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PhysicSprite.h">
+      <Filter>src\render\sprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -367,6 +391,9 @@
       <Filter>src\demo</Filter>
     </None>
     <None Include="..\Resources\shader\metaball_shader.glsl">
+      <Filter>resource\shader</Filter>
+    </None>
+    <None Include="..\Resources\shader\particle_shader.glsl">
       <Filter>resource\shader</Filter>
     </None>
   </ItemGroup>

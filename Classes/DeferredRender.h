@@ -1,9 +1,9 @@
 #pragma once
 #include "Effect.h"
-class DeferredEffect : public Effect
+class DeferredRender : public Effect
 {
 public:
-	static DeferredEffect* create();
+	static DeferredRender* create();
 	void genBuffer();
 	void draw(GLuint lightmap);
 	void reafBuffer();

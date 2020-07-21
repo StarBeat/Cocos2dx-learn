@@ -1,18 +1,18 @@
-#include "DeferredEffect.h"
+#include "DeferredRender.h"
 #include "Resources\shader\deferred_light_shader.glsl"
 #include "Light2d.h"
 
 using namespace cocos2d;
 
-DeferredEffect* DeferredEffect::create()
+DeferredRender* DeferredRender::create()
 {
-    auto ins = new DeferredEffect();
+    auto ins = new DeferredRender();
     ins->init();
     ins->retain();
     return ins;
 }
 
-void DeferredEffect::genBuffer()
+void DeferredRender::genBuffer()
 {
 	struct Data
 	{
@@ -59,11 +59,18 @@ void DeferredEffect::genBuffer()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _colorbuffer, 0);
 	unsigned int attachments[1] = { GL_COLOR_ATTACHMENT0};
+
+	//unsigned int rbo;
+	//glGenRenderbuffers(1, &rbo);
+	//glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+	//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, wsize.width, wsize.height);
+	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
 	glDrawBuffers(1, attachments);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void DeferredEffect::draw(GLuint lightmap)
+void DeferredRender::draw(GLuint lightmap)
 {
 	//_globalLight = Vec3(0.1, 0.1, 0);
 	_glprogramstate->getGLProgram()->use();
@@ -81,7 +88,7 @@ void DeferredEffect::draw(GLuint lightmap)
 	CHECK_GL_ERROR_DEBUG();
 }
 
-void DeferredEffect::reafBuffer()
+void DeferredRender::reafBuffer()
 {
 	auto wsize = Director::getInstance()->getWinSize();
 
@@ -91,7 +98,7 @@ void DeferredEffect::reafBuffer()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-bool DeferredEffect::init()
+bool DeferredRender::init()
 {
     std::string vs = deferred_light_vs;
     std::string fs = deferred_light_fs;

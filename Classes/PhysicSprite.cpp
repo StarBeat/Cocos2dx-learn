@@ -20,19 +20,19 @@
  * SOFTWARE.
  */
 
-#include "LFSpriteNode.h"
+#include "PhysicSprite.h"
 
 using namespace cocos2d;
 
-LFSpriteNode::LFSpriteNode()
+PhysicSprite::PhysicSprite()
 : _ignoreBodyRotation(false)
 , _pB2Body(nullptr)
 , _PTMRatio(0.0f)
 {}
 
-LFSpriteNode* LFSpriteNode::create()
+PhysicSprite* PhysicSprite::create()
 {
-    LFSpriteNode* pRet = new LFSpriteNode();
+    PhysicSprite* pRet = new PhysicSprite();
     if (pRet && pRet->init())
     {
         pRet->autorelease();
@@ -45,9 +45,9 @@ LFSpriteNode* LFSpriteNode::create()
     return pRet;
 }
 
-LFSpriteNode* LFSpriteNode::createWithTexture(Texture2D *pTexture)
+PhysicSprite* PhysicSprite::createWithTexture(Texture2D *pTexture)
 {
-    LFSpriteNode* pRet = new LFSpriteNode();
+    PhysicSprite* pRet = new PhysicSprite();
     if (pRet && pRet->initWithTexture(pTexture))
     {
         pRet->autorelease();
@@ -60,9 +60,9 @@ LFSpriteNode* LFSpriteNode::createWithTexture(Texture2D *pTexture)
     return pRet;
 }
 
-LFSpriteNode* LFSpriteNode::createWithTexture(Texture2D *pTexture, const Rect& rect)
+PhysicSprite* PhysicSprite::createWithTexture(Texture2D *pTexture, const Rect& rect)
 {
-    LFSpriteNode* pRet = new LFSpriteNode();
+    PhysicSprite* pRet = new PhysicSprite();
     if (pRet && pRet->initWithTexture(pTexture, rect))
     {
         pRet->autorelease();
@@ -75,9 +75,9 @@ LFSpriteNode* LFSpriteNode::createWithTexture(Texture2D *pTexture, const Rect& r
     return pRet;
 }
 
-LFSpriteNode* LFSpriteNode::createWithSpriteFrame(SpriteFrame *pSpriteFrame)
+PhysicSprite* PhysicSprite::createWithSpriteFrame(SpriteFrame *pSpriteFrame)
 {
-    LFSpriteNode* pRet = new LFSpriteNode();
+    PhysicSprite* pRet = new PhysicSprite();
     if (pRet && pRet->initWithSpriteFrame(pSpriteFrame))
     {
         pRet->autorelease();
@@ -90,9 +90,9 @@ LFSpriteNode* LFSpriteNode::createWithSpriteFrame(SpriteFrame *pSpriteFrame)
     return pRet;
 }
 
-LFSpriteNode* LFSpriteNode::createWithSpriteFrameName(const char *pszSpriteFrameName)
+PhysicSprite* PhysicSprite::createWithSpriteFrameName(const char *pszSpriteFrameName)
 {
-    LFSpriteNode* pRet = new LFSpriteNode();
+    PhysicSprite* pRet = new PhysicSprite();
     if (pRet && pRet->initWithSpriteFrameName(pszSpriteFrameName))
     {
         pRet->autorelease();
@@ -105,9 +105,9 @@ LFSpriteNode* LFSpriteNode::createWithSpriteFrameName(const char *pszSpriteFrame
     return pRet;
 }
 
-LFSpriteNode* LFSpriteNode::create(const char *pszFileName)
+PhysicSprite* PhysicSprite::create(const char *pszFileName)
 {
-    LFSpriteNode* pRet = new LFSpriteNode();
+    PhysicSprite* pRet = new PhysicSprite();
     if (pRet && pRet->initWithFile(pszFileName))
     {
         pRet->autorelease();
@@ -120,9 +120,9 @@ LFSpriteNode* LFSpriteNode::create(const char *pszFileName)
     return pRet;
 }
 
-LFSpriteNode* LFSpriteNode::create(const char *pszFileName, const Rect& rect)
+PhysicSprite* PhysicSprite::create(const char *pszFileName, const Rect& rect)
 {
-    LFSpriteNode* pRet = new LFSpriteNode();
+    PhysicSprite* pRet = new PhysicSprite();
     if (pRet && pRet->initWithFile(pszFileName, rect))
     {
         pRet->autorelease();
@@ -138,28 +138,28 @@ LFSpriteNode* LFSpriteNode::create(const char *pszFileName, const Rect& rect)
 // this method will only get called if the sprite is batched.
 // return YES if the physic's values (angles, position ) changed.
 // If you return NO, then getNodeToParentTransform won't be called.
-bool LFSpriteNode::isDirty() const
+bool PhysicSprite::isDirty() const
 {
     return true;
 }
 
-bool LFSpriteNode::isIgnoreBodyRotation() const
+bool PhysicSprite::isIgnoreBodyRotation() const
 {
     return _ignoreBodyRotation;
 }
 
-void LFSpriteNode::setIgnoreBodyRotation(bool bIgnoreBodyRotation)
+void PhysicSprite::setIgnoreBodyRotation(bool bIgnoreBodyRotation)
 {
     _ignoreBodyRotation = bIgnoreBodyRotation;
 }
 
 // Override the setters and getters to always reflect the body's properties.
-const Point& LFSpriteNode::getPosition() const
+const Point& PhysicSprite::getPosition() const
 {
     return getPosFromPhysics();
 }
 
-void LFSpriteNode::getPosition(float* x, float* y) const
+void PhysicSprite::getPosition(float* x, float* y) const
 {
     if (x == NULL || y == NULL) {
         return;
@@ -169,12 +169,12 @@ void LFSpriteNode::getPosition(float* x, float* y) const
     *y = pos.y;
 }
 
-float LFSpriteNode::getPositionX() const
+float PhysicSprite::getPositionX() const
 {
     return getPosFromPhysics().x;
 }
 
-float LFSpriteNode::getPositionY() const
+float PhysicSprite::getPositionY() const
 {
     return getPosFromPhysics().y;
 }
@@ -185,22 +185,22 @@ float LFSpriteNode::getPositionY() const
 
 
 
-b2Body* LFSpriteNode::getB2Body() const
+b2Body* PhysicSprite::getB2Body() const
 {
     return _pB2Body;
 }
 
-void LFSpriteNode::setB2Body(b2Body *pBody)
+void PhysicSprite::setB2Body(b2Body *pBody)
 {
     _pB2Body = pBody;
 }
 
-float LFSpriteNode::getPTMRatio() const
+float PhysicSprite::getPTMRatio() const
 {
     return _PTMRatio;
 }
 
-void LFSpriteNode::setPTMRatio(float fRatio)
+void PhysicSprite::setPTMRatio(float fRatio)
 {
     _PTMRatio = fRatio;
 }
@@ -209,7 +209,7 @@ void LFSpriteNode::setPTMRatio(float fRatio)
 // Common to Box2d and Chipmunk
 //
 
-const Point& LFSpriteNode::getPosFromPhysics() const
+const Point& PhysicSprite::getPosFromPhysics() const
 {
     static Point s_physicPosion;
 
@@ -220,19 +220,19 @@ const Point& LFSpriteNode::getPosFromPhysics() const
     return s_physicPosion;
 }
 
-void LFSpriteNode::setPosition(const Point &pos)
+void PhysicSprite::setPosition(const Point &pos)
 {
     float angle = _pB2Body->GetAngle();
     _pB2Body->SetTransform(b2Vec2(pos.x / _PTMRatio, pos.y / _PTMRatio), angle);
 }
 
-float LFSpriteNode::getRotation() const
+float PhysicSprite::getRotation() const
 {
     return (_ignoreBodyRotation ? Sprite::getRotation() :
             CC_RADIANS_TO_DEGREES(_pB2Body->GetAngle()));
 }
 
-void LFSpriteNode::setRotation(float fRotation)
+void PhysicSprite::setRotation(float fRotation)
 {
     if (_ignoreBodyRotation)
     {
@@ -246,7 +246,7 @@ void LFSpriteNode::setRotation(float fRotation)
     }
 }
 
-void LFSpriteNode::visit(Renderer *renderer, const cocos2d::Mat4& parentTransform, uint32_t parentTransformFlags)
+void PhysicSprite::visit(Renderer *renderer, const cocos2d::Mat4& parentTransform, uint32_t parentTransformFlags)
 {
     // box2d controls the position, so set the transform as dirty
     _transformUpdated = true;
@@ -254,7 +254,7 @@ void LFSpriteNode::visit(Renderer *renderer, const cocos2d::Mat4& parentTransfor
 }
 
 // returns the transform matrix according the Chipmunk Body values
-const cocos2d::Mat4& LFSpriteNode::getNodeToParentTransform() const
+const cocos2d::Mat4& PhysicSprite::getNodeToParentTransform() const
 {
     // Although scale is not used by physics engines, it is calculated just in case
 	// the sprite is animated (scaled up/down) using actions.

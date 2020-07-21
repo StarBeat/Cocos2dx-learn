@@ -14,5 +14,6 @@ protected:
 	cocos2d::GLProgramState* _glprogramstate;
 	
 	friend class BGEffect;
+	friend class ParticleEffectSpawn;
 };
 

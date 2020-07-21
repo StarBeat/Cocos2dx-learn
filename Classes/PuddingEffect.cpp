@@ -48,7 +48,8 @@ void PuddingEffect::onDraw(const Mat4& transform, uint32_t transformFlags)
     glBindBuffer(GL_ARRAY_BUFFER, _vbo1);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vec2) * texCoords.size(), &texCoords[0], GL_STREAM_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
-    glPolygonMode(GL_FRONT, GL_LINE);
+    
+    //glPolygonMode(GL_FRONT, GL_LINE);
 
     //int totalParticles = _particleSystem->GetParticleCount();
     //glDrawArrays(GL_POINTS, 0, totalParticles);
@@ -56,7 +57,7 @@ void PuddingEffect::onDraw(const Mat4& transform, uint32_t transformFlags)
     //glDrawElements(GL_TRIANGLES, indexs.size(), GL_UNSIGNED_INT , &indexs[0]);
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glPolygonMode(GL_FRONT, GL_FILL);
+   // glPolygonMode(GL_FRONT, GL_FILL);
 
     CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, texCoords.size());
     CHECK_GL_ERROR_DEBUG();
@@ -65,7 +66,7 @@ void PuddingEffect::onDraw(const Mat4& transform, uint32_t transformFlags)
 void PuddingEffect::initData(Type t, cocos2d::Vec2 position, float stride)
 {
     auto s = Director::getInstance()->getWinSize();
-    auto texSize = _texture->getContentSize();
+    texSize = _texture->getContentSize();
     auto center = s / 2;
     auto diff = Size(position) - center;
 

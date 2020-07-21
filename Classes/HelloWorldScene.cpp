@@ -159,7 +159,7 @@ bool HelloWorld::init()
 
 
     GameManager::Instane()->delayInit(this);
- //   auto bg = BGEffect::create();
+  //  auto bg = BGEffect::create(8);
  ///*   bg->setTexturei(2, "snail.png");
  //   bg->setTexturei(3, "snai2.png");
  //   bg->setTexturei(4, "snai3.png");*/

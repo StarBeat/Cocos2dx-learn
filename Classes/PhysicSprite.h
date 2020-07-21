@@ -26,56 +26,45 @@
 #include "cocos2d.h"
 #include <Box2D/Box2D.h>
 
-/** A Sprite subclass that is bound to a physics body.
- It works with:
- - Chipmunk: Preprocessor macro CC_ENABLE_CHIPMUNK_INTEGRATION should be defined
- - Objective-Chipmunk: Preprocessor macro CC_ENABLE_CHIPMUNK_INTEGRATION should be defined
- - Box2d: Preprocessor macro CC_ENABLE_BOX2D_INTEGRATION should be defined
 
- Features and Limitations:
- - Scale and Skew properties are ignored.
- - Position and rotation are going to updated from the physics body
- - If you update the rotation or position manually, the physics body will be updated
- - You can't enble both Chipmunk support and Box2d support at the same time. Only one can be enabled at compile time
- */
-class LFSpriteNode : public cocos2d::Sprite
+class PhysicSprite : public cocos2d::Sprite
 {
 public:
 
-    static LFSpriteNode* create();
+    static PhysicSprite* create();
     /** Creates an sprite with a texture.
      The rect used will be the size of the texture.
      The offset will be (0,0).
      */
-    static LFSpriteNode* createWithTexture(cocos2d::Texture2D *pTexture);
+    static PhysicSprite* createWithTexture(cocos2d::Texture2D *pTexture);
 
     /** Creates an sprite with a texture and a rect.
      The offset will be (0,0).
      */
-    static LFSpriteNode* createWithTexture(cocos2d::Texture2D *pTexture, const cocos2d::Rect& rect);
+    static PhysicSprite* createWithTexture(cocos2d::Texture2D *pTexture, const cocos2d::Rect& rect);
 
     /** Creates an sprite with an sprite frame. */
-    static LFSpriteNode* createWithSpriteFrame(cocos2d::SpriteFrame *pSpriteFrame);
+    static PhysicSprite* createWithSpriteFrame(cocos2d::SpriteFrame *pSpriteFrame);
 
     /** Creates an sprite with an sprite frame name.
      An SpriteFrame will be fetched from the SpriteFrameCache by name.
      If the SpriteFrame doesn't exist it will raise an exception.
      @since v0.9
      */
-    static LFSpriteNode* createWithSpriteFrameName(const char *pszSpriteFrameName);
+    static PhysicSprite* createWithSpriteFrameName(const char *pszSpriteFrameName);
 
     /** Creates an sprite with an image filename.
      The rect used will be the size of the image.
      The offset will be (0,0).
      */
-    static LFSpriteNode* create(const char *pszFileName);
+    static PhysicSprite* create(const char *pszFileName);
 
     /** Creates an sprite with an image filename and a rect.
      The offset will be (0,0).
      */
-    static LFSpriteNode* create(const char *pszFileName, const cocos2d::Rect& rect);
+    static PhysicSprite* create(const char *pszFileName, const cocos2d::Rect& rect);
 
-    LFSpriteNode();
+    PhysicSprite();
 
     virtual bool isDirty() const;
 

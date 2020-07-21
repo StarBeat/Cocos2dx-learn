@@ -25,7 +25,7 @@ void LightingManager::draw()
 {
 	if (deferred == nullptr)
 	{
-		deferred = DeferredEffect::create();
+		deferred = DeferredRender::create();
 		deferred->genBuffer();
 	}
 	_mats = 0;

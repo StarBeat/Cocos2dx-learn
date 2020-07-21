@@ -1,9 +1,11 @@
 #include "LiquidFunDemo.h"
 #include "GameManager.h"
 #include <Box2D\Box2D.h>
-#include "LFSpriteNode.h"
+#include "PhysicSprite.h"
 #include "PuddingSprite.h"
-
+#include "BGEffect.h"
+#include <MetaBallSprite.h>
+#include "ParticleEffect.h"
 USING_NS_CC;
 #define PTM_RATIO B2Physic::PTM_RATIO
 bool LiquidFunDemo::init()
@@ -44,12 +46,8 @@ bool LiquidFunDemo::init()
     sp->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     this->addChild(sp);
 
- /*   auto pp = PuddingSprite::create("Images/r2.png");
-    pp->initParticlePosition(visibleSize.width / 2 + origin.x , visibleSize.height / 2 + origin.y);
-    this->addChild(pp);*/
-
-    auto color = LayerColor::create(Color4B::GRAY);
-    this->addChild(color, -1);
+ /*   auto color = LayerColor::create(Color4B::GRAY);
+    this->addChild(color, -1);*/
     GameManager::Instane()->delayInit(this);
 
     auto mouse = EventListenerMouse::create();
@@ -57,6 +55,7 @@ bool LiquidFunDemo::init()
     {
         if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_LEFT)
         {
+           
             addNewSpriteAtPosition({ event->getCursorX(), event->getCursorY() });
         }
         if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_RIGHT)
@@ -68,12 +67,35 @@ bool LiquidFunDemo::init()
         }
         CCLOG("%f,%f\n", event->getCursorX(), event->getCursorY());
     };
-
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouse, this);
+   //auto bg = BGEffect::create(8);
+   //bg->genBindBuffer();
+   //this->addChild(bg);
 
+    //auto mp = Sprite::create("ParticleImage.png");
+    //mp->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+    //this->addChild(mp);
+    //mp->setScaleX(0.15);
+    //mp->setScaleY(0.15);
+    //mp->setColor(Color3B::RED);
+
+    ParticleEffectSpawn* pe = ParticleEffectSpawn::create();
+    pe->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+    pe->setType(ParticleEffectSpawn::Type::LAVA);
+    this->addChild(pe);
+
+    ParticleEffectSpawn* pew = ParticleEffectSpawn::create();
+    pew->setPosition(Vec2(visibleSize.width / 2 , visibleSize.height / 2 + 300));
+    pew->setType(ParticleEffectSpawn::Type::WATER);
+    this->addChild(pew);
+
+    //ParticleEffectSpawn* peg = ParticleEffectSpawn::create();
+    //peg->setPosition(Vec2(visibleSize.width / 2 - 300, visibleSize.height / 2 + origin.y));
+    //peg->setType(ParticleEffectSpawn::Type::GAS);
+    //this->addChild(peg);
     CCIMGUI::getInstance()->addImGUI([=]() {
         ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), u8"单击选中灯光修改属性");
-        
+
         static bool _allowBg = false;
         ImGui::Checkbox(u8"允许改变背景", &_allowBg);
         {
@@ -107,7 +129,19 @@ bool LiquidFunDemo::init()
             }
             ImGui::NewLine();
         }
-        
+        float x = sp->getRotation3D().x, y = sp->getRotation3D().y, z = sp->getRotation3D().z;
+        ImGui::SliderFloat("x", &x, 0, 360);
+        ImGui::SliderFloat("y", &y, 0, 360);
+        ImGui::SliderFloat("z", &z, 0, 360);
+        sp->setRotation3D({ x,y,z });
+
+        //float sx = mp->getScaleX(), sy = mp->getScaleY();
+        //ImGui::SliderFloat("sx", &sx, 0, 2);
+        //ImGui::SliderFloat("sy", &sy, 0, 2);
+        //mp->setScaleX(sx);
+        //mp->setScaleY(sy);
+
+
         ImGui::ShowDemoWindow();
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         }, "LiquidFunDemo");
@@ -118,7 +152,7 @@ void LiquidFunDemo::addNewSpriteAtPosition(Vec2 p)
 {
     CCLOG("Add sprite %0.2f x %02.f", p.x, p.y);
 
-    auto sprite = LFSpriteNode::create("Images/r1.png");
+    auto sprite = PhysicSprite::create("Images/r1.png");
     this->addChild(sprite);
 
     // Define the dynamic body.
@@ -139,7 +173,7 @@ void LiquidFunDemo::addNewSpriteAtPosition(Vec2 p)
     fixtureDef.friction = 0.3f;
     //fixtureDef.isSensor = true;
     body->CreateFixture(&fixtureDef);
-
+    body->SetGravityScale(0);
     sprite->setB2Body(body);
     sprite->setPTMRatio(PTM_RATIO);
 }
