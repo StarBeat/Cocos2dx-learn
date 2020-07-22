@@ -81,8 +81,6 @@ struct IPrimitive : public cocos2d::Node
     virtual ~IPrimitive() 
     {
         _instancecommande.rmPrimitive(this);
-        glDeleteBuffers(1, &_vbo);
-        glDeleteVertexArrays(1, &_vao);
         delete _trianglesbuffer;
     }
     void calculateTriangleDone()
@@ -122,8 +120,6 @@ struct IPrimitive : public cocos2d::Node
     unsigned int _primitiveHash;
 protected:
     void* _owner;
-    GLuint _vao;
-    GLuint _vbo;
     InstanceRenderCommand _instancecommande;
 protected:
     void createPolygonTriangle(const cocos2d::Vec2* verts, int count, const cocos2d::Color4F& fillColor, float borderWidth, const cocos2d::Color4F& borderColor)

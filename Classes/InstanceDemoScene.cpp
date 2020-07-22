@@ -33,38 +33,38 @@ bool InstanceDemoScene::init()
         auto root = Layer::create();
         this->addChild(root);
         root->setPosition(event->getCursorX(), event->getCursorY());
-        for (size_t i = 0; i < 1; i++)
+        for (size_t i = 0; i < _nnums; i++)
         {
             auto color = colors[Random::Instane()->get<int>(0, colors.size() - 1)];
-            auto node = CirclePrimitive::create({ 0,0 }, 2, 50, 1, 1, color);
+            auto node = CirclePrimitive::create({ 0,0 }, 2, 5, 1, 1, color);
             //  node->setPosition(Random::Instane()->get<int>(0, visibleSize.width), Random::Instane()->get<int>(0, visibleSize.height));
             root->addChild(node);
             auto node1 = RectPrimitive::create({}, Vec2(2, 2), color);
             // node1->setPosition(Random::Instane()->get<int>(0, visibleSize.width), Random::Instane()->get<int>(0, visibleSize.height));
             root->addChild(node1);
         }
-        //auto children = root->getChildren();
-        //for (const auto& i : children)
-        //{
-        //    auto pos = Vec2(Random::Instane()->get<int>(-visibleSize.width, visibleSize.width),
-        //        Random::Instane()->get<int>(-visibleSize.width, visibleSize.width))+ Vec2(100,100);
-        //    if (pos.getLength() > visibleSize.width)
-        //        {
-        //            if (Random::Instane()->get<int>(0, 2) == 0)
-        //            {
-        //                pos.x = 0;
-        //            }
-        //            else
-        //            {
-        //                pos.y = 0;
-        //            }
-        //        }
-        //    auto a = MoveBy::create(3, pos);
-        //    auto a2 = CallFunc::create([i] {/* i->removeFromParent(); */}); // 在release下会出现奇怪的渲染问题 /*i->removeFromParent();*/ 
-        //    auto seq = Sequence::create(DelayTime::create(Random::Instane()->get<float>(0.5, 3)), a2, NULL);
-        //    auto parll = Spawn::create(a, seq, NULL);
-        //    i->runAction(parll);
-        //}
+        auto children = root->getChildren();
+        for (const auto& i : children)
+        {
+            auto pos = Vec2(Random::Instane()->get<int>(-visibleSize.width, visibleSize.width),
+                Random::Instane()->get<int>(-visibleSize.width, visibleSize.width))+ Vec2(100,100);
+            if (pos.getLength() > visibleSize.width)
+                {
+                    if (Random::Instane()->get<int>(0, 2) == 0)
+                    {
+                        pos.x = 0;
+                    }
+                    else
+                    {
+                        pos.y = 0;
+                    }
+                }
+            auto a = MoveBy::create(3, pos);
+            auto a2 = CallFunc::create([i] { i->removeFromParent(); }); // 在release下会出现奇怪的渲染问题 /*i->removeFromParent();*/ 
+            auto seq = Sequence::create(DelayTime::create(Random::Instane()->get<float>(0.5, 3)), a2, NULL);
+            auto parll = Spawn::create(a, seq, NULL);
+            i->runAction(parll);
+        }
         CCLOG("%f,%f\n", event->getCursorX(), event->getCursorY());
     };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouse, this);

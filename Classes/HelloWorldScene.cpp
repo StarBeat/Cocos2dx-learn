@@ -218,11 +218,14 @@ bool HelloWorld::init()
            // auto li = this;
             if (EventKeyboard::KeyCode::KEY_D == k)
             {
-                DotPrimitive* d = DotPrimitive::create({0,0}, 3, Color4F::WHITE);
-                auto a2 = CallFunc::create([d] { d->removeFromParent();}); 
-                auto seq = Sequence::create(DelayTime::create(2 ), a2, NULL);
-                li->addChild(d);
-                li->runAction(seq);
+                for (size_t i = 0; i < 50; i++)
+                {
+                    DotPrimitive* d = DotPrimitive::create({0,0}, 3, Color4F::WHITE);
+                    auto a2 = CallFunc::create([d] { d->removeFromParent();}); 
+                    auto seq = Sequence::create(DelayTime::create(0.1), a2, NULL);
+                    li->addChild(d);
+                    d->runAction(seq);
+                }
 
                 p = li->getPosition() + Vec2(40, 0);
                 li->setPosition(p);
