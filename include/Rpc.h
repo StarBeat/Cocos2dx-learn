@@ -167,10 +167,10 @@ public:
 		ds << SERVERID;
 		net_call(ds, id);
 	}
-private:
-	
-	void connect(int id);
+
 	void disconnect(int id);
+private:
+	void connect(int id);
 	
 	void call_(int id, std::string name, const char* data, int len);
 

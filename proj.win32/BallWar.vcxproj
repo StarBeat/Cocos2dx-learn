@@ -57,7 +57,7 @@
   <PropertyGroup>
     <_ProjectFileVersion>12.0.21005.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration).win32\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration).win32\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration).win32\obj</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration).win32\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration).win32\obj\</IntDir>
@@ -100,8 +100,7 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>rmdir /S /Q "$(Configuration).win32\obj\"</Command>
     </PostBuildEvent>
     <PreLinkEvent>
       <Command>

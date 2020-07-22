@@ -19,6 +19,11 @@ void NetWork::asClient()
 	_rpc->asClient(_ip, _port);
 }
 
+void NetWork::disConnect(int id)
+{
+	_rpc->disconnect(id);
+}
+
 void NetWork::update(float dt)
 {
 	_rpc->update();

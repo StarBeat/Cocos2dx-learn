@@ -46,7 +46,7 @@ public:
 	
 	void init();
 	void update(float df);
-
+	void stop() { _rpc->disconnect(_selfid); }
 	static bool OnColliderEntry(PhysicsContact& contact);
 	static bool OnColliderPreSolve(PhysicsContact& contact, PhysicsContactPreSolve& solve);
 	static void OnColliderPostSolve(PhysicsContact& contact, const PhysicsContactPostSolve& solve);

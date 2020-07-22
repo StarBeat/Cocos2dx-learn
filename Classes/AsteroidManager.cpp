@@ -10,7 +10,7 @@ AsteroidManager* ISingle< AsteroidManager>::instance = new AsteroidManager();
 
 AsteroidManager::AsteroidManager():_asteroidCount(0)
 {
-	
+
 }
 
 AsteroidManager::~AsteroidManager()
@@ -80,6 +80,12 @@ void AsteroidManager::init()
 			event->release();
 		});
 	GameScene::gameScene->getEventDispatcher()->addEventListenerWithSceneGraphPriority(e, GameScene::gameScene);
+}
+
+void AsteroidManager::stop()
+{
+	_aid2count.clear();
+	GameScene::gameScene->getScheduler()->unscheduleAllForTarget(this);
 }
 
 void AsteroidManager::update(float dt)

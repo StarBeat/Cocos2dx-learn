@@ -7,6 +7,7 @@
 #include <CirclePrimitive.h>
 #include <DotPrimitive.h>
 #include <HelloWorldScene.h>
+#include "AsteroidManager.h"
 
 using namespace cocos2d;
 GameScene* GameScene::gameScene = nullptr;
@@ -58,8 +59,12 @@ bool GameScene::init()
         CCLOG("%f,%f\n", event->getCursorX(), event->getCursorY());
     };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouse, this);
-    auto back = MenuItemLabel::create(Label::createWithTTF("Back", "fonts/Marker Felt.ttf", 24), [](Ref*) {
+    auto back = MenuItemLabel::create(Label::createWithTTF("Back", "fonts/Marker Felt.ttf", 24), [&](Ref*) {
+        _scheduler->unscheduleAllForTarget(GameManager::Instane()->_network);
+        _scheduler->unscheduleAllForTarget(PlayerManager::Instane());
+        AsteroidManager::Instane()->stop();
         Director::getInstance()->replaceScene(HelloWorld::createScene());
+        gameScene = nullptr;
         });
     float x = origin.x + visibleSize.width - back->getContentSize().width / 2;
     float y = origin.y + back->getContentSize().height / 2;

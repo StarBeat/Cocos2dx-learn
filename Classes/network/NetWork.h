@@ -23,6 +23,7 @@ public:
 	{
 		return _rpc->isServer();
 	}
+	void disConnect(int selfid);
 	void update(float dt);
 public:
 	Rpc* _rpc;

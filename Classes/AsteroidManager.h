@@ -14,6 +14,7 @@ public:
 	~AsteroidManager();
 	void spwanAsteriod();
 	void init();
+	void stop();
 	void update(float dt);
 public:
 	static const int AREA_COUNT = 4;
