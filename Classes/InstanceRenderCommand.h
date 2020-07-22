@@ -32,7 +32,6 @@ private:
     static std::unordered_map<unsigned int, PrimitiveEffect*>_hash2shader;
     static std::unordered_map <unsigned int, std::vector<float>>_hash2matbuffer;
 
-    static float* _matbuffer;
 
     friend class IPrimitive;
 };

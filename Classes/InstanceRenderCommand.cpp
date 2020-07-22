@@ -3,7 +3,6 @@
 
 using namespace cocos2d;
 
-float* InstanceRenderCommand::_matbuffer = nullptr;
 std::unordered_map<unsigned int, std::list<IPrimitive*>> InstanceRenderCommand::_instanceBatchPool;
 std::unordered_map<unsigned int, int>InstanceRenderCommand::_hash2count;
 std::unordered_map<unsigned int, PrimitiveEffect*>InstanceRenderCommand::_hash2shader;
@@ -35,17 +34,10 @@ void InstanceRenderCommand::submit()
 				return;
 			}
 			_hash2shader[i.first]->use();
-			_matbuffer = new float[i.second * 16];
-			for (const auto& ins : ls)
-			{
-				memcpy(_matbuffer + offset, ins->_mvp.m, 16 * sizeof(float));
-				offset += 16;
-			}
-			_hash2shader[i.first]->bindMatBufferData(_matbuffer, ls.size());
-			//_hash2shader[i.first]->bindMatBufferData(_hash2matbuffer[i.first].data(), ls.size());
-			_hash2shader[i.first]->draw(ls.front()->_vertex_count, _instanceBatchPool[i.first].size());
+
+			_hash2shader[i.first]->bindMatBufferData(&_hash2matbuffer[i.first][0], ls.size());
+			_hash2shader[i.first]->draw(ls.front()->_vertex_count, ls.size());
 			_hash2matbuffer[i.first].clear();
-			delete[] _matbuffer;
 		}
 	}
 }

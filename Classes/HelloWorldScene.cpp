@@ -207,8 +207,8 @@ bool HelloWorld::init()
     li5->setPosition(435, 150);
     li5->setLightSize(300, 150);
     this->addChild(li5, 100);
-    DotPrimitive* d = DotPrimitive::create({0,0}, 3, Color4F::WHITE);
-    li5->addChild(d);
+    //DotPrimitive* d = DotPrimitive::create({0,0}, 3, Color4F::WHITE);
+    //li5->addChild(d);
     li5->runAction(ac1);
 
     auto event = EventListenerKeyboard::create();
@@ -218,6 +218,12 @@ bool HelloWorld::init()
            // auto li = this;
             if (EventKeyboard::KeyCode::KEY_D == k)
             {
+                DotPrimitive* d = DotPrimitive::create({0,0}, 3, Color4F::WHITE);
+                auto a2 = CallFunc::create([d] { d->removeFromParent();}); 
+                auto seq = Sequence::create(DelayTime::create(2 ), a2, NULL);
+                li->addChild(d);
+                li->runAction(seq);
+
                 p = li->getPosition() + Vec2(40, 0);
                 li->setPosition(p);
             }

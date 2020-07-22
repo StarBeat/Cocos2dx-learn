@@ -62,13 +62,11 @@ void PrimitiveEffect::bindMatBufferData(void* mbuffer, int msize)
 	glBindVertexArray(_vao);
 	glBindBuffer(GL_ARRAY_BUFFER, _matbuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 16 * msize, mbuffer, GL_STREAM_DRAW);
-	glBindVertexArray(0);
+	//glBindVertexArray(0);
 }
 
 void PrimitiveEffect::draw(int vertcount, int objcount)
 {
-	_glprogramstate->applyAttributes();
-	_glprogramstate->applyUniforms();
 	glBindVertexArray(_vao);
 	glDrawArraysInstanced(GL_TRIANGLES, 0, vertcount, objcount);
 

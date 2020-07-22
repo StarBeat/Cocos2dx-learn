@@ -37,6 +37,4 @@ void LightingManager::draw()
 	}
 	LightEffect::lightRenderEnd();
 	deferred->draw(LightEffect::getLightMap());
-	//deferred light
-
 }
