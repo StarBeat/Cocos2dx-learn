@@ -111,7 +111,6 @@ public:
 		_world = new  b2World(gravity);
 		_world->SetAllowSleeping(true);
 		_world->SetContinuousPhysics(true);
-#if _DEBUG
 		_debugDraw = new GLESDebugDraw(PTM_RATIO);
 		_world->SetDebugDraw(_debugDraw);
 		uint32 flags = 0;
@@ -122,7 +121,6 @@ public:
 		//flags += b2Draw::e_centerOfMassBit;
 		//flags += b2Draw::e_particleBit;
 		_debugDraw->SetFlags(flags);
-#endif
 		cocos2d::Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, true);
 
 		_world->SetContactListener(this);
@@ -170,9 +168,7 @@ private:
 
 	std::list<b2ContactListener*> _listener;
 
-#if _DEBUG
 	GLESDebugDraw* _debugDraw;
 	cocos2d::CustomCommand _customCmd;
-#endif // _DEBUG
 	friend class GameManager;
 };
