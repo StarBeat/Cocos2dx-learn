@@ -150,7 +150,10 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent>
-      <Command>rmdir /S /Q "$(Configuration).win32\obj\"</Command>
+      <Command>rmdir /S /Q "$(Configuration).win32\obj"
+DEL $(Configuration).win32\*.lib
+DEL $(Configuration).win32\*.exp
+IF EXIST $(Configuration).win32\iconv.dll DEL $(Configuration).win32\iconv.dll</Command>
     </PostBuildEvent>
     <PreLinkEvent>
       <Command>
