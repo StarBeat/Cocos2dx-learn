@@ -6,6 +6,8 @@
 #include "Random.h"
 #include "PlayerManager.h"
 #include "AsteroidManager.h"
+#include "b2Physic.h"
+#include "network\NetWork.h"
 
 #include <chrono>
 using namespace cocos2d;
@@ -19,6 +21,7 @@ void GameManager::physicModuleInit(PhysicsWorld* pw)
 {
 	pw->setGravity(cocos2d::Vec2::ZERO);
 	_b2physic = B2Physic::create();
+	_b2physic->retain();
 	_b2world = _b2physic->_world;
 	::PhysicEx::init(pw);
 }

@@ -23,10 +23,7 @@ public:
 	{
 		virtual void BeginContact(b2Contact* contact);
 	};
-	float GAS_FLOATABILITY = 7.0f;
-	float SPAWN_INTERVAL = 0.025f;
-	float timeAcumular = 0;
-	float particleLifeTime = 3.0f;
+
 	//void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
 	void visit(cocos2d::Renderer* renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags) override;
 
@@ -36,13 +33,14 @@ public:
 	~ParticleEffectSpawn();
 
 	void setType(Type t);
+	void setLife(float lt);
 	void update(float dt);
 	bool init();
 
 	CREATE_FUNC(ParticleEffectSpawn);
 private:
 	b2ParticleSystem* _particleSystem;
-	LS* listener;
+	b2ContactListener* listener;
 	cocos2d::Sprite* _particleSp;
 	std::queue<Particle*> _pool;
 	std::list<Particle*> _children;
@@ -57,7 +55,10 @@ private:
 	cocos2d::GLProgramState* _target;
 	float scale = 0.15f;
 
+	float timeAcumular = 0;
+	float GAS_FLOATABILITY = 7.0f;
+	float SPAWN_INTERVAL = 0.025f;
+	float particleLifeTime = 3.0f;
 
-
-	friend class Particle;
+	friend class Particle;	
 };

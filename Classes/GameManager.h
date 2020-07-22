@@ -1,10 +1,10 @@
 #pragma once
 #include "ISingle.h"
 #include "cocos2d.h"
-#include "network\NetWork.h"
-#include <b2Physic.h>
 
-
+class B2Physic;
+class NetWork;
+class b2World;
 extern const char* EV_EAT;
 
 class GameManager : public ISingle<GameManager>
@@ -24,10 +24,10 @@ public:
 #pragma region rpc
 	void setSeed(int seed);
 #pragma endregion
-	NetWork* _network;
+	NetWork* _network = nullptr;
 	int _seed;
-	B2Physic* _b2physic;
-	b2World* _b2world;
+	B2Physic* _b2physic = nullptr;
+	b2World* _b2world = nullptr;
 private:
 	void physicModuleInit(cocos2d::PhysicsWorld* pw);
 };

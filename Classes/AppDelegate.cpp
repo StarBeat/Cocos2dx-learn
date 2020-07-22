@@ -200,13 +200,13 @@ bool AppDelegate::applicationDidFinishLaunching() {
     if(!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
         
-        glview = GLViewImpl::createWithRect("BallWar", Rect{0,0, designResolutionSize.width, designResolutionSize.height }, 1, true);
+        glview = GLViewImpl::createWithRect("Demo", Rect{0,0, designResolutionSize.width, designResolutionSize.height }, 1, true);
         //glfwWindowHint(GLFW_DECORATED, GL_FALSE);
         //DWORD dskPid = 0;
         //DWORD tid = ::GetWindowThreadProcessId(glview->getWin32Window(), &dskPid);
         //_gMsgHook = ::SetWindowsHookEx(WH_CALLWNDPROC, hook_proc, NULL, tid);
 #else
-        glview = GLViewImpl::create("BallWar");
+        glview = GLViewImpl::create("Demo");
 #endif
         director->setOpenGLView(glview);
     }

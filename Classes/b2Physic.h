@@ -2,16 +2,23 @@
 #include <cocos2d.h>
 #include <Box2D\Box2D.h>
 #include <GLESDebugDraw.h>
-
+#include "GameManager.h"
 
 class B2Physic : public cocos2d::Node, public b2ContactListener
 {
 public:
 	static const int PTM_RATIO = 32;
+	static const unsigned int UD_TAG = 1 << 32 | 1;
 public:
-	B2Physic() {}
-	~B2Physic() 
+	B2Physic()
 	{
+	}
+	~B2Physic()
+	{
+		if (GameManager::Instane()->_b2physic == this)
+		{
+			GameManager::Instane()->_b2physic = nullptr;//析构顺序 导致_listener访问问题
+		}
 	}
 	CREATE_FUNC(B2Physic);
 
@@ -19,17 +26,17 @@ public:
 	{
 		for (const auto& i : _listener)
 		{
-			if (i != nullptr)
-				i->BeginContact(contact);
+
+			i->BeginContact(contact);
 		}
 	}
-	
-	virtual void EndContact(b2Contact* contact) 
+
+	virtual void EndContact(b2Contact* contact)
 	{
 		for (const auto& i : _listener)
 		{
-			if (i != nullptr)
-				i->EndContact(contact);
+
+			i->EndContact(contact);
 		}
 	}
 
@@ -37,8 +44,8 @@ public:
 	{
 		for (const auto& i : _listener)
 		{
-			if (i != nullptr)
-				i->EndContact(fixture, particleSystem, index);
+
+			i->EndContact(fixture, particleSystem, index);
 		}
 	}
 
@@ -46,18 +53,17 @@ public:
 	{
 		for (const auto& i : _listener)
 		{
-			if (i != nullptr)
-				i->EndContact(particleSystem, indexA, indexB);
+
+			i->EndContact(particleSystem, indexA, indexB);
 		}
 	}
-
 
 	virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
 	{
 		for (const auto& i : _listener)
 		{
-			if (i != nullptr)
-				i->PreSolve(contact, oldManifold);
+
+			i->PreSolve(contact, oldManifold);
 		}
 	}
 
@@ -65,8 +71,7 @@ public:
 	{
 		for (const auto& i : _listener)
 		{
-			if (i != nullptr)
-				i->PostSolve(contact, impulse);
+			i->PostSolve(contact, impulse);
 		}
 	}
 
@@ -78,24 +83,28 @@ public:
 		///* ~b2_elasticParticle ^ b2_destructionListenerParticle ^ b2_zombieParticle ^ b2_fixtureContactListenerParticle ^ b2_particleContactListenerParticle*/);
 		for (const auto& i : _listener)
 		{
-			if(i!=nullptr)
+
 			i->BeginContact(particleSystem, particleBodyContact);
 		}
 	}
 	virtual void BeginContact(b2ParticleSystem* particleSystem, b2ParticleContact* particleContact) override
 	{
-	/*	const_cast<b2ParticleTriad*>(particleSystem->GetTriads())[particleContact->GetIndexA()].flags = b2_waterParticle | b2_fixtureContactListenerParticle | b2_particleContactListenerParticle;
-		particleSystem->SetParticleFlags(particleContact->GetIndexA(),
-			b2_waterParticle | b2_fixtureContactListenerParticle | b2_particleContactListenerParticle);
-		const_cast<b2ParticleTriad*>(particleSystem->GetTriads())[particleContact->GetIndexB()].flags = b2_waterParticle | b2_fixtureContactListenerParticle | b2_particleContactListenerParticle;
-		particleSystem->SetParticleFlags(particleContact->GetIndexB(),
-			b2_waterParticle | b2_fixtureContactListenerParticle | b2_particleContactListenerParticle);*/
+		/*	const_cast<b2ParticleTriad*>(particleSystem->GetTriads())[particleContact->GetIndexA()].flags = b2_waterParticle | b2_fixtureContactListenerParticle | b2_particleContactListenerParticle;
+			particleSystem->SetParticleFlags(particleContact->GetIndexA(),
+				b2_waterParticle | b2_fixtureContactListenerParticle | b2_particleContactListenerParticle);
+			const_cast<b2ParticleTriad*>(particleSystem->GetTriads())[particleContact->GetIndexB()].flags = b2_waterParticle | b2_fixtureContactListenerParticle | b2_particleContactListenerParticle;
+			particleSystem->SetParticleFlags(particleContact->GetIndexB(),
+				b2_waterParticle | b2_fixtureContactListenerParticle | b2_particleContactListenerParticle);*/
 		for (const auto& i : _listener)
 		{
 			i->BeginContact(particleSystem, particleContact);
 		}
 	}
 
+	void setDebugFlag(uint32 flags)
+	{
+		_debugDraw->SetFlags(flags);
+	}
 	bool init()
 	{
 		b2Vec2 gravity(0.0f, -10.0f);
@@ -106,16 +115,16 @@ public:
 		_debugDraw = new GLESDebugDraw(PTM_RATIO);
 		_world->SetDebugDraw(_debugDraw);
 		uint32 flags = 0;
-		flags += b2Draw::e_shapeBit;
+		//flags += b2Draw::e_shapeBit;
 		flags += b2Draw::e_jointBit;
 		//flags += b2Draw::e_aabbBit;
 		//flags += b2Draw::e_pairBit;
-		flags += b2Draw::e_centerOfMassBit;
+		//flags += b2Draw::e_centerOfMassBit;
 		//flags += b2Draw::e_particleBit;
 		_debugDraw->SetFlags(flags);
 #endif
-		cocos2d::Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
-		
+		cocos2d::Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, true);
+
 		_world->SetContactListener(this);
 		return true;
 	}
@@ -125,7 +134,6 @@ public:
 		const int velocityIterations = 8;
 		const int positionIterations = 1;
 		_world->Step(dt, velocityIterations, positionIterations);
-		_listener.remove_if([](b2ContactListener* t) {return t== nullptr; });
 	}
 
 	void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t transformFlags)
@@ -148,13 +156,20 @@ public:
 		cocos2d::kmGLPopMatrix();
 	}
 
-	void addB2ContactListener(b2ContactListener* l)
+	void addB2ContactListener(b2ContactListener*& l)
 	{
 		_listener.push_back(l);
 	}
+
+	void removeB2ContactListener(b2ContactListener*& l)
+	{
+		_listener.remove(l);
+	}
 private:
 	b2World* _world;
+
 	std::list<b2ContactListener*> _listener;
+
 #if _DEBUG
 	GLESDebugDraw* _debugDraw;
 	cocos2d::CustomCommand _customCmd;

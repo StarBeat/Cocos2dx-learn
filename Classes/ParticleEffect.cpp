@@ -2,6 +2,7 @@
 #include "GameManager.h"
 #include "Resources\shader\particle_shader.glsl"
 #include <PhysicSprite.h>
+#include "b2Physic.h"
 USING_NS_CC;
 #define PTM_RATIO B2Physic::PTM_RATIO
 
@@ -64,6 +65,12 @@ ParticleEffectSpawn::ParticleEffectSpawn()
 
 ParticleEffectSpawn::~ParticleEffectSpawn()
 {
+	for (const auto& i : _children)
+	{
+		i->sp->stopAllActions();
+		i->sp->getB2Body()->SetActive(false);
+	}
+	GameManager::Instane()->_b2physic->removeB2ContactListener(listener);
 	delete listener;
 }
 
@@ -71,7 +78,10 @@ void ParticleEffectSpawn::setType(Type t)
 {
 	_type = t;
 }
-
+void ParticleEffectSpawn::setLife(float lt)
+{
+	particleLifeTime = lt;
+}
 void ParticleEffectSpawn::update(float dt)
 {
 	if (timeAcumular > SPAWN_INTERVAL)
@@ -288,6 +298,8 @@ void ParticleEffectSpawn::LS::BeginContact(b2Contact* contact)
 {
 	auto b1 = contact->GetFixtureA()->GetBody();
 	auto b2 = contact->GetFixtureB()->GetBody();
+	if ((unsigned int)b1->GetUserData() & B2Physic::UD_TAG || (unsigned int)b1->GetUserData() & B2Physic::UD_TAG)
+		return;
 	Particle* p1 = (Particle*)b1->GetUserData();
 	Particle* p2 = (Particle*)b2->GetUserData();
 	if (p1 && p2 && p1->_t == Type::WATER)

@@ -1,16 +1,18 @@
 #include "LiquidFunDemo.h"
 #include "GameManager.h"
-#include <Box2D\Box2D.h>
 #include "PhysicSprite.h"
 #include "PuddingSprite.h"
 #include "BGEffect.h"
 #include <MetaBallSprite.h>
 #include "ParticleEffect.h"
+#include "b2Physic.h"
 USING_NS_CC;
 #define PTM_RATIO B2Physic::PTM_RATIO
+const static unsigned int Edge_chain = 1 << 2 | B2Physic::UD_TAG;
 bool LiquidFunDemo::init()
 {
     memset(&_bslot, 0, sizeof(_bslot) / sizeof(_bslot[0]));
+    _lhold = false;
     ImGui::CreateContext();
     initWithPhysics();
     _physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
@@ -19,25 +21,23 @@ bool LiquidFunDemo::init()
     auto s = visibleSize;
     auto origin = Director::getInstance()->getVisibleOrigin();
     auto _world = GameManager::Instane()->_b2world;
+    _drawNode = DrawNode::create();
+    this->addChild(_drawNode);
     b2BodyDef groundBodyDef;
     groundBodyDef.position.Set(0, 0); // bottom-left corner
     b2Body* groundBody = _world->CreateBody(&groundBodyDef);
 
     // Define the ground box shape.
     b2EdgeShape groundBox;
-
     // bottom
     groundBox.Set(b2Vec2(0 / PTM_RATIO, 0 / PTM_RATIO), b2Vec2(s.width / PTM_RATIO, 0 / PTM_RATIO));
     groundBody->CreateFixture(&groundBox, 0);
-
     // top
     groundBox.Set(b2Vec2(0 / PTM_RATIO, s.height / PTM_RATIO), b2Vec2(s.width / PTM_RATIO, s.height / PTM_RATIO));
     groundBody->CreateFixture(&groundBox, 0);
-
     // left
     groundBox.Set(b2Vec2(0 / PTM_RATIO, 0 / PTM_RATIO), b2Vec2(0 / PTM_RATIO, s.height / PTM_RATIO));
     groundBody->CreateFixture(&groundBox, 0);
-
     // right
     groundBox.Set(b2Vec2(s.width / PTM_RATIO, 0 / PTM_RATIO), b2Vec2(s.width / PTM_RATIO, s.height / PTM_RATIO));
     groundBody->CreateFixture(&groundBox, 0);
@@ -53,24 +53,96 @@ bool LiquidFunDemo::init()
     auto mouse = EventListenerMouse::create();
     mouse->onMouseDown = [=](EventMouse* event)
     {
+        Vec2 p(event->getCursorX(), event->getCursorY());
         if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_LEFT)
         {
-           
-            addNewSpriteAtPosition({ event->getCursorX(), event->getCursorY() });
+            _lhold = true;
+            if (_bslot[0])
+            {
+                ParticleEffectSpawn* pew = ParticleEffectSpawn::create();
+                pew->setType(ParticleEffectSpawn::Type::WATER);
+                pew->setPosition(p);
+                auto n = Sprite::create("Images/stars2.png");
+                pew->addChild(n);
+                this->addChild(pew);
+            }
+            if (_bslot[1])
+            {
+                ParticleEffectSpawn* pe = ParticleEffectSpawn::create();
+                pe->setPosition(p);
+                pe->setType(ParticleEffectSpawn::Type::LAVA);
+                pe->setLife(10);
+                auto n = Sprite::create("Images/stars2.png");
+                pe->addChild(n);
+                this->addChild(pe);
+            }
+            if (_bslot[2])
+            {
+                if (_sselect.empty())
+                {
+                    return;
+                }
+                auto pp = PuddingSprite::create(_sselect); //"Images/r2.png"
+                pp->initParticlePosition(p.x, p.y);
+                this->addChild(pp);
+            }
+            if (_bslot[3])
+            {
+                _path.push_back({ p.x / PTM_RATIO, p.y / PTM_RATIO });
+                _drawNode->drawDot({ event->getCursorX()  , event->getCursorY() }, 1.5, Color4F::GREEN);
+            }
         }
         if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_RIGHT)
         {
-            auto pp = PuddingSprite::create("Images/r2.png");
-            pp->initParticlePosition(event->getCursorX(), event->getCursorY());
-            //pp->setScale(0.5);
-            this->addChild(pp);
+            _sselect.clear();
+            if (_bslot[3])
+            {
+                _path.clear();
+            }
+            memset(&_bslot, 0, sizeof(_bslot) / sizeof(_bslot[0]));
+         //   addNewSpriteAtPosition({ event->getCursorX(), event->getCursorY() });
         }
+       
         CCLOG("%f,%f\n", event->getCursorX(), event->getCursorY());
     };
+    mouse->onMouseMove = [=](EventMouse* event) 
+    {
+        if (_bslot[3] && _lhold)
+        {
+            _drawNode->drawDot({ event->getCursorX()  , event->getCursorY() }, 1.5, Color4F::GREEN);
+            _path.push_back({ event->getCursorX() / PTM_RATIO , event->getCursorY() / PTM_RATIO });
+        }
+      //  CCLOG("%f,%f\n", event->getCursorX(), event->getCursorY());
+    };
+    mouse->onMouseUp = [=](EventMouse* event) 
+    {
+        if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_LEFT)
+        {
+            _lhold = false;
+        }
+
+        if (_bslot[3])
+        {
+            b2BodyDef def;
+            def.position.Set(0, 0); 
+            def.type = b2_staticBody;
+            b2Body* bd = _world->CreateBody(&def);
+
+            b2ChainShape shap;
+            shap.CreateChain(&_path[0], _path.size());
+
+            // Define the dynamic body fixture.
+            b2FixtureDef fixtureDef;
+            fixtureDef.shape = &shap;
+            fixtureDef.density = 1.0f;
+            fixtureDef.friction = 0.3f;
+            //fixtureDef.isSensor = true;
+            bd->CreateFixture(&fixtureDef); 
+            bd->SetUserData((void*)(Edge_chain));
+            _path.clear();
+        }
+    };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouse, this);
-   //auto bg = BGEffect::create(8);
-   //bg->genBindBuffer();
-   //this->addChild(bg);
 
     //auto mp = Sprite::create("ParticleImage.png");
     //mp->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
@@ -79,23 +151,57 @@ bool LiquidFunDemo::init()
     //mp->setScaleY(0.15);
     //mp->setColor(Color3B::RED);
 
-    ParticleEffectSpawn* pe = ParticleEffectSpawn::create();
-    pe->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-    pe->setType(ParticleEffectSpawn::Type::LAVA);
-    this->addChild(pe);
-
-    ParticleEffectSpawn* pew = ParticleEffectSpawn::create();
-    pew->setPosition(Vec2(visibleSize.width / 2 , visibleSize.height / 2 + 300));
-    pew->setType(ParticleEffectSpawn::Type::WATER);
-    this->addChild(pew);
-
-    //ParticleEffectSpawn* peg = ParticleEffectSpawn::create();
-    //peg->setPosition(Vec2(visibleSize.width / 2 - 300, visibleSize.height / 2 + origin.y));
-    //peg->setType(ParticleEffectSpawn::Type::GAS);
-    //this->addChild(peg);
+    
     CCIMGUI::getInstance()->addImGUI([=]() {
-        ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), u8"单击选中灯光修改属性");
-
+      //  ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), u8"单击选中灯光修改属性");
+        ImGui::Checkbox(u8"允许添加water发射点", &_bslot[0]);
+        if (_bslot[0])
+        {
+            ImGui::Text(u8"单击添加，右击结束");
+            memset(&_bslot, 0, sizeof(_bslot) / sizeof(_bslot[0]));
+            _bslot[0] = true;
+        }
+        ImGui::Checkbox(u8"允许添加laya发射点", &_bslot[1]);
+        if (_bslot[1])
+        {
+            ImGui::Text(u8"单击添加，右击结束");
+            memset(&_bslot, 0, sizeof(_bslot) / sizeof(_bslot[0]));
+            _bslot[1] = true;
+        }
+        ImGui::Checkbox(u8"允许添加布丁", &_bslot[2]);
+        if (_bslot[2])
+        {
+            ImGui::Text(u8"单击添加，右击结束");
+            auto ls = lsdir(FileUtils::getInstance()->getDefaultResourceRootPath(), "Images/*.png");
+            static int selected = 0;
+            ImGui::BeginChild("left pane", ImVec2(150, 0), true);
+            for (int i = 0; i < ls.size(); i++)
+            {
+                if (ImGui::Selectable(ls[i].c_str(), selected == i))
+                {
+                    selected = i;
+                    _sselect = "Images/" + ls[i];
+                }
+                if (ImGui::IsItemHovered())
+                {
+                    ImGui::BeginTooltip();
+                    Texture2D* texture = Director::getInstance()->getTextureCache()->addImage("Images/" + ls[i]);
+                    ImGui::Text(u8"预览");
+                    ImGui::Image((ImTextureID)(intptr_t)texture->getName(), ImVec2(300, 400), ImVec2(0, 0), ImVec2(1, 1), ImVec4(1.0f, 1.0f, 1.0f, 1.0f), ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+                    ImGui::EndTooltip();
+                }
+            }
+            ImGui::EndChild();
+            memset(&_bslot, 0, sizeof(_bslot) / sizeof(_bslot[0]));
+            _bslot[2] = true;
+        }
+        ImGui::Checkbox(u8"允许添加chain", &_bslot[3]);
+        if (_bslot[3])
+        {
+            memset(&_bslot, 0, sizeof(_bslot) / sizeof(_bslot[0]));
+            _bslot[3] = true;
+            ImGui::Text(u8"单击添加,拖动鼠标添加，左键抬起结束");
+        }
         static bool _allowBg = false;
         ImGui::Checkbox(u8"允许改变背景", &_allowBg);
         {
@@ -129,18 +235,77 @@ bool LiquidFunDemo::init()
             }
             ImGui::NewLine();
         }
-        float x = sp->getRotation3D().x, y = sp->getRotation3D().y, z = sp->getRotation3D().z;
-        ImGui::SliderFloat("x", &x, 0, 360);
-        ImGui::SliderFloat("y", &y, 0, 360);
-        ImGui::SliderFloat("z", &z, 0, 360);
-        sp->setRotation3D({ x,y,z });
+
+        if (ImGui::Button(u8"清除所有节点"))
+        {
+            sp->retain();
+            _drawNode->retain();
+            GameManager::Instane()->_b2physic->retain();
+            this->removeAllChildren();
+            this->addChild(sp);
+            this->addChild(_drawNode);
+            this->addChild(GameManager::Instane()->_b2physic);
+            Director::getInstance()->getScheduler()->scheduleUpdate(GameManager::Instane()->_b2physic, 0, true);
+            GameManager::Instane()->_b2physic->resume();
+            auto bdls = _world->GetBodyList();
+            auto bdcount = _world->GetBodyCount();
+            auto tmp = bdls;
+            do 
+            {
+             //   _world->DestroyBody(tmp);
+                if ((unsigned int)tmp->GetUserData() & B2Physic::UD_TAG)
+                {
+                    if((unsigned int)tmp->GetUserData() == Edge_chain)
+                    _world->DestroyBody(tmp);
+                }
+                tmp = bdls->GetNext();
+
+            } while (--bdcount);
+
+        }
+        if (ImGui::Button(u8"清除chain绘制节点"))
+        {
+            _drawNode->clear();
+        }
+        static bool _b2debug = false;
+        ImGui::Checkbox(u8"开启box2d debug", &_b2debug);
+        if (_b2debug)
+        {
+            uint32 flags = 0;
+            static bool b[6] = { 0 };
+            ImGui::Checkbox(u8"shap", &b[0]);
+            ImGui::Checkbox(u8"joint", &b[1]);
+            ImGui::Checkbox(u8"aabb", &b[2]);
+            ImGui::Checkbox(u8"pair", &b[3]);
+            ImGui::Checkbox(u8"Centroid", &b[4]);
+            ImGui::Checkbox(u8"particle", &b[5]);
+            if (b[0])
+            {
+                flags |= b2Draw::e_shapeBit;
+            }
+            for (size_t i = 1; i < 6; i++)
+            {
+                flags |= (1 << i) * b[i];
+            }
+
+            GameManager::Instane()->_b2physic->setDebugFlag(flags);
+        }
+        else
+        {
+            GameManager::Instane()->_b2physic->setDebugFlag(0);
+        }
+        //ImGui::Text(u8"背景旋转");
+        //float x = sp->getRotation3D().x, y = sp->getRotation3D().y, z = sp->getRotation3D().z;
+        //ImGui::SliderFloat("x", &x, 0, 360);
+        //ImGui::SliderFloat("y", &y, 0, 360);
+        //ImGui::SliderFloat("z", &z, 0, 360);
+        //sp->setRotation3D({ x,y,z });
 
         //float sx = mp->getScaleX(), sy = mp->getScaleY();
         //ImGui::SliderFloat("sx", &sx, 0, 2);
         //ImGui::SliderFloat("sy", &sy, 0, 2);
         //mp->setScaleX(sx);
         //mp->setScaleY(sy);
-
 
         ImGui::ShowDemoWindow();
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
