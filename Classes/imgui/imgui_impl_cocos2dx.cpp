@@ -266,7 +266,7 @@ static void ImGui_ImplCocos2dx_SetClipboardText(void* user_data, const char* tex
 
 void ImGui_ImplCocos2dx_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-    if (g_PrevUserCallbackMousebutton != nullptr)
+    if (g_PrevUserCallbackMousebutton != nullptr && !ImGui::IsAnyWindowHovered())
         g_PrevUserCallbackMousebutton(window, button, action, mods);
     if (action == GLFW_PRESS && button >= 0 && button < IM_ARRAYSIZE(g_MouseJustPressed))
         g_MouseJustPressed[button] = true;
