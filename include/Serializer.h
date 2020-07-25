@@ -50,7 +50,10 @@ public:
 	Serializer() = default;
 	Serializer(const ByteStream& s) { _io = s; }
 	~Serializer() = default;
-
+	void operator()(const ByteStream& s)
+	{
+		_io = s;
+	}
 	size_t size() { return _io.size(); }
 	size_t lavesize() { return _io.size() - _io.getindex(); }
 	const char* data() { return _io.data(); }
@@ -97,16 +100,9 @@ public:
 		memcpy(l, _io.current(), sizeof(size_t));
 		size_t len = *reinterpret_cast<size_t*>(&l[0]);
 		_io.offset(sizeof(size_t));
-		try
-		{
 		t.insert(t.begin(), _io.current(), _io.current() + len);
 		_io.offset(len);
 
-		}
-		catch (const std::exception&)
-		{
-			printf("");
-		}
 	}
 
 	template<typename T>

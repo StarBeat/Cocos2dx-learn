@@ -41,7 +41,7 @@ bool LightDemoScene::init()
 
     initWithPhysics();
     _physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-    this->addChild(_drawNode);
+    this->addChild(_drawNode, 1);
 
     GameManager::Instane()->moduleInit(_physicsWorld);
 
@@ -123,7 +123,7 @@ bool LightDemoScene::init()
             else
             {
                 Vec2 p = { event->getCursorX(), event->getCursorY() };
-                _drawNode->drawDot(p, 1, Color4F::GRAY);
+                _drawNode->drawDot(p, 5, Color4F::GRAY);
                 _chainPoints.push_back(p);
             }
         }
@@ -170,6 +170,7 @@ bool LightDemoScene::init()
                         this->removeChild(i);
                     }
                 }
+                _drawNode->clear();
                 _selectLi = nullptr;
             }
             static bool show = true;
@@ -243,7 +244,7 @@ bool LightDemoScene1::init()
     GameManager::Instane()->moduleInit(_physicsWorld);
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    this->addChild(_drawNode);
+    this->addChild(_drawNode, 1);
 
     auto mouse = EventListenerMouse::create();
     mouse->onMouseDown = [&](EventMouse* event)
@@ -449,6 +450,7 @@ bool LightDemoScene1::init()
                     this->removeChild(i);
                 }
             }
+            _drawNode->clear();
             _selectLi = nullptr;
         }
         static bool _allowBg = false;

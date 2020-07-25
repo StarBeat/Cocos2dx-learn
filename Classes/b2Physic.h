@@ -8,7 +8,7 @@ class B2Physic : public cocos2d::Node, public b2ContactListener
 {
 public:
 	static const int PTM_RATIO = 32;
-	static const unsigned int UD_TAG = 1 << 32 | 1;
+	static const unsigned int UD_TAG = 1 << 31 | 1;
 public:
 	B2Physic()
 	{

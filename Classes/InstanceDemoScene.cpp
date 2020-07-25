@@ -13,8 +13,8 @@ using namespace cocos2d;
 
 bool InstanceDemoScene::init()
 {
-    _nnums = 1000;
-    _cnums = 10;
+    _nnums = 10000;
+    _cnums = 5;
     ImGui::CreateContext();
     initWithPhysics();
     _physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
@@ -60,7 +60,7 @@ bool InstanceDemoScene::init()
                     }
                 }
             auto a = MoveBy::create(3, pos);
-            auto a2 = CallFunc::create([i] { i->removeFromParent(); }); // 在release下会出现奇怪的渲染问题 /*i->removeFromParent();*/ 
+            auto a2 = CallFunc::create([i] { /*i->removeFromParent();*/ }); // 在release下会出现奇怪的渲染问题 /*i->removeFromParent();*/ 
             auto seq = Sequence::create(DelayTime::create(Random::Instane()->get<float>(0.5, 3)), a2, NULL);
             auto parll = Spawn::create(a, seq, NULL);
             i->runAction(parll);

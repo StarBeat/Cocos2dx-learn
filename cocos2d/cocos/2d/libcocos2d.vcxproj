@@ -160,6 +160,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\external\uv\prebuilt\win32\*.*" "$(OutDir)"</Com
       <ForcedIncludeFiles>precheader.h</ForcedIncludeFiles>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <OmitFramePointers>true</OmitFramePointers>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <PreLinkEvent>
       <Command>if not exist "$(OutDir)" mkdir "$(OutDir)"

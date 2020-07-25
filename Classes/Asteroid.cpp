@@ -17,7 +17,7 @@ Asteroid::Asteroid(float x, float y, int mass, float density, int type, float r,
 	case 0:
 	{
 
-		_body = CirclePrimitive::create(Vec2::ZERO, w, 30, 1, 1, color);
+		_body = CirclePrimitive::create(Vec2::ZERO, w, 10, 1, 1, color);
 		_body->setPosition(Vec2(x, y));
 		auto pb = PhysicsBody::createCircle(w);
 		_body->setTag(::PhysicEx::NODE_TAG::SHADOW_CAST_TAG);

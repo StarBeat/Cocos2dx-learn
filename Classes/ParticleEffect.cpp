@@ -68,7 +68,7 @@ ParticleEffectSpawn::~ParticleEffectSpawn()
 	for (const auto& i : _children)
 	{
 		i->sp->stopAllActions();
-		i->sp->getB2Body()->SetActive(false);
+		GameManager::Instane()->_b2world->DestroyBody(i->sp->getB2Body());
 	}
 	GameManager::Instane()->_b2physic->removeB2ContactListener(listener);
 	delete listener;
